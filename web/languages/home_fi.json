@@ -1,0 +1,12 @@
+{
+    "page": "Etusivu",
+    "language": "fi",
+    "join_game": "Liity",
+    "input_code": "Syötä koodi...",
+    "create_lobby": "Luo aula",
+    "create": "Luo",
+    "login": "Kirjaudu sisään",
+    "made_by": "Projektin tekijät:",
+    "developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
+    "info": "2024, v1"
+}
