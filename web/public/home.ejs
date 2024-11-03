@@ -1,10 +1,17 @@
 <%- include('partials/header') %>
 <main>
-    <div id="create-game-container" class="create-game">
-
-    </div>
-    <div id="join-game-container" class="join-game">
-        
+    <div id="home-container">
+        <div id="create-game-container" class="create-game">
+            <h2><%= create_lobby %></h2>
+            <button class="button" id="create-button"><%= create %></button>
+        </div>
+        <div id="join-game-container" class="join-game">
+            <h2><%= join_game %></h2>
+            <form method="get">
+                <input type="number" id="lobby-code" placeholder="<%= input_code %>">
+                <input type="submit" value="<%= join_game %>" class="button" id="join-button">
+            </form>
+        </div>
     </div>
 </main>
 <%- include('partials/footer') %>

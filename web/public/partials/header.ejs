@@ -8,5 +8,11 @@
 </head>
 <body>
     <header>
+        <form method="get" id="language-form">
+            <select name="language" id="language-selection" onchange="this.form.submit()">
+                <option value="fi" <%= language === 'fi' ? 'selected' : '' %>>FI</option>
+                <option value="en" <%= language === 'en' ? 'selected' : '' %>>EN</option>
+            </select>
+        </form>
         <h1 id="main-title">Quizconst</h1>
     </header>

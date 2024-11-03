@@ -1,6 +1,39 @@
+@import url("https://use.typekit.net/kuq8csk.css");
+
+body {
+    font-family: "laca-variable", sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #4E4C67;
+}
+
 header, footer {
+    height: 25vh;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    align-items: center;
+}
+
+main {
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    font-family: "laca-variable", sans-serif;
+    font-weight: 800;
+    background-color: #A6B1E1;
+    color: #4E4C67;
 }
 
 #main-title {
@@ -11,4 +44,23 @@ header, footer {
 #credits {
     grid-column-start: 2;
     text-align: center;
+}
+
+#home-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#create-game-container {
+    grid-column-start: 1;
+    text-align: center;
+    border-right: 1.5px solid #4E4C67;
+}
+
+#join-game-container {
+    grid-column-start: 2;
+    text-align: center;
+    border-left: 1.5px solid #4E4C67;
 }

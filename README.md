@@ -7,3 +7,5 @@ Quizconst on (kröhm... quizletin ja kahootin kopio/sekoitus) tietovisa peli jos
 ## Idea
 
 Quizconstin idea on saatu osittain quizletistä ja osittain netistä löydettyjen ideoiden sekoituksena. 
+
+## Suunnittelu ja toteutus
