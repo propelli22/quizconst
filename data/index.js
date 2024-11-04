@@ -4,6 +4,7 @@ const mysql = require('mysql');
 const dbconfig = require('./dbconfig.json');
 
 const app = express();  
+app.use(express.json());
 
 const port = "4000";
 const host = "localhost"; // runs on localhost to avoid external users access to database
@@ -83,4 +84,32 @@ app.get('/lobbydata', (req, res) => {
     connection.end();
 });
 
-app.listen(port, host, () => console.log(`${host}:${port} kuuntelee...`));
+// check if user exists, returns true or false, if true, returns what info were the same, else returns only false
+app.get('/checkuser', (req, res) => {
+    
+});
+
+app.post('/createuser', (req, res) => {
+    const username = req.body.user;
+    const password = req.body.password;
+    const email = req.body.email;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    let sql = 'INSERT INTO user (`username`, `password`, `email`) VALUES (?, ?, ?)'
+
+    if (username == undefined || password == undefined || email == undefined) {
+        res.status(400).json({"message": "Something went wrong, undefined details in request"})
+    } else {
+        connection.query(sql, [username, password, email], (err, rows) => {
+            if (err) {
+                throw err;
+            }
+    
+            res.json({"message": "User created successfully"})
+        });
+    }
+});
+
+app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));
