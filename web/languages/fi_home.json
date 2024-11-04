@@ -5,6 +5,8 @@
     "input_code": "Syötä koodi...",
     "create_lobby": "Luo aula",
     "create": "Luo",
+    "create_subject": "Luo aihe",
+    "find_subject": "Etsi aihe",
     "login": "Kirjaudu sisään",
     "made_by": "Projektin tekijät:",
     "developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
