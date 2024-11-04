@@ -64,3 +64,7 @@ main {
     text-align: center;
     border-left: 1.5px solid #4E4C67;
 }
+
+#header-nav {
+    grid-column-start: 3;
+}
