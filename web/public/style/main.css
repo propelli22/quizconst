@@ -29,11 +29,25 @@ main {
     align-items: center;
 }
 
-.button {
+nav {
+    display: flex;
+}
+
+.nav-button {
+    height: 30%;    
+}
+
+/*VÄLIAIKAINEN*/
+#find-subject {
+    display: none;
+}
+
+.nav-button, .button {
     font-family: "laca-variable", sans-serif;
     font-weight: 800;
     background-color: #A6B1E1;
     color: #4E4C67;
+    width: 50%;
 }
 
 #main-title {
