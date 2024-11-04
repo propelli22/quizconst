@@ -67,4 +67,5 @@ main {
 
 #header-nav {
     grid-column-start: 3;
+    text-align: right;
 }
