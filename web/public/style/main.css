@@ -128,3 +128,8 @@ input[type="number"], select {
         align-items: center;
     }
 }
+
+#developers {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

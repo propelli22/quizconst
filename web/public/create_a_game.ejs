@@ -1,0 +1,33 @@
+<%- include('partials/header') %>
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="style/create_a_game.css">
+</head>
+<body>
+	<main>
+	<div id="game-creation">
+		<div id="question-container">
+			<button id="open-question-modal">></button>
+			<div id="questionModal" class="modal">
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h2>Select Question</h2>
+					<div id="question-list">
+						<div class="question-item">Question 1</div>
+					</div>
+					<button id="add-question">Add question</button>
+				</div>
+			</div>
+		</div>
+		<div id="question-title">
+			<p id="selected-question-name">Question 1</p>
+			<label for="file-upload" class="custom-file-upload">
+				<i class="fa fa-cloud-upload"></i> Upload Image
+			</label>
+			<input type="file" id="file-upload" style="display: none;">
+		</div>
+	</main>
+	<script src="script/creating-game-dia-modal.js"></script>
+</body>
+</html>
