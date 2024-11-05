@@ -7,13 +7,17 @@ body {
     color: #4E4C67;
 }
 
-header, footer {
+header {
     height: 25vh;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 40% 60%;
 }
 
 footer {
+    height: 25vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -31,10 +35,14 @@ main {
 
 nav {
     display: flex;
+    grid-row: 2;
+    grid-column: 1 / span 6;
 }
 
-.nav-button {
-    height: 30%;    
+.nav-button, #nav-dropdown {
+    height: 50%;    
+    margin-left: 1%;
+    margin-right: 1%;
 }
 
 /*VÄLIAIKAINEN*/
@@ -50,8 +58,28 @@ nav {
     width: 50%;
 }
 
+#language-form {
+    grid-column: 1;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: auto;
+    height: 60%;
+    width: 86%;
+}
+
+#language-selection {
+    background-color: #A6B1E1;
+    font-family: "laca-variable", sans-serif;
+    font-weight: 800;
+    text-align: center;
+    color: #4E4C67;
+    width: 86%;
+    height: 60%;
+}
+
 #main-title {
-    grid-column-start: 2;
+    grid-column: 3 / span 2;
     text-align: center;
 }
 
@@ -80,6 +108,15 @@ nav {
 }
 
 #header-nav {
-    grid-column-start: 3;
     text-align: right;
+}
+
+#nav-dropdown {
+    grid-column: 6;
+    grid-row: 1;
+    width: 86%;
+    height: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
 }
