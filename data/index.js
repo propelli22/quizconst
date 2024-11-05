@@ -86,7 +86,31 @@ app.get('/lobbydata', (req, res) => {
 
 // check if user exists, returns true or false, if true, returns what info were the same, else returns only false
 app.get('/checkuser', (req, res) => {
-    
+    const username = req.query.user;
+    const email = req.query.user;
+
+    const sql = 'SELECT username, email FROM user WHERE username = ? OR email = ?';
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    connection.query(sql, [username, email], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        if (rows[0].username) {
+            res.json({"message": "username"})
+        } else if (rows[0].email) {
+            res.json({"message": "email"});
+        } else if (rows[0].username && rows[0].email) {
+            res.json({"message": "both"})
+        } else {
+            res.json({"message": "OK"})
+        }
+    });
+
+    connection.end();
 });
 
 app.post('/createuser', (req, res) => {
