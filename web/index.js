@@ -18,15 +18,39 @@ app.use(express.static(__dirname + '/public'));
 const port = "3000";
 const host = "0.0.0.0"; // run on device local ip
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     const language = req.query.language;
+
+    let subjectsURL = 'http://localhost:4000/getsubjects'
+    const settings = {
+        method: 'GET'
+    };
+    let subjects;
+    let merged = {};
+
+    try {
+        const subjectsPage = await fetch(subjectsURL, settings)
+        subjectsURL = await subjectsPage.text();
+        subjectsURL = JSON.parse(subjectsURL);
+    } catch (err) {
+        console.log(err)
+    }
     
     if (language == 'fi') {
-        res.render('home', fi_home)
+        res.render('home', {
+            ...fi_home,
+            subjects: subjectsURL
+        });
     } else if (language == 'en') {
-        res.render('home', en_home)
+        res.render('home', {
+            ...en_home,
+            subjects: subjectsURL
+        });
     } else { // by default render the finnish verison
-        res.render('home', fi_home)
+        res.render('home', {
+            ...fi_home,
+            subjects: subjectsURL
+        });
     }
 });
 

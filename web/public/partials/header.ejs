@@ -6,7 +6,6 @@
     <title><%= page %> - Quizconst</title>
     <link rel="stylesheet" href="style/reset.css">
     <link rel="stylesheet" href="style/main.css">
-    <script src="script/script.js"></script>
 </head>
 <body>
     <header>
@@ -19,8 +18,8 @@
         <h1 id="main-title">Quizconst</h1>
         <button id="nav-dropdown" class="button" onclick="toggleMenu()">▼</button>
         <nav id="header-nav">
-            <button id="log-in" class="nav-button" style="display: none;"><%= login %></button>
-            <button id="create-subject" class="nav-button" style="display: none;"><%= create_subject %></button>
-            <button id="find-subject" class="nav-button" style="display: none;"><%= find_subject %></button>
+            <button id="log-in" class="nav-button"><%= login %></button>
+            <button id="create-subject" class="nav-button"><%= create_subject %></button>
+            <button id="find-subject" class="nav-button"><%= find_subject %></button>
         </nav>
     </header>

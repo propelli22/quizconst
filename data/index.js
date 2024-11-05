@@ -134,6 +134,25 @@ app.post('/createuser', (req, res) => {
             res.json({"message": "User created successfully"})
         });
     }
+
+    connection.end();
+});
+
+app.get('/getsubjects', (req, res) => {
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    let sql = `SELECT subject_id, subject_title, subject_description, subject_image, username FROM subject INNER JOIN user ON subject.subject_author = user.user_id`
+
+    connection.query(sql, (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        res.json(rows);
+    });
+    
+    connection.end();
 });
 
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));

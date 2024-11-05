@@ -8,7 +8,9 @@
     "create_subject": "Luo aihe",
     "find_subject": "Etsi aihe",
     "login": "Kirjaudu sisään",
-    "made_by": "Projektin tekijät:",
+    "admin_settings": "Ylläpitäjän asetukset",
+    "select": "Valitse",
+    "made_by": "Projektin toteutti:",
     "developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
     "info": "2024, v1"
 }

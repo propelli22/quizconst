@@ -8,6 +8,8 @@
     "create_subject": "Create subject",
     "find_subject": "Search subject",
     "login": "Log in",
+    "admin_settings": "Admin settings",
+    "select": "Select",
     "made_by": "Built by:",
     "developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
     "info": "2024, v1"
