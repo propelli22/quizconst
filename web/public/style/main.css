@@ -69,3 +69,8 @@ main {
     grid-column-start: 3;
     text-align: right;
 }
+
+#developers {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
