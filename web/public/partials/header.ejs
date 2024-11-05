@@ -16,9 +16,10 @@
             </select>
         </form>
         <h1 id="main-title">Quizconst</h1>
+        <button id="nav-dropdown" onclick="toggleMenu()">▼</button>
         <nav id="header-nav">
-            <button id="log-in" class="button"><%= login %></button>
-            <button id="create-subject" class="button"><%= create_subject %></button>
-            <button id="find-subject" class="button"><%= find_subject %></button>
+            <button id="log-in" class="nav-button" style="display: none;"><%= login %></button>
+            <button id="create-subject" class="nav-button" style="display: none;"><%= create_subject %></button>
+            <button id="find-subject" class="nav-button" style="display: none;"><%= find_subject %></button>
         </nav>
     </header>
