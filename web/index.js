@@ -9,6 +9,8 @@ const app = express();
 // import languages from json
 const fi_home = require('./languages/fi_home.json')
 const en_home = require('./languages/en_home.json')
+const fi_create = require('./languages/fi_create.json')
+const en_create = require('./languages/en_create.json')
 
 // EJS setup
 app.set('view engine', 'ejs');
@@ -28,6 +30,18 @@ app.get('/', (req, res) => {
     } else { // by default render the finnish verison
         res.render('home', fi_home)
     }
+});
+
+app.get('/create', (req, res) => {
+	const language = req.query.language;
+
+	if (language == 'fi') {
+		res.render('create_a_game', fi_create)
+	} else if (language == 'en') {
+		res.render('create_a_game', en_create)
+	} else {
+		res.render('create_a_game', fi_create)
+	}
 });
 
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}...`));
