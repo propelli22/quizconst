@@ -1,3 +1,5 @@
+var logModal = document.getElementById("log-modal");
+
 function toggleMenu() {
     const buttons = document.querySelectorAll('.nav-button');
 
@@ -9,3 +11,11 @@ function toggleMenu() {
         }
     }
 };
+
+document.getElementById("log-in").addEventListener("click", () => {
+    logModal.style.display = "block";
+});
+
+document.getElementById("log-close-button").addEventListener("click", () => {
+    logModal.style.display = "none";
+});

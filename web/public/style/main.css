@@ -111,6 +111,41 @@ nav {
     text-align: right;
 }
 
+#log-modal {
+    display: none;
+    background-color: gray;
+    position: fixed;
+    width: 28vw;
+    height: 70vh;
+    z-index: 1;
+}
+
+.close{
+    float: right;
+    font-size: 3rem;
+}
+
+#log-in-button {
+    max-width: 20vw;
+}
+
+#sign-up-button {
+    max-width: 20vw;
+}
+
+@media only screen and (max-width: 900px) {
+    #log-modal {
+        width: 48vw;
+        height: 70vh;
+    }
+}
+
+@media only screen and (max-width: 590px) {
+    #log-modal {
+        width: 90%;
+        height: 70vh;
+    }
+  
 #nav-dropdown {
     grid-column: 6;
     grid-row: 1;
