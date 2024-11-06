@@ -16,6 +16,7 @@
     "sign_name": "Name:",
     "sign_email": "Email:",
     "sign_password": "Password:",
+    "sign_button": "Sign up",
     "made_by": "Built by:",
     "developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
     "info": "2024, v1"

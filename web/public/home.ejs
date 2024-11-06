@@ -14,24 +14,24 @@
         </div>
     </div>
 
+    <!--Sign up/Log in modal-->
     <div id="log-modal" class="modal">
         <span id="log-close-button" class="close">&times;</span>
         <div class="log-modal-content">
             <div id="log-in-content">
                 <h2><%= log_title %></h2>
-                <p><%= log_name %></p>
-                <p><%= log_password %></p> 
+                <p><%= log_name %></p><input type="text" class="log_text" name="input_name">
+                <p><%= log_password %></p> <input type="password" class="log_text"  name="input_log">
                 <button class="button" id="log-in-button"><%= log_button %></button>
             </div>
 
             <div id="sign-up-content">
                 <h2><%= sign_title %></h2>
-                <p><%= sign_name %></p>
-                <p><%= sign_email %></p>
-                <p><%= sign_password %></p>
+                <p><%= sign_name %></p> <input type="text" class="sign_text" name="name_sign">
+                <p><%= sign_email %></p><input type="text" class="sign_text" name="email_sign">
+                <p><%= sign_password %></p><input type="password" class="sign_text" name="input_sign"> 
                 <button class="button" id="sign-up-button"><%= sign_button %></button>
         </div>
-      
       </div>
 
 </main>
