@@ -14,25 +14,26 @@
         </div>
     </div>
 
+    <!--Sign up/Log in modal-->
     <div id="log-modal" class="modal">
         <span id="log-close-button" class="close">&times;</span>
         <div class="log-modal-content">
-            <div id="log-in-content">
+            <form id="log-in-content">
                 <h2><%= log_title %></h2>
-                <p><%= log_name %></p>
-                <p><%= log_password %></p> 
+                <p><%= log_name %></p><input type="text" class="log_text" name="input_name" min="4" max="14 required">
+                <p><%= log_password %></p> <input type="password" class="log_text" name="input_log" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$">
                 <button class="button" id="log-in-button"><%= log_button %></button>
-            </div>
+            </form>
 
-            <div id="sign-up-content">
+            <form id="sign-up-content">
                 <h2><%= sign_title %></h2>
-                <p><%= sign_name %></p>
+                <p><%= sign_name %></p> <input type="text" class="sign_text" name="name_sign" min="4" max="14" required>
                 <p><%= sign_email %></p>
-                <p><%= sign_password %></p>
-                <button class="button" id="sign-up-button"><%= sign_button %></button>
+                <input type="email" class="sign_text" name="signup-email" id="signup-email" required>                <p><%= sign_password %></p> <input type="password" class="sign_text" name="input_sign" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$">
+                <input type="button" onclick="validateEmail()" class="button" id="sign-up-button" value="<%= sign_button %>">
+            </form>
         </div>
-      
-      </div>
+    </div>
 
 </main>
 <%- include('partials/footer') %>
