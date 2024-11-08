@@ -1,5 +1,6 @@
 @import url("https://use.typekit.net/kuq8csk.css");
 
+
 body {
     font-family: "laca-variable", sans-serif;
     margin: 0;
@@ -88,6 +89,86 @@ input[type="number"], select {
     text-align: right;
 }
 
+/* Sign up/ Log in modal */
+#log-modal {
+    display: none;
+    background-color: gray;
+    position: fixed;
+    width: 28vw;
+    height: 70vh;
+    z-index: 1;
+}
+
+#log-in-content p{
+    margin-bottom: 7px;
+}
+
+#log-in-content h2{
+    margin-bottom: 10px;
+}
+
+#log-in-content input {
+    background-color: white;
+    max-width: 21vh;
+    margin-bottom: 7px;
+}
+
+#log-in-content {
+    margin-top: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+#sign-up-content p{
+    margin-bottom: 7px;
+}
+
+#sign-up-content h2{
+    margin-bottom: 10px;
+}
+
+#sign-up-content input {
+    background-color: white;
+    max-width: 21vh;
+    margin-bottom: 7px;
+}
+
+#sign-up-content {
+    margin-top: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+.close{
+    float: right;
+    font-size: 3rem;
+}
+
+#log-in-button {
+    max-width: 20vw;
+    height: 3vh;
+    margin-top: 10px;
+}
+
+#sign-up-button {
+    max-width: 20vw;
+    height: 3vh;
+    margin-top: 10px;
+}
+
+@media only screen and (max-width: 900px) {
+    #log-modal {
+        width: 48vw;
+        height: 70vh;
+    }
+}
+
+@media only screen and (max-width: 590px) {
+    #log-modal {
+        width: 90%;
+        height: 70vh;
+    }
+}
+  
 #nav-dropdown {
     grid-column: 6;
     grid-row: 1;
