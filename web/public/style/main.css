@@ -6,23 +6,22 @@ body {
     margin: 0;
     padding: 0;
     color: #4E4C67;
+    height: 100%;
+    overflow: hidden;
 }
 
 header {
     height: 25vh;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 40% 60%;
+    grid-template-rows: 31% 69%;
 }
 
 footer {
-    height: 25vh;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 20% 60% 20%;
     position: fixed;
     bottom: 0;
-    left: 0;
-    right: 0;
     width: 100vw;
     align-items: center;
 }
@@ -40,15 +39,12 @@ nav {
     grid-column: 1 / span 6;
 }
 
-.nav-button, #nav-dropdown {
-    height: 50%;    
-    margin-left: 1%;
-    margin-right: 1%;
+input[type="number"], select {
+    border: #4E4C67 2px solid;
 }
 
-/*VÄLIAIKAINEN*/
-#find-subject {
-    display: none;
+.nav-button {
+    height: 50%;    
 }
 
 .nav-button, .button {
@@ -57,16 +53,17 @@ nav {
     background-color: #A6B1E1;
     color: #4E4C67;
     width: 50%;
+    border: 2px #4E4C67 solid;
 }
 
 #language-form {
     grid-column: 1;
-    margin-top: auto;
-    margin-bottom: auto;
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
     height: 60%;
     width: 86%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #language-selection {
@@ -75,37 +72,17 @@ nav {
     font-weight: 800;
     text-align: center;
     color: #4E4C67;
-    width: 86%;
-    height: 60%;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 #main-title {
     grid-column: 3 / span 2;
     text-align: center;
-}
-
-#credits {
-    grid-column-start: 2;
-    text-align: center;
-}
-
-#home-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin-top: auto;
-    margin-bottom: auto;
-}
-
-#create-game-container {
-    grid-column-start: 1;
-    text-align: center;
-    border-right: 1.5px solid #4E4C67;
-}
-
-#join-game-container {
-    grid-column-start: 2;
-    text-align: center;
-    border-left: 1.5px solid #4E4C67;
+    margin: auto;
 }
 
 #header-nav {
@@ -196,10 +173,41 @@ nav {
     grid-column: 6;
     grid-row: 1;
     width: 86%;
-    height: 95%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: auto;
+    height: 60%;
+    margin: auto;
+}
+
+#admin-settings-button {
+    width: 90%;
+    margin: 5%;
+}
+
+/* tablet size */
+@media screen and (min-width: 660px) {
+    #admin-settings-button {
+        padding: 10%;
+    }
+}
+
+/* everything else */
+@media screen and (min-width: 1024px) {
+    #nav-dropdown {
+        display: none;
+    }
+
+    .nav-button {
+        display: block !important;
+        margin: 1%;
+        height: 60%;
+        width: 86%;
+    }
+
+    nav {
+        grid-row: 1;
+        grid-column: 5 / span 2;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 #developers {
