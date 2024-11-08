@@ -31,14 +31,11 @@ body {
 @keyframes gradient {
 	0% {
 		background-position: 0% 50%;
-        background-position: 45deg;
 	}
 	50% {
 		background-position: 100% 50%;
-        background-position: 225deg;
 	}
 	100% {
 		background-position: 0% 50%;
-        background-position: 45deg;
 	}
 }
