@@ -1,0 +1,21 @@
+<link rel="stylesheet" href="style/find_subject.css">
+<div id="find-subject-modal" class="modal">
+    <div id="find-subject-modal-content">
+        <span class="close">&times;</span>
+        <h1><%= find_subject %></h1>
+
+        <div id="subject-container">
+            <% for (let subject of subjects) { %>
+                <div class="subject-selection">
+                    <div class="subject-data">
+                        <h2><%= subject.subject_title %></h2>
+                        <p><%= subject.subject_description %></p>
+                        <p><%= subject.username %></p>
+                        <button id="<%= subject.subject_id %>" class="select-button"><%= select %></button>
+                    </div>
+                    <img src="style/content/public_img/<%= subject.subject_image %>" alt="Image related to <%= subject.subject_title %>">
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
