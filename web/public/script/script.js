@@ -22,17 +22,43 @@ document.getElementById("log-close-button").addEventListener("click", () => {
     logModal.style.display = "none";
 });
 
-//Email validation function!
-function validateEmail() {
-    const emailInput = document.getElementById("signup-email");
-    const emailPattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.[a-z]{2,}(?:\.[a-z]{2,})?$/i;
+//Email validation !!!
+document.getElementById("sign-up-button").addEventListener("click", () => {
+    var emailPattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.[a-z]{2,}(?:\.[a-z]{2,})?$/i;
+    var passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/;
 
-    if (!emailPattern.test(emailInput.value)) {
-        alert("Please enter a valid email address with a domain extension (e.g., '.com', '.fi').");
-        emailInput.focus();
-        return false;
-    } else {
-        return true;
+    let email = document.getElementById("signup-email").value;
+    let wrongEmailError = document.getElementById("wrongEmail");
+    let emptyEmailError = document.getElementById("emptyEmail");
+    let password = document.getElementById("signup-password").value;
+    let wrongPasswordError = document.getElementById("wrongPassword");
+    let emptyPasswordError = document.getElementById("emptyPassword");
+
+    if (email == "") {
+        emptyEmailError.style.display = "block";
+        wrongEmailError.style.display = "none";
+        emptyEmailError.style.color = "red";
+    } 
+    else if (!emailPattern.test(email)) {
+        wrongEmailError.style.display = "block";
+        emptyEmailError.style.display = "none";
+        wrongEmailError.style.color = "red";
+    }  
+    else {
+        wrongEmailError.style.display = "none";
     }
-}
-
+    
+    if (password == "") {
+        emptyPasswordError.style.display = "block";
+        wrongPasswordError.style.display = "none";
+        emptyPasswordError.style.color = "red";
+    }
+    else if (!passwordPattern.test(password)) {
+        wrongPasswordError.style.display = "block";
+        wrongPasswordError.style.color = "red";
+        emptyPasswordError.style.display = "none";
+    } else {
+        wrongPasswordError.style.display = "none";
+    }
+    
+});

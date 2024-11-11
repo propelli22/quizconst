@@ -119,7 +119,7 @@ nav {
     position: fixed;
     width: 28vw;
     height: 70vh;
-    z-index: 1;
+    z-index: 1;;
 }
 
 #log-in-content p{
@@ -166,16 +166,17 @@ nav {
     font-size: 3rem;
 }
 
-#log-in-button {
-    max-width: 20vw;
-    height: 3vh;
-    margin-top: 10px;
+#log-in-content, #sign-up-content {
+    display: flex;
+    flex-direction: column;
 }
 
-#sign-up-button {
+#log-in-button, #sign-up-button {
     max-width: 20vw;
     height: 3vh;
     margin-top: 10px;
+    align-self: flex-start;
+    background-color: white;
 }
 
 @media only screen and (max-width: 900px) {
@@ -183,11 +184,13 @@ nav {
         width: 48vw;
         height: 70vh;
     }
+
+    
 }
 
 @media only screen and (max-width: 590px) {
     #log-modal {
-        width: 90%;
+        width: 68vw;
         height: 70vh;
     }
 }
