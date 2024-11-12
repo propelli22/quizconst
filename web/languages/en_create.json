@@ -1,0 +1,12 @@
+{
+	"page": "Home",
+	"language": "en",
+	"join_game": "Join",
+	"input_code": "Insert code...",
+	"create_lobby": "Create a lobby",
+	"create": "Create",
+	"login": "Log in",
+	"made_by": "Built by:",
+	"developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
+	"info": "2024, v1"
+}

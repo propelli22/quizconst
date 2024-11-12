@@ -4,8 +4,190 @@ const mysql = require('mysql');
 const dbconfig = require('./dbconfig.json');
 
 const app = express();  
+app.use(express.json());
+
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "http://10.20.12.180:3000");
+    res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    next();
+})
 
 const port = "4000";
-const host = "localhost"; // TODO: selvitä pitääkö pyöriä samalla osoitteella kuin web palvelin vai voiko pyöriä localhostina
+const host = "0.0.0.0"; // runs on localhost to avoid external users access to database
 
-app.listen(port, host, () => console.log(`${host}:${port} kuuntelee...`));
+// Obvious: checks password, return is it is correct or not, does not tell if the user is also correct etc.
+app.get('/checklogin', (req, res) => {
+    const user = req.query.user;
+    const password = req.query.password;
+
+    let result = [];
+
+    const sql = 'SELECT password FROM user WHERE user_id = ?';
+
+    const connection = mysql.createConnection(dbconfig);
+
+    connection.connect();
+    connection.query(sql, [user], (err, rows) => { 
+        if (err) {
+            throw err;
+        };
+
+        let result = JSON.parse(JSON.stringify(rows));
+
+        if (result[0].password == password) {
+            res.send(true);
+        } else {
+            res.send(false);
+        };
+    });
+
+    connection.end();
+});
+
+// responds with all of the lobby info
+app.get('/lobbydata', (req, res) => {
+    const lobby = req.query.id;
+
+    let data = [];
+
+    const sql = 'SELECT * FROM lobby, player WHERE lobby.lobby_id = ?'
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    connection.query(sql, [lobby], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        for (let row of rows) {
+            let newData = {
+                lobby: `${row.lobby_id}`, 
+                subject: `${row.subject_id}`, 
+                lobbyName: `${row.lobby_name}`, 
+                date: `${row.game_date}`, 
+                player: `${row.player_id}`, 
+                banned: `${row.banned}`, 
+                name: `${row.name}`, 
+                points: `${row.points}`, 
+                account: `${row.account}`
+            }
+            data.push(newData);
+        }
+
+        const builder = new XMLBuilder({
+            arrayNodeName: 'lobbydata'
+        });
+
+        const xml = `<?xml version="1.0" encoding="UTF-8"?>
+        <lobbydata>
+            ${builder.build(data)}
+        </lobbydata>`;
+
+        res.set('Content-Type', 'text/xml')
+        res.send(xml);
+    });
+
+    connection.end();
+});
+
+// check if user exists, returns true or false, if true, returns what info were the same, else returns only false
+app.get('/checkuser', (req, res) => {
+    const username = req.query.user;
+    const email = req.query.user;
+
+    const sql = 'SELECT username, email FROM user WHERE username = ? OR email = ?';
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    connection.query(sql, [username, email], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        if (rows[0].username) {
+            res.json({"message": "username"})
+        } else if (rows[0].email) {
+            res.json({"message": "email"});
+        } else if (rows[0].username && rows[0].email) {
+            res.json({"message": "both"})
+        } else {
+            res.json({"message": "OK"})
+        }
+    });
+
+    connection.end();
+});
+
+app.post('/createuser', (req, res) => {
+    const username = req.body.user;
+    const password = req.body.password;
+    const email = req.body.email;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    let sql = 'INSERT INTO user (`username`, `password`, `email`) VALUES (?, ?, ?)'
+
+    if (username == undefined || password == undefined || email == undefined) {
+        res.status(400).json({"message": "Something went wrong, undefined details in request"})
+    } else {
+        connection.query(sql, [username, password, email], (err, rows) => {
+            if (err) {
+                throw err;
+            }
+    
+            res.json({"message": "User created successfully"})
+        });
+    }
+
+    connection.end();
+});
+
+app.get('/getsubjects', (req, res) => {
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    let sql = `SELECT subject_id, subject_title, subject_description, subject_image, username FROM subject INNER JOIN user ON subject.subject_author = user.user_id`
+
+    connection.query(sql, (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        res.json(rows);
+    });
+    
+    connection.end();
+});
+
+app.post('/createlobby', (req, res) => {
+    const name = req.body.name;
+    const max_players = req.body.playercount;
+    const subject = req.body.subject;
+    const game_date = "2024-01-23"
+
+    let sql = "INSERT INTO `lobby`(`subject_id`, `lobby_name`, `max_players`, `game_date`) VALUES (?,?,?,?);"
+
+    // remove comment tags if issues with inserting empty names
+    //if (!name) {
+    //    sql = `INSERT INTO lobby('subject_id', 'max_players', 'game_date') VALUES (?, ?, ?)`
+    //}
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    connection.query(sql, [subject, name, max_players, game_date], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        // send back lobby id to open up lobby page
+        res.json({"lobbyId": rows.insertId});
+    });
+
+    connection.end();
+});
+
+app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));
