@@ -117,9 +117,9 @@ nav {
     display: none;
     background-color: gray;
     position: fixed;
-    width: 28vw;
-    height: 70vh;
-    z-index: 1;;
+    width: 24vw;
+    height: 90vh;
+    z-index: 1;
 }
 
 #log-in-content p{
@@ -182,7 +182,7 @@ nav {
 @media only screen and (max-width: 900px) {
     #log-modal {
         width: 48vw;
-        height: 70vh;
+        height: 100vh;
     }
 
     
@@ -191,7 +191,7 @@ nav {
 @media only screen and (max-width: 590px) {
     #log-modal {
         width: 68vw;
-        height: 70vh;
+        height: 100vh;
     }
 }
   
