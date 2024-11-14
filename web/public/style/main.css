@@ -92,11 +92,12 @@ input[type="number"], select {
 /* Sign up/ Log in modal */
 #log-modal {
     display: none;
-    background-color: gray;
+    background-color: rgb(190, 190, 190);
     position: fixed;
-    width: 28vw;
-    height: 70vh;
+    width: 24vw;
+    height: 90vh;
     z-index: 1;
+    border-radius: solid black 3px;
 }
 
 #log-in-content p{
@@ -143,29 +144,32 @@ input[type="number"], select {
     font-size: 3rem;
 }
 
-#log-in-button {
-    max-width: 20vw;
-    height: 3vh;
-    margin-top: 10px;
+#log-in-content, #sign-up-content {
+    display: flex;
+    flex-direction: column;
 }
 
-#sign-up-button {
+#log-in-button, #sign-up-button {
     max-width: 20vw;
     height: 3vh;
     margin-top: 10px;
+    align-self: flex-start;
+    background-color: white;
 }
 
 @media only screen and (max-width: 900px) {
     #log-modal {
         width: 48vw;
-        height: 70vh;
+        height: 100vh;
     }
+
+    
 }
 
 @media only screen and (max-width: 590px) {
     #log-modal {
-        width: 90%;
-        height: 70vh;
+        width: 68vw;
+        height: 100vh;
     }
 }
   
