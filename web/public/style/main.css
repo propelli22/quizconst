@@ -10,6 +10,12 @@ body {
     overflow: hidden;
 }
 
+h1 {
+    margin-bottom: 20px;
+    text-align: center;
+    
+}
+
 header {
     height: 25vh;
     display: grid;
@@ -29,6 +35,7 @@ footer {
 main {
     height: 50vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -87,6 +94,102 @@ input[type="number"], select {
 
 #header-nav {
     text-align: right;
+}
+
+/* New styles for the players grid */
+.players-grid {
+    display: grid   ;
+    grid-template-columns: 1fr;
+    grid-gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 5px;     
+    background-color: #f9f9f9;
+    width: 120px;
+    text-align: center;
+    margin: 5px;
+}
+
+@media (max-width: 1200px) {
+    .players-grid {
+        grid-template-columns: repeat(4, 1fr); /* 4 columns on medium screens */
+    }
+}
+
+@media (max-width: 900px) {
+    .players-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on smaller screens */
+    }
+}
+
+@media (max-width: 600px) {
+    .players-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on small screens */
+    }
+
+    .player-box {
+        width: 10   0px; /* Adjust width for smaller screens */
+        padding: 15px; /* Adjust padding for smaller screens */
+    }
+
+    main {
+        height: auto; /* Adjust height for smaller screens */
+    }
+
+    h1 {
+        font-size: 1.5em; /* Adjust font size for smaller screens */
+    }
+
+    button {
+        margin-bottom: 10px; /* Add some space below the button */
+    }
+}
+
+@media (max-width: 400px) {
+    .players-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* 2 columns on very small screens */
+        grid-gap: 10px;
+        justify-content: start; /* Align grid to the start */
+    }
+
+    .player-box {
+        width: 130px; /* Adjust width for very small screens */
+        padding: 10px; /* Adjust padding for very small screens */
+        margin: 5px; /* Add margin to separate the boxes */
+    }
+
+    .players-grid .player-box:nth-child(odd) {
+        grid-column: 1; /* First column */
+    }
+
+    .players-grid .player-box:nth-child(even) {
+        grid-column: 2; /* Second column */
+    }
+}
+
+#credits {
+    display: none;
+}   
+}
+
+/* Sign up/ Log in modal */
+#log-modal {
+    display: none;
+    background-color: gray;
+    position: fixed;
+    width: 28vw;
+    height: 70vh;
+    z-index: 1;;
+}
+
+#log-in-content p{
+    margin-bottom: 7px;
 }
 
 /* Sign up/ Log in modal */

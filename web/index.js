@@ -23,6 +23,16 @@ app.use(express.static(__dirname + '/public'));
 const port = "3000";
 const host = "0.0.0.0"; // run on device local ip
 
+const players = [
+    { name: 'Player 1' },
+    // Add more players as needed
+];
+
+app.get('/aula', (req, res) => {
+    const hostPlayer = players.slice(0, 1); // Get only the first player
+    res.render('aula', { ...fi_home, players: hostPlayer });
+});
+
 app.get('/', async (req, res) => {
     console.log("loaded Frontpage");
 
