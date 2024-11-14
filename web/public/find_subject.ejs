@@ -11,7 +11,7 @@
                         <h2><%= subject.subject_title %></h2>
                         <p><%= subject.subject_description %></p>
                         <p><%= subject.username %></p>
-                        <button id="<%= subject.subject_id %>" class="select-button"><%= select %></button>
+                        <button id="<%= subject.subject_id %>" class="select-button" onclick="alert(this.id)"><%= select %></button>
                     </div>
                     <img src="style/content/public_img/<%= subject.subject_image %>" alt="Image related to <%= subject.subject_title %>">
                 </div>
