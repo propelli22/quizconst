@@ -1,0 +1,87 @@
+/* Sign up/ Log in modal */
+
+#log-modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 25%;
+    max-height: calc(110vh - 210px);
+    overflow-y: auto;
+}
+
+#log-in-content p{
+    margin-bottom: 7px;
+}
+
+#log-in-content h2{
+    margin-bottom: 10px;
+}
+
+#log-in-content input {
+    background-color: white;
+    max-width: 21vh;
+    margin-bottom: 7px;
+    border: solid black;
+}
+
+#log-in-content {
+    margin-top: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+#sign-up-content p{
+    margin-bottom: 7px;
+}
+
+#sign-up-content h2{
+    margin-bottom: 10px;
+}
+
+#sign-up-content input {
+    background-color: white;
+    max-width: 21vh;
+    margin-bottom: 7px;
+    border: solid black;
+
+}
+
+#sign-up-content {
+    margin-top: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+.close{
+    float: right;
+    font-size: 3rem;
+}
+
+#log-in-content, #sign-up-content {
+    display: flex;
+    flex-direction: column;
+}
+
+#log-in-button, #sign-up-button {
+    max-width: 20vw;
+    height: 3vh;
+    margin-top: 10px;
+    align-self: flex-start;
+    background-color: white;
+}
+
+@media only screen and (max-width: 900px) {
+    #log-modal-content {
+        width: 48vw;
+        height: 100vh;
+    }
+
+    
+}
+
+@media only screen and (max-width: 590px) {
+    #log-modal-content {
+        width: 68vw;
+        height: 100vh;
+    }
+}
