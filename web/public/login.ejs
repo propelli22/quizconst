@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="style/login_modal.css">
+
+
+<!--Log in modal-->¨
+    <div class="modal" id="log-modal">
+        <div id="log-modal-content">
+            <span id="log-close-button" class="close">&times;</span>
+            <div class="log-modal-content">
+                <form id="log-in-content" onsubmit="return false;">
+                    <h2><%= log_title %></h2>
+                    <p><%= log_name %></p><input type="text" class="log_text" name="input_name" id="login-username" min="4" max="14"> <p style="display: none;" id="wrongNameLogin"> <%=wrongNameLogin%> </p> <p style="display: none;" id="emptyNameLogin"> <%=emptyNameLogin%> </p>
+                    <p><%= log_password %></p> <input type="password" class="log_text" name="input_log" id="login-password"> <p style="display: none;" id="wrongPasswordLogin"> <%=wrongPasswordLogin%> </p> <p style="display: none;" id="emptyPasswordLogin"> <%=emptyPasswordLogin%> </p>
+                    <input type="submit" class="button" id="log-in-button" value="<%= log_button %>" >
+                </form>
+                <!--Sign up modal-->
+                <form id="sign-up-content" onsubmit="return false;">
+                    <h2><%= sign_title %></h2>
+                    <p><%= sign_name %></p> <input type="text" class="sign_text" name="name_sign" id="signup-username" min="4" max="14"> <p style="display: none;" id="wrongName"><%=wrongNameSignup%></p> <p style="display: none;" id="emptyName"><%=emptyNameSignup%></p>
+                    <p><%= sign_email %></p> <input type="text" class="sign_text" name="signup-email" id="signup-email"> <p style="display: none;" id="wrongEmail"><%=wrongEmailSignup%></p> <p style="display: none;" id="emptyEmail"><%=emptyEmailSignup%></p>
+                    <p><%= sign_password %></p> <input type="password" class="sign_text" name="input_sign" id="signup-password"> <p style="display: none;" id="wrongPasswordSignup"><%=wrongPasswordSignup%></p> <p style="display: none;" id="emptyPasswordSignup"><%=emptyPasswordSignup%></p>
+                    <input type="submit" class="button" id="sign-up-button" value="<%= sign_button %>" >
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="script/script.js"></script>
