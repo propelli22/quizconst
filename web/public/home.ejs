@@ -19,23 +19,23 @@
         <%- include('create_lobby') %>
     </div>
 
-    <!--Sign up/Log in modal-->
+    <!--Log in modal-->
     <div id="log-modal" class="modal">
         <span id="log-close-button" class="close">&times;</span>
         <div class="log-modal-content">
-            <form id="log-in-content">
+            <form id="log-in-content" onsubmit="return false;">
                 <h2><%= log_title %></h2>
-                <p><%= log_name %></p><input type="text" class="log_text" name="input_name" min="4" max="14 required">
-                <p><%= log_password %></p> <input type="password" class="log_text" name="input_log" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$">
-                <button class="button" id="log-in-button"><%= log_button %></button>
+                <p><%= log_name %></p><input type="text" class="log_text" name="input_name" id="login-username" min="4" max="14"> <p style="display: none;" id="wrongNameLogin"> <%=wrongNameLogin%> </p> <p style="display: none;" id="emptyNameLogin"> <%=emptyNameLogin%> </p>
+                <p><%= log_password %></p> <input type="password" class="log_text" name="input_log" id="login-password"> <p style="display: none;" id="wrongPasswordLogin"> <%=wrongPasswordLogin%> </p> <p style="display: none;" id="emptyPasswordLogin"> <%=emptyPasswordLogin%> </p>
+                <input type="submit" class="button" id="log-in-button" value="<%= log_button %>" >
             </form>
-
-            <form id="sign-up-content">
+    <!--Sign up modal-->
+            <form id="sign-up-content" onsubmit="return false;">
                 <h2><%= sign_title %></h2>
-                <p><%= sign_name %></p> <input type="text" class="sign_text" name="name_sign" min="4" max="14" required>
-                <p><%= sign_email %></p> <input type="text" class="sign_text" name="signup-email" id="signup-email" required> <p style="display: none;" id="wrongEmail">Sähköposti ei ole olemassa</p> <p style="display: none;" id="emptyEmail">Sähköposti on pakkolinen</p>
-                <p><%= sign_password %></p> <input type="password" class="sign_text" name="input_sign" id="signup-password" required> <p style="display: none;" id="wrongPassword"> Salasana ei ole kelvollinen </p> <p style="display: none;" id="emptyPassword"> Salasana on pakkolinen </p>
-                <input type="submit" class="button" id="sign-up-button"<%= sign_button %> >
+                <p><%= sign_name %></p> <input type="text" class="sign_text" name="name_sign" id="signup-username" min="4" max="14"> <p style="display: none;" id="wrongName"><%=wrongNameSignup%></p> <p style="display: none;" id="emptyName"><%=emptyNameSignup%></p>
+                <p><%= sign_email %></p> <input type="text" class="sign_text" name="signup-email" id="signup-email"> <p style="display: none;" id="wrongEmail"><%=wrongEmailSignup%></p> <p style="display: none;" id="emptyEmail"><%=emptyEmailSignup%></p>
+                <p><%= sign_password %></p> <input type="password" class="sign_text" name="input_sign" id="signup-password"> <p style="display: none;" id="wrongPasswordSignup"><%=wrongPasswordSignup%></p> <p style="display: none;" id="emptyPasswordSignup"><%=emptyPasswordSignup%></p>
+                <input type="submit" class="button" id="sign-up-button" value="<%= sign_button %>" >
             </form>
         </div>
     </div>
