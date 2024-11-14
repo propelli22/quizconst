@@ -1,7 +1,8 @@
 const express = require('express');
-const {XMLBuilder, XMLParser, XMLValidator} = require('fast-xml-parser');
+const {XMLBuilder} = require('fast-xml-parser');
 const mysql = require('mysql');
 const dbconfig = require('./dbconfig.json');
+const bcrypt = require('bcrypt');
 
 const app = express();  
 app.use(express.json());
@@ -14,16 +15,16 @@ app.use((req, res, next) => {
 })
 
 const port = "4000";
-const host = "0.0.0.0"; // runs on localhost to avoid external users access to database
+const host = "localhost"; // runs on localhost to avoid external users access to database
 
 // Obvious: checks password, return is it is correct or not, does not tell if the user is also correct etc.
 app.get('/checklogin', (req, res) => {
+    console.log("used Check login");
+
     const user = req.query.user;
     const password = req.query.password;
 
-    let result = [];
-
-    const sql = 'SELECT password FROM user WHERE user_id = ?';
+    const sql = 'SELECT password FROM user WHERE username = ?';
 
     const connection = mysql.createConnection(dbconfig);
 
@@ -35,11 +36,10 @@ app.get('/checklogin', (req, res) => {
 
         let result = JSON.parse(JSON.stringify(rows));
 
-        if (result[0].password == password) {
-            res.send(true);
-        } else {
-            res.send(false);
-        };
+        // can only send back true or false
+        bcrypt.compare(password, result[0].password, function(err, passwordResult) {
+            res.send(passwordResult)
+        });
     });
 
     connection.end();
@@ -47,6 +47,8 @@ app.get('/checklogin', (req, res) => {
 
 // responds with all of the lobby info
 app.get('/lobbydata', (req, res) => {
+    console.log("used Lobby data");
+
     const lobby = req.query.id;
 
     let data = [];
@@ -93,10 +95,12 @@ app.get('/lobbydata', (req, res) => {
 
 // check if user exists, returns true or false, if true, returns what info were the same, else returns only false
 app.get('/checkuser', (req, res) => {
-    const username = req.query.user;
-    const email = req.query.user;
+    console.log("used Check user");
 
-    const sql = 'SELECT username, email FROM user WHERE username = ? OR email = ?';
+    const username = req.query.user;
+    const email = req.query.email;
+
+    const sql = 'SELECT username FROM user WHERE username = ?; SELECT email FROM user WHERE email = ?;';
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
@@ -106,12 +110,13 @@ app.get('/checkuser', (req, res) => {
             throw err;
         }
 
-        if (rows[0].username) {
-            res.json({"message": "username"})
+        // send back result, could be improved with better response
+        if (rows[0].username && rows[0].email) {
+            res.json({"message": "both"})
         } else if (rows[0].email) {
             res.json({"message": "email"});
-        } else if (rows[0].username && rows[0].email) {
-            res.json({"message": "both"})
+        } else if (rows[0].username) {
+            res.json({"message": "username"})
         } else {
             res.json({"message": "OK"})
         }
@@ -121,6 +126,8 @@ app.get('/checkuser', (req, res) => {
 });
 
 app.post('/createuser', (req, res) => {
+    console.log("used Create user")
+
     const username = req.body.user;
     const password = req.body.password;
     const email = req.body.email;
@@ -130,6 +137,7 @@ app.post('/createuser', (req, res) => {
 
     let sql = 'INSERT INTO user (`username`, `password`, `email`) VALUES (?, ?, ?)'
 
+    // check if all fields are valid
     if (username == undefined || password == undefined || email == undefined) {
         res.status(400).json({"message": "Something went wrong, undefined details in request"})
     } else {
@@ -146,6 +154,8 @@ app.post('/createuser', (req, res) => {
 });
 
 app.get('/getsubjects', (req, res) => {
+    console.log("used Get subjects");
+
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
 
@@ -163,10 +173,12 @@ app.get('/getsubjects', (req, res) => {
 });
 
 app.post('/createlobby', (req, res) => {
+    console.log("used Create lobby")
+
     const name = req.body.name;
     const max_players = req.body.playercount;
     const subject = req.body.subject;
-    const game_date = "2024-01-23"
+    const game_date = "2024-01-23" // TO DO: set game_date automatically to current date
 
     let sql = "INSERT INTO `lobby`(`subject_id`, `lobby_name`, `max_players`, `game_date`) VALUES (?,?,?,?);"
 

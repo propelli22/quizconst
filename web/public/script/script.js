@@ -28,8 +28,14 @@ var subjectSpan = document.getElementsByClassName("close")[0];
 var lobbyModal = document.getElementById("create-lobby-modal");
 var lobbyButton = document.getElementById("create-button");
 var lobbySpan = document.getElementsByClassName("close")[1];
+
+let cLobbySubjectButton = document.getElementById("c-lobby-select-subject");
  
 subjectButton.onclick = function() {
+  subjectModal.style.display = "block";
+}
+
+cLobbySubjectButton.onclick = function() {
   subjectModal.style.display = "block";
 }
 
@@ -84,7 +90,7 @@ function countDown() {
 function newLobby() {
   const lobbyName = document.getElementById("lobbyName").innerHTML;
   //const maxPlayers = document.getElementById("count").innerHTML;
-  const maxPlayers = "4";
+  const maxPlayers = document.getElementById("count").innerHTML;
   const subjectId = "3";
   const date = new Date();
   let gameDate = date.toISOString();
@@ -124,7 +130,7 @@ document.getElementById("log-in").addEventListener("click", () => {
 document.getElementById("log-close-button").addEventListener("click", () => {
     logModal.style.display = "none";
 });
-
+      
 //Sign up validation !!!
 var emailPattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.[a-z]{2,}(?:\.[a-z]{2,})?$/i;
 var passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
