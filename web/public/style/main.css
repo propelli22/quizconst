@@ -92,11 +92,12 @@ input[type="number"], select {
 /* Sign up/ Log in modal */
 #log-modal {
     display: none;
-    background-color: gray;
+    background-color: rgb(190, 190, 190);
     position: fixed;
     width: 24vw;
     height: 90vh;
     z-index: 1;
+    border-radius: solid black 3px;
 }
 
 #log-in-content p{
