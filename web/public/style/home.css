@@ -1,0 +1,41 @@
+#credits {
+    grid-column-start: 2;
+    text-align: center;
+}
+
+#home-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#create-game-container {
+    grid-column-start: 1;
+    text-align: center;
+    border-right: 1.5px solid #4E4C67;
+}
+
+#join-game-container {
+    grid-column-start: 2;
+    text-align: center;
+    border-left: 1.5px solid #4E4C67;
+}
+
+body {
+    background: linear-gradient(45deg, #DCD6F7, #B4869F, #985F6F);
+    background-size: 400% 400%;
+    animation: gradient 20s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}

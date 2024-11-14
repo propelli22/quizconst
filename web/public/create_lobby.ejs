@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="style/create_lobby.css">
+<div id="create-lobby-modal" class="modal">
+    <div id="create-lobby-content">
+        <span class="close">&times;</span>
+        <h2><%= create_lobby %></h2>
+        <form method="post" action="localhost:4000/createlobby">
+            <h3><%= lobby_name %></h3>
+            <input type="text" name="lobbyname" id="lobbyName" placeholder="testi">
+            <h3><%= max_players %></h3>
+            <div id="player-count-div">
+                <input type="button" id="count-up" class="button" value="+" onclick="countUp()">
+                <p id="count">16</p>
+                <input type="button" id="count-down" class="button" value="-" onclick="countDown()">
+            </div>
+            <h3><%= select_subject %></h3>
+            <div id="selected-subject">
+                <p id="no-selection"><%= no_subject %></p>
+                <input type="button" class="button" onclick="alert('Toimii!')" value="<%= select_subject %>">
+            </div>
+            <input type="button" value="<%= create %>" class="button" onclick="newLobby()">
+        </form>
+    </div>
+</div>

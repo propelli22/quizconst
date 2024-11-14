@@ -6,8 +6,15 @@ const dbconfig = require('./dbconfig.json');
 const app = express();  
 app.use(express.json());
 
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "http://10.20.12.180:3000");
+    res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    next();
+})
+
 const port = "4000";
-const host = "localhost"; // runs on localhost to avoid external users access to database
+const host = "0.0.0.0"; // runs on localhost to avoid external users access to database
 
 // Obvious: checks password, return is it is correct or not, does not tell if the user is also correct etc.
 app.get('/checklogin', (req, res) => {
@@ -134,6 +141,53 @@ app.post('/createuser', (req, res) => {
             res.json({"message": "User created successfully"})
         });
     }
+
+    connection.end();
+});
+
+app.get('/getsubjects', (req, res) => {
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    let sql = `SELECT subject_id, subject_title, subject_description, subject_image, username FROM subject INNER JOIN user ON subject.subject_author = user.user_id`
+
+    connection.query(sql, (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        res.json(rows);
+    });
+    
+    connection.end();
+});
+
+app.post('/createlobby', (req, res) => {
+    const name = req.body.name;
+    const max_players = req.body.playercount;
+    const subject = req.body.subject;
+    const game_date = "2024-01-23"
+
+    let sql = "INSERT INTO `lobby`(`subject_id`, `lobby_name`, `max_players`, `game_date`) VALUES (?,?,?,?);"
+
+    // remove comment tags if issues with inserting empty names
+    //if (!name) {
+    //    sql = `INSERT INTO lobby('subject_id', 'max_players', 'game_date') VALUES (?, ?, ?)`
+    //}
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    connection.query(sql, [subject, name, max_players, game_date], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        // send back lobby id to open up lobby page
+        res.json({"lobbyId": rows.insertId});
+    });
+
+    connection.end();
 });
 
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));
