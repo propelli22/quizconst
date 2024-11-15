@@ -18,11 +18,10 @@ const port = "4000";
 const host = "localhost"; // runs on localhost to avoid external users access to database
 
 // Obvious: checks password, return is it is correct or not, does not tell if the user is also correct etc.
-app.get('/checklogin', (req, res) => {
+app.post('/checklogin', (req, res) => {
     console.log("used Check login");
 
-    const user = req.query.user;
-    const password = req.query.password;
+    const {user, password} = req.body;
 
     const sql = 'SELECT password FROM user WHERE username = ?';
 
@@ -94,31 +93,28 @@ app.get('/lobbydata', (req, res) => {
 });
 
 // check if user exists, returns true or false, if true, returns what info were the same, else returns only false
-app.get('/checkuser', (req, res) => {
+app.post('/checkuser', (req, res) => {
     console.log("used Check user");
 
-    const username = req.query.user;
-    const email = req.query.email;
+    const {user, email} = req.body;
 
-    const sql = 'SELECT username FROM user WHERE username = ?; SELECT email FROM user WHERE email = ?;';
+    const sql = 'SELECT * FROM user WHERE username = ? OR email = ?';
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
 
-    connection.query(sql, [username, email], (err, rows) => {
+    connection.query(sql, [user, email], (err, rows) => {
         if (err) {
             throw err;
         }
 
+        console.log(rows.length);
+
         // send back result, could be improved with better response
-        if (rows[0].username && rows[0].email) {
-            res.json({"message": "both"})
-        } else if (rows[0].email) {
-            res.json({"message": "email"});
-        } else if (rows[0].username) {
-            res.json({"message": "username"})
+        if (rows.length == 0) {
+            res.json({"message": "OK"});
         } else {
-            res.json({"message": "OK"})
+            res.json({"message": "fail"})
         }
     });
 
@@ -127,6 +123,8 @@ app.get('/checkuser', (req, res) => {
 
 app.post('/createuser', (req, res) => {
     console.log("used Create user")
+
+    console.log(req.body);
 
     const username = req.body.user;
     const password = req.body.password;

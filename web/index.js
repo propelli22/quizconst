@@ -77,7 +77,9 @@ app.get('/create', (req, res) => {
 app.post('/register', (req, res) => {
     console.log("used Register");
 
-    const {username, email, password} = req.body;
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
     
     const saltRounds = 10;
 
@@ -88,13 +90,15 @@ app.post('/register', (req, res) => {
             password: hash
         }
 
-        const responseCheck = await fetch(`http://localhost:4000/checkuser?user=${username}&email=${email}`, {
-            method: 'GET'
+        const responseCheck = await fetch(`http://localhost:4000/checkuser`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
         });
 
         const checkData = await responseCheck.json();
 
-        if (checkData == {"message": "OK"}) {
+        if (checkData.message == 'OK') {
             const responeCreate = await fetch('http://localhost:4000/createuser', {
                 method: 'POST',
                 body: JSON.stringify(body),
@@ -105,24 +109,35 @@ app.post('/register', (req, res) => {
     
             res.json(data);
         } else {
-            res.json(checkData)
+            res.json(checkData);
         }
     });
 
 });
 
-app.get('/login', async (req, res) => {
+app.post('/login', async (req, res) => {
     console.log("used Login");
 
-    const {username, password} = req.query;
+    const {input_name, input_log} = req.body;
 
-    const checkLogin = await fetch(`http://localhost:4000/checklogin?user=${username}&password=${password}`, {
-        method: 'GET'
+    const body = {
+        user: input_name,
+        password: input_log
+    };
+
+    const checkLogin = await fetch(`http://localhost:4000/checklogin`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {'Content-Type': 'application/json'}
     });
 
     const checkResult = await checkLogin.json();
 
-    res.json(checkResult);
+    if (checkResult === true) {
+        res.json({"message": "cool"});
+    } else {
+        res.json({"message": "not cool"})
+    }
 });
 
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}...`));

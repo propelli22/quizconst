@@ -137,15 +137,15 @@ var passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 
 document.getElementById("sign-up-button").addEventListener("click", () => {
 
-    let usernameSignup = document.getElementById("signup-username").value;
+    let usernameSignup = document.getElementById("username").value;
     let wrongNameError = document.getElementById("wrongName");
     let emptyNameError = document.getElementById("emptyName");
 
-    let email = document.getElementById("signup-email").value;
+    let email = document.getElementById("email").value;
     let wrongEmailError = document.getElementById("wrongEmail");
     let emptyEmailError = document.getElementById("emptyEmail");
 
-    let passwordSignup = document.getElementById("signup-password").value;
+    let passwordSignup = document.getElementById("password").value;
     let wrongPasswordError = document.getElementById("wrongPasswordSignup");
     let emptyPasswordError = document.getElementById("emptyPasswordSignup");
 
