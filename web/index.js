@@ -103,28 +103,18 @@ app.post('/register', (req, res) => {
             password: hash
         }
 
-        const login = {
-            input_name: username,
-            input_log: password
-        }
-
         const responseCheck = await fetch(`http://localhost:4000/checkuser`, {
             method: 'POST',
             body: JSON.stringify(body),
             headers: {'Content-Type': 'application/json'}
         });
 
-        const checkData = await responseCheck.json();
-
-        if (checkData.message == 'OK') {
+        if (responseCheck.status == 200) {
             const responeCreate = await fetch('http://localhost:4000/createuser', {
                 method: 'POST',
                 body: JSON.stringify(body),
                 headers: {'Content-Type': 'application/json'}
             });
-
-            console.log(responeCreate)
-            console.log("====s")
     
             if (responeCreate.status == 201) {
                 const sessionId = `${username}-${Date.now()}`
@@ -140,10 +130,10 @@ app.post('/register', (req, res) => {
                 const lastPage = req.query.redirect || '/';
                 res.redirect(lastPage);
             } else {
-                res.json({"message": "WHOOPS"})
+                res.status(400).json({"message": "Failed to create new user, please check input."})
             }
         } else {
-            res.json(checkData);
+            res.status(400).json({"message": "User already exists."});
         }
     });
 
@@ -179,7 +169,7 @@ app.post('/login', async (req, res) => {
         });
 
         const lastPage = req.query.redirect || '/';
-        res.redirect(lastPage);
+        res.status(200).redirect(lastPage);
     } else {
         res.status(401).json({ "message": "Failed to authenticate user, please check input."})
     }

@@ -112,9 +112,9 @@ app.post('/checkuser', (req, res) => {
 
         // send back result, could be improved with better response. TODO: change res to http status code
         if (rows.length == 0) {
-            res.json({"message": "OK"});
+            res.status(200).json({"message": "No user found."});
         } else {
-            res.json({"message": "fail"})
+            res.status(400).json({"message": "Found user."})
         }
     });
 
