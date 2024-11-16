@@ -110,7 +110,7 @@ app.post('/checkuser', (req, res) => {
 
         console.log(rows.length);
 
-        // send back result, could be improved with better response
+        // send back result, could be improved with better response. TODO: change res to http status code
         if (rows.length == 0) {
             res.json({"message": "OK"});
         } else {
@@ -144,7 +144,7 @@ app.post('/createuser', (req, res) => {
                 throw err;
             }
     
-            res.json({"message": "User created successfully"})
+            res.status(201).json({"message": "User created successfully"})
         });
     }
 

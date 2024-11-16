@@ -29,27 +29,29 @@ var lobbyModal = document.getElementById("create-lobby-modal");
 var lobbyButton = document.getElementById("create-button");
 var lobbySpan = document.getElementsByClassName("close")[1];
 
-let cLobbySubjectButton = document.getElementById("c-lobby-select-subject");
+const cLobbySubjectButton = document.getElementById("c-lobby-select-subject");
  
-subjectButton.onclick = function() {
-  subjectModal.style.display = "block";
-}
-
-cLobbySubjectButton.onclick = function() {
-  subjectModal.style.display = "block";
-}
-
-subjectSpan.onclick = function() {
-  subjectModal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == subjectModal) {
+if (subjectButton) {
+  subjectButton.onclick = function() {
+    subjectModal.style.display = "block";
+  }
+  
+  cLobbySubjectButton.onclick = function() {
+    subjectModal.style.display = "block";
+  }
+  
+  subjectSpan.onclick = function() {
     subjectModal.style.display = "none";
   }
-
-  if (event.target == lobbyModal) {
-    lobbyModal.style.display = "none";
+  
+  window.onclick = function(event) {
+    if (event.target == subjectModal) {
+      subjectModal.style.display = "none";
+    }
+  
+    if (event.target == lobbyModal) {
+      lobbyModal.style.display = "none";
+    }
   }
 }
 

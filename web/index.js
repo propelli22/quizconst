@@ -3,7 +3,7 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const fetch = (...args) =>
     import('node-fetch').then(({default: fetch}) => fetch(...args));
-const dotenv = require('dotenv')
+const session = require('express-session');
 
 const app = express();
 app.use(express.urlencoded({extended: 'false'}))
@@ -20,6 +20,15 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'public'));
 app.use(express.static(__dirname + '/public'));
 
+app.use(
+    session({
+        secret: 'kissa-putkessa',
+        resave: false,
+        saveUninitialized: false,
+        cookie: { secure: false, httpOnly: true }
+    })
+);
+
 const port = "3000";
 const host = "0.0.0.0"; // run on device local ip
 
@@ -27,6 +36,7 @@ app.get('/', async (req, res) => {
     console.log("loaded Frontpage");
 
     const language = req.query.language;
+    const sessionId = req.session.sessionId || null;
 
     let subjectsURL = 'http://localhost:4000/getsubjects'
     const settings = {
@@ -46,17 +56,20 @@ app.get('/', async (req, res) => {
     if (language == 'fi') {
         res.render('home', {
             ...fi_home,
-            subjects: subjectsURL
+            subjects: subjectsURL,
+            sessionId: sessionId
         });
     } else if (language == 'en') {
         res.render('home', {
             ...en_home,
-            subjects: subjectsURL
+            subjects: subjectsURL,
+            sessionId: sessionId
         });
     } else { // by default render the finnish verison
         res.render('home', {
             ...fi_home,
-            subjects: subjectsURL
+            subjects: subjectsURL,
+            sessionId: sessionId
         });
     }
 });
@@ -90,6 +103,11 @@ app.post('/register', (req, res) => {
             password: hash
         }
 
+        const login = {
+            input_name: username,
+            input_log: password
+        }
+
         const responseCheck = await fetch(`http://localhost:4000/checkuser`, {
             method: 'POST',
             body: JSON.stringify(body),
@@ -104,10 +122,26 @@ app.post('/register', (req, res) => {
                 body: JSON.stringify(body),
                 headers: {'Content-Type': 'application/json'}
             });
+
+            console.log(responeCreate)
+            console.log("====s")
     
-            const data = await responeCreate.json();
-    
-            res.json(data);
+            if (responeCreate.status == 201) {
+                const sessionId = `${username}-${Date.now()}`
+                req.session.userId = username;
+                req.session.sessionId = sessionId;
+
+                res.cookie('sessionId', sessionId, {
+                    httpOnly: true,
+                    secure: false,
+                    maxAge: 24 * 60 * 60 * 1000
+                });
+            
+                const lastPage = req.query.redirect || '/';
+                res.redirect(lastPage);
+            } else {
+                res.json({"message": "WHOOPS"})
+            }
         } else {
             res.json(checkData);
         }
@@ -134,9 +168,20 @@ app.post('/login', async (req, res) => {
     const checkResult = await checkLogin.json();
 
     if (checkResult === true) {
-        res.json({"message": "cool"});
+        const sessionId = `${input_name}-${Date.now()}`
+        req.session.userId = input_name;
+        req.session.sessionId = sessionId;
+
+        res.cookie('sessionId', sessionId, {
+            httpOnly: true,
+            secure: false,
+            maxAge: 24 * 60 * 60 * 1000
+        });
+
+        const lastPage = req.query.redirect || '/';
+        res.redirect(lastPage);
     } else {
-        res.json({"message": "not cool"})
+        res.status(401).json({ "message": "Failed to authenticate user, please check input."})
     }
 });
 

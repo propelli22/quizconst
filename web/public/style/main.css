@@ -102,6 +102,10 @@ input[type="number"], select {
     margin: 5%;
 }
 
+#find-subject, #create-subject {
+    display: none;
+}
+
 /* tablet size */
 @media screen and (min-width: 660px) {
     #admin-settings-button {
@@ -127,6 +131,10 @@ input[type="number"], select {
         grid-column: 5 / span 2;
         justify-content: center;
         align-items: center;
+    }
+
+    #find-subject, #create-subject {
+        display: none;
     }
 }
 
