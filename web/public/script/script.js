@@ -29,27 +29,53 @@ var lobbyModal = document.getElementById("create-lobby-modal");
 var lobbyButton = document.getElementById("create-button");
 var lobbySpan = document.getElementsByClassName("close")[1];
 
-let cLobbySubjectButton = document.getElementById("c-lobby-select-subject");
+var userModal = document.getElementById("user-modal");
+var userButton = document.getElementById("account");
+var userSpan = document.getElementsByClassName("close")[3];
+
+const cLobbySubjectButton = document.getElementById("c-lobby-select-subject");
  
-subjectButton.onclick = function() {
-  subjectModal.style.display = "block";
-}
-
-cLobbySubjectButton.onclick = function() {
-  subjectModal.style.display = "block";
-}
-
-subjectSpan.onclick = function() {
-  subjectModal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == subjectModal) {
+if (subjectButton) {
+  subjectButton.onclick = function() {
+    subjectModal.style.display = "block";
+  }
+  
+  cLobbySubjectButton.onclick = function() {
+    subjectModal.style.display = "block";
+  }
+  
+  subjectSpan.onclick = function() {
     subjectModal.style.display = "none";
   }
+  
+  window.onclick = function(event) {
+    if (event.target == subjectModal) {
+      subjectModal.style.display = "none";
+    }
+  
+    if (event.target == lobbyModal) {
+      lobbyModal.style.display = "none";
+    }
+  }
+}
 
-  if (event.target == lobbyModal) {
-    lobbyModal.style.display = "none";
+if (userButton) {
+  userButton.onclick = function() {
+    userModal.style.display = "block";
+  }
+  
+  userSpan.onclick = function() {
+    userModal.style.display = "none";
+  }
+  
+  window.onclick = function(event) {
+    if (event.target == userModal) {
+      userModal.style.display = "none";
+    }
+  
+    if (event.target == userModal) {
+      userModal.style.display = "none";
+    }
   }
 }
 
@@ -137,15 +163,15 @@ var passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 
 document.getElementById("sign-up-button").addEventListener("click", () => {
 
-    let usernameSignup = document.getElementById("signup-username").value;
+    let usernameSignup = document.getElementById("username").value;
     let wrongNameError = document.getElementById("wrongName");
     let emptyNameError = document.getElementById("emptyName");
 
-    let email = document.getElementById("signup-email").value;
+    let email = document.getElementById("email").value;
     let wrongEmailError = document.getElementById("wrongEmail");
     let emptyEmailError = document.getElementById("emptyEmail");
 
-    let passwordSignup = document.getElementById("signup-password").value;
+    let passwordSignup = document.getElementById("password").value;
     let wrongPasswordError = document.getElementById("wrongPasswordSignup");
     let emptyPasswordError = document.getElementById("emptyPasswordSignup");
 
