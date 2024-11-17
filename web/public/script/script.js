@@ -29,6 +29,10 @@ var lobbyModal = document.getElementById("create-lobby-modal");
 var lobbyButton = document.getElementById("create-button");
 var lobbySpan = document.getElementsByClassName("close")[1];
 
+var userModal = document.getElementById("user-modal");
+var userButton = document.getElementById("account");
+var userSpan = document.getElementsByClassName("close")[3];
+
 const cLobbySubjectButton = document.getElementById("c-lobby-select-subject");
  
 if (subjectButton) {
@@ -51,6 +55,26 @@ if (subjectButton) {
   
     if (event.target == lobbyModal) {
       lobbyModal.style.display = "none";
+    }
+  }
+}
+
+if (userButton) {
+  userButton.onclick = function() {
+    userModal.style.display = "block";
+  }
+  
+  userSpan.onclick = function() {
+    userModal.style.display = "none";
+  }
+  
+  window.onclick = function(event) {
+    if (event.target == userModal) {
+      userModal.style.display = "none";
+    }
+  
+    if (event.target == userModal) {
+      userModal.style.display = "none";
     }
   }
 }

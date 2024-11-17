@@ -56,6 +56,10 @@ input[type="number"], select {
     border: 2px #4E4C67 solid;
 }
 
+.textInput {
+    border: #4E4C67 2px solid;
+}
+
 #language-form {
     grid-column: 1;
     margin: auto;
