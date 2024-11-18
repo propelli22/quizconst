@@ -202,4 +202,22 @@ app.post('/createlobby', (req, res) => {
     connection.end();
 });
 
+
+app.get('/time', (req, res) => {
+    const time = req.query.question;
+    let sql = `SELECT time FROM question WHERE question_id = ?`
+
+    console.log(time)
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    connection.query(sql, [time], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        res.json(rows);
+    });
+    connection.end();
+})
+
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));

@@ -112,8 +112,7 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/login', async (req, res) => {
-    console.log("used Login");
-
+    
     const {username, password} = req.query;
 
     const checkLogin = await fetch(`http://localhost:4000/checklogin?user=${username}&password=${password}`, {
