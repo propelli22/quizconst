@@ -1,0 +1,16 @@
+{
+    "page": "Game",
+    "language": "en",
+    "account": "Account",
+    "accountSettings": "Account settings",
+    "username": "Username",
+    "insertName": "Insert name",
+    "userBackground": "Background",
+    "attachImage": "Attach image",
+    "gameHistory": "Your game history",
+    "view": "View",
+    "admin_settings": "Admin settings",
+    "made_by": "Built by:",
+    "developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
+    "info": "2024, dev version 1"
+}

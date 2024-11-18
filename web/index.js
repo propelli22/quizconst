@@ -14,6 +14,8 @@ const fi_home = require('./languages/fi_home.json')
 const en_home = require('./languages/en_home.json')
 const fi_create = require('./languages/fi_create.json')
 const en_create = require('./languages/en_create.json')
+const fi_game = require('./languages/fi_game.json');
+const en_game = require('./languages/en_game.json')
 
 // EJS setup
 app.set('view engine', 'ejs');
@@ -87,8 +89,26 @@ app.get('/create', (req, res) => {
 	}
 });
 
+// using post to hide passed data
+// if we used get, a user could easily change what question they are on and cheat in the game
+// idk if this works :)
 app.get('/game', (req, res) => {
     // kalle does this. - Kalle
+    console.log("loaded Game");
+    const lobby = req.body.lobby;
+    const language = req.body.language;
+    const sessionId = req.headers.cookie || null;
+
+    if (language == 'fi') {
+        res.render('game', fi_game);
+    } else if (language == 'en') {
+        res.render('game', en_game);
+    } else { // by default, render the finnish version
+        res.render('game', {
+            ...fi_game,
+            sessionId: sessionId
+        });
+    }
 });
 
 app.post('/register', (req, res) => {

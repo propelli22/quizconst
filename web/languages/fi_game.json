@@ -1,0 +1,18 @@
+{
+    "page": "Peli",
+    "language": "fi",
+    "find_subject": "Etsi aihe",
+    "create_subject": "Luo aihe",
+    "account": "Käyttäjä",
+    "accountSettings": "Käyttäjä asetukset",
+    "username": "Käyttäjänimi",
+    "insertName": "Syötä nimi",
+    "userBackground": "Taustakuva",
+    "attachImage": "Liitä kuva",
+    "gameHistory": "Peli historiasi",
+    "view": "Katso",
+    "admin_settings": "Ylläpitäjän asetukset",
+    "made_by": "Projektin tekijät:",
+    "developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
+    "info": "2024, dev version 1"
+}
