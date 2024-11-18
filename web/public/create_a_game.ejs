@@ -3,6 +3,7 @@
 <html>
 <head>
 	<link rel="stylesheet" type="text/css" href="style/create_a_game.css">
+	<title>Create a Game - Quizconst</title>
 </head>
 <body>
 	<main>
@@ -10,8 +11,8 @@
 		<div id="question-container">
 			<button id="open-question-modal">></button>
 			<div id="questionModal" class="modal">
-				<div class="modal-content">
-					<span class="close">&times;</span>
+				<div class="modal-content" id="question-modal-content">
+					<span class="close" id="closeQuestionModal">&times;</span>
 					<h2>Select Question</h2>
 					<div id="question-list">
 						<div class="question-item">Question 1</div>
@@ -20,14 +21,43 @@
 				</div>
 			</div>
 		</div>
+		<h2 id="aiheen-nimi">Skibidi!</h2>
 		<div id="question-title">
-			<p id="selected-question-name">Question 1</p>
-			<label for="file-upload" class="custom-file-upload">
-				<i class="fa fa-cloud-upload"></i> Upload Image
+			<h1 id="selected-question-name">Question 1</h1>
+			<label for="file-upload" id="custom-file-upload">
+				<i id="image-upload">Upload Image</i>
 			</label>
-			<input type="file" id="file-upload" style="display: none;">
+			<input type="file" id="file-upload" accept=".jpg,.jpeg,.png,.bmp,.webp,.svg,.apng,.avif" style="display: none;">
+			<div id="image-name-container" class="question-item" style="display: none; cursor: pointer;">
+				<span class="close" id="closeImageNameContainer">&times;</span>
+				<span id="image-name"></span>
+			</div>
+			<img id="uploaded-image" style="display: none; max-width: 100%; height: auto;" />
+
 		</div>
+		<!-- Fullscreen Image Modal -->
+	<div id="imageModal" class="modal" style="display: none;">
+		<span class="close" id="closeImageModal">&times;</span>
+		<img class="image-modal-content" id="fullscreen-image">
+	</div>
+	<div id="question-answers">
+		<div class="answer-container" id="triangle">
+			<p class="answer" id="answer1">Answer 1</p>
+		</div>
+		<div class="answer-container" id="rhombus">
+			<p class="answer" id="answer2">Answer 2</p>
+		</div>
+		<div class="answer-container" id="circle">
+			<p class="answer" id="answer3">Answer 3</p>
+		</div>
+		<div class="answer-container" id="square">
+			<p class="answer" id="answer4">Answer 4</p>
+		</div>
+	</div>
+	<button id="asetukset">Asetukset</button>
 	</main>
-	<script src="script/creating-game-dia-modal.js"></script>
+	<script src="script/creating-game-image-upload.js"></script>
+	<script src="script/creating-game-question-modal.js"></script>
+	<script src="script/creating-game-text-renaming.js"></script>
 </body>
 </html>
