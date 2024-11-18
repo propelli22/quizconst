@@ -1,0 +1,88 @@
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+#find-subject-modal {
+    z-index: 2;
+}
+
+#find-subject-modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+  
+.close:hover, .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.subject-selection {
+    display: grid;
+    border: 3px #4E4C67 solid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+    margin: 10px;
+    overflow: hidden;
+}
+
+.subject-data {
+    padding: 5px;
+}
+
+.subject-selection img {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    float: left;
+    width: 100%;
+    height: auto;
+    max-width: 15vh;
+    max-height: 15vh;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    margin-left: auto;
+}
+
+.select-button {
+    font-family: "laca-variable", sans-serif;
+    font-weight: 800;
+    background-color: #1ce658;
+    color: #4E4C67;
+    width: 50%;
+    border: 2px #4E4C67 solid;
+    height: 50%;
+}
+
+@media screen and (min-width: 660px) {
+    #subject-container {
+        display: grid;
+        grid-template-columns: 50% 50%;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    #subject-container {
+        grid-template-columns: 33% 33% 33%;
+    }
+}
