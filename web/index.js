@@ -36,7 +36,7 @@ app.get('/', async (req, res) => {
     console.log("loaded Frontpage");
 
     const language = req.query.language;
-    const sessionId = req.session.sessionId || null;
+    const sessionId = req.headers.cookie || null;
 
     let subjectsURL = 'http://localhost:4000/getsubjects'
     const settings = {
@@ -87,6 +87,10 @@ app.get('/create', (req, res) => {
 	}
 });
 
+app.get('/game', (req, res) => {
+    // kalle does this. - Kalle
+});
+
 app.post('/register', (req, res) => {
     console.log("used Register");
 
@@ -117,11 +121,11 @@ app.post('/register', (req, res) => {
             });
     
             if (responeCreate.status == 201) {
-                const sessionId = `${username}-${Date.now()}`
+                const loggedUser = `${username}`
                 req.session.userId = username;
-                req.session.sessionId = sessionId;
+                req.session.sessionId = loggedUser;
 
-                res.cookie('sessionId', sessionId, {
+                res.cookie('sessionId', loggedUser, {
                     httpOnly: true,
                     secure: false,
                     maxAge: 24 * 60 * 60 * 1000
@@ -158,11 +162,11 @@ app.post('/login', async (req, res) => {
     const checkResult = await checkLogin.json();
 
     if (checkResult === true) {
-        const sessionId = `${input_name}-${Date.now()}`
+        const loggedUser = `${input_name}`
         req.session.userId = input_name;
-        req.session.sessionId = sessionId;
+        req.session.sessionId = loggedUser;
 
-        res.cookie('sessionId', sessionId, {
+        res.cookie('sessionId', loggedUser, {
             httpOnly: true,
             secure: false,
             maxAge: 24 * 60 * 60 * 1000
