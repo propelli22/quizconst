@@ -206,8 +206,9 @@ document.getElementById("sign-up-button").addEventListener("click", () => {
     }
 });
 
-//Log in validation !!!
+//Log in validation
 
+// Get the values and IDs from the input fields
 document.getElementById("log-in-button").addEventListener("click", () => {
     const usernameLogIn = document.getElementById("login-username").value;
     const wrongNameLogError = document.getElementById("wrongNameLogin");
@@ -217,6 +218,7 @@ document.getElementById("log-in-button").addEventListener("click", () => {
     const emptyPasswordError = document.getElementById("emptyPasswordLogin");
     const wrongPasswordError = document.getElementById("wrongPasswordLogin");
     
+    // Set the validation to true
     var isValid2 = true;
 
     //Verification of the input fields (name, password)
@@ -252,6 +254,7 @@ document.getElementById("log-in-button").addEventListener("click", () => {
         emptyPasswordError.style.display = "none";
     }
 
+    // If the validation is true, the form will be submitted else it will not
     if (isValid2) {
         document.getElementById("log-in-content").onsubmit = function() { return true; };
     } else {

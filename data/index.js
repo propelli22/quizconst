@@ -202,10 +202,11 @@ app.post('/createlobby', (req, res) => {
     connection.end();
 });
 
+// Get the time for the question based on questions ID
 
 app.get('/time', (req, res) => {
     const time = req.query.question;
-    let sql = `SELECT time FROM question WHERE question_id = ?`
+    let sql = `SELECT time, points FROM question WHERE question_id = ?`
 
     console.log(time)
     const connection = mysql.createConnection(dbconfig);
@@ -215,9 +216,15 @@ app.get('/time', (req, res) => {
         if (err) {
             throw err;
         }
-        res.json(rows);
+
+        rows.forEach(row => {
+            console.log(row.time, row.points);
+        });
+        res.json(rows); 
     });
     connection.end();
 })
+
+
 
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));
