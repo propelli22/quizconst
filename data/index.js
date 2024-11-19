@@ -19,7 +19,7 @@ const host = "localhost"; // runs on localhost to avoid external users access to
 
 // Obvious: checks password, return is it is correct or not, does not tell if the user is also correct etc.
 app.post('/checklogin', (req, res) => {
-    console.log("used Check login");
+    console.log("used /checklogin");
 
     const {user, password} = req.body;
 
@@ -46,7 +46,7 @@ app.post('/checklogin', (req, res) => {
 
 // responds with all of the lobby info
 app.get('/lobbydata', (req, res) => {
-    console.log("used Lobby data");
+    console.log("used /lobbydata");
 
     const lobby = req.query.id;
 
@@ -94,7 +94,7 @@ app.get('/lobbydata', (req, res) => {
 
 // check if user exists, returns true or false, if true, returns what info were the same, else returns only false
 app.post('/checkuser', (req, res) => {
-    console.log("used Check user");
+    console.log("used /checkuser");
 
     const {user, email} = req.body;
 
@@ -122,7 +122,7 @@ app.post('/checkuser', (req, res) => {
 });
 
 app.post('/createuser', (req, res) => {
-    console.log("used Create user")
+    console.log("used /createuser")
 
     console.log(req.body);
 
@@ -152,7 +152,7 @@ app.post('/createuser', (req, res) => {
 });
 
 app.get('/getsubjects', (req, res) => {
-    console.log("used Get subjects");
+    console.log("used /getsubjects");
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
@@ -171,7 +171,7 @@ app.get('/getsubjects', (req, res) => {
 });
 
 app.post('/createlobby', (req, res) => {
-    console.log("used Create lobby")
+    console.log("used /createlobby")
 
     const name = req.body.name;
     const max_players = req.body.playercount;
@@ -198,6 +198,62 @@ app.post('/createlobby', (req, res) => {
     });
 
     connection.end();
+});
+
+// NOT TESTED YET
+app.post('/question', (req, res) => {
+    console.log("used /question");
+
+    const questionId = req.body.question;
+    const subjectId = req.body.subject;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    const sql = 'SELECT * FROM question WHERE question_id = ?'
+
+    connection.query(sql, [questionId], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        if (rows[0].subject_id != subjectId) {
+            res.status(400).json({"message": "Something went wrong, please check input."})
+        } else {
+            res.json(rows);
+        }
+    });
+
+    connection.end();
+});
+
+// NOT TESTED YET
+app.post('/playerresult', (req, res) => {
+    console.log("used /playerresult");
+
+    const lobby = req.body.lobbyId;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    const sql = 'SELECT * FROM player WHERE lobby_id = ?';
+
+    connection.query(sql, [lobby], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        res.json(rows);
+    });
+
+    connection.end();
+});
+
+// NOT TESTED YET
+app.post('/questionready', (req, res) => {
+    console.log("used /questionready");
+
+    // wtf do i do here :sob: 
 });
 
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));
