@@ -1,6 +1,27 @@
 <%- include('partials/header') %>
 <link rel="stylesheet" href="style/game.css">
 <main>
-    <p>MOI TÄMÄ ON TESTI!</p>
+    <div id="main-game-container">
+        <div id="game-question-container">
+            <h2>Aiheen otsikko</h2>
+            <h3>Kysymys</h3>
+            <img src="style/content/public_img/testi.png" alt="Image related to question" id="question-img">
+        </div>
+
+        <div id="answers-container">
+            <div id="answer1" class="answers">
+                <p>Vaihtoehto 1</p>
+            </div>
+            <div id="answer2" class="answers">
+                <p>Vaihtoehto 2</p>
+            </div>
+            <div id="answer3" class="answers">
+                <p>Vaihtoehto 3</p>
+            </div>
+            <div id="answer4" class="answers">
+                <p>Vaihtoehto 4</p>
+            </div>
+        </div>
+    </div>
 </main>
 <%- include('partials/footer') %>

@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const fetch = (...args) =>
     import('node-fetch').then(({default: fetch}) => fetch(...args));
 const session = require('express-session');
+const { XMLParser, XMLBuilder, XMLValidator} = require("fast-xml-parser");
 
 const app = express();
 app.use(express.urlencoded({extended: 'false'}))
@@ -89,10 +90,7 @@ app.get('/create', (req, res) => {
 	}
 });
 
-// using post to hide passed data
-// if we used get, a user could easily change what question they are on and cheat in the game
-// idk if this works :)
-app.get('/game', (req, res) => {
+app.get('/game', async (req, res) => {
     // kalle does this. - Kalle
     console.log("loaded Game");
     const lobby = req.body.lobby;

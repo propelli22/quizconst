@@ -1,1 +1,46 @@
-/*lol*/
+.answers {
+    border: #4E4C67 2px solid;
+    grid-column: span 2;
+    height: auto;
+    padding: 5%;
+}
+
+#answers-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    row-gap: 10%;
+    column-gap: 1%;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-question-container {
+    text-align: center;
+    margin-bottom: 2%;
+}
+
+#question-img {
+    width: 80vw;
+    height: 30vh;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+body {
+    background: linear-gradient(45deg, #DCD6F7, #B4869F, #985F6F);
+    background-size: 400% 400%;
+    animation: gradient 20s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
