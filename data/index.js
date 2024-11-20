@@ -200,7 +200,11 @@ app.post('/createlobby', (req, res) => {
     connection.end();
 });
 
-// NOT TESTED YET
+// TODO for the main game data requests:
+// - Improve responses
+// - Add input validation
+//
+// Main game data requests, done with post to make access of data as hidden as possible
 app.post('/question', (req, res) => {
     console.log("used /question");
 
@@ -217,7 +221,7 @@ app.post('/question', (req, res) => {
             throw err;
         }
 
-        if (rows[0].subject_id != subjectId) {
+        if (rows[0].subject_id != subjectId) { 
             res.status(400).json({"message": "Something went wrong, please check input."})
         } else {
             res.json(rows);
@@ -227,33 +231,112 @@ app.post('/question', (req, res) => {
     connection.end();
 });
 
-// NOT TESTED YET
 app.post('/playerresult', (req, res) => {
     console.log("used /playerresult");
 
-    const lobby = req.body.lobbyId;
+    const player = req.body.playerId;
+    const points = req.body.recivedPoints;
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
 
-    const sql = 'SELECT * FROM player WHERE lobby_id = ?';
+    const sql = "UPDATE `player` SET `points`= points + ? WHERE player_id = ?";
+
+    connection.query(sql, [points, player], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        res.status(200).json(rows); // improve response
+    });
+
+    connection.end();
+});
+
+// this looks like stupid code, and it probably is, so, TODO: maybe rewrite better
+app.post('/questionready', (req, res) => {
+    console.log("used /questionready");
+
+    const player = req.body.playerId;
+    const lobby = req.body.lobbyId;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+    const sql = "UPDATE `player` SET `ready`='1' WHERE player_id = ?";
+    const sql2 = "SELECT * FROM player WHERE lobby_id = ?"
+    let playersReady;
+
+    // mark player as ready
+    connection.query(sql, [player], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+    });
+
+    getReadyPlayers();
+
+    // query is in the function so that it can be ran again later in the checkReadyPlayers loop
+    function getReadyPlayers() {
+        connection.query(sql2, [lobby], (err, rows) => {
+            if (err) {
+                throw err;
+            }
+    
+            playersReady = rows;
+        });
+    }
+
+    function allPlayersReady() {
+        let totalReady = 0;
+        getReadyPlayers();
+
+        for (let i = 0; i < playersReady.length; i++) {
+            if (playersReady[i].ready == 1) {
+                totalReady++
+            }
+        }
+
+        if (totalReady == playersReady.length) {
+            clearInterval(checkIfAllReady);
+            res.json({"message": "ALL READY"}) // improve response, add status
+            connection.end();
+        }
+    }
+
+    // every 1s, check if all is ready.
+    const checkIfAllReady = setInterval(allPlayersReady, 1000);
+});
+
+// TODO: add logic to check if the last question was the last question of the subject, add to response if it was.
+app.post('/results', (req, res) => {
+    console.log("used /results");
+
+    const lobby = req.body.lobbyId;
+    const player = req.body.playerId;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+    const sql = "SELECT * FROM player WHERE lobby_id = ?";
+    const sql2 = "UPDATE `player` SET `ready` = '0' WHERE player_id = ?";
 
     connection.query(sql, [lobby], (err, rows) => {
         if (err) {
             throw err;
         }
 
-        res.json(rows);
+        res.status(200).json(rows); // improve response
+    });
+
+    // no need to respond back, sets players as not ready.
+    // maybe run this before the other query in case this one throws an error?
+    connection.query(sql2, [player], (err, rows) => {
+        if (err) {
+            throw err;
+        }
     });
 
     connection.end();
 });
 
-// NOT TESTED YET
-app.post('/questionready', (req, res) => {
-    console.log("used /questionready");
-
-    // wtf do i do here :sob: 
-});
-
+// run the server
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));
