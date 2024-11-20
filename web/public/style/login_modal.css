@@ -2,11 +2,11 @@
 
 #log-modal-content {
     background-color: #fefefe;
-    margin: auto;
+    margin: auto; /* Center the modal */
     padding: 20px;
     border: 1px solid #888;
     width: 25%;
-    max-height: calc(110vh - 210px);
+    max-height: calc(110vh - 210px); /* Prevent overflow */
     overflow-y: auto;
 }
 
@@ -44,7 +44,7 @@
     max-width: 21vh;
     margin-bottom: 7px;
     border: solid black;
-
+    
 }
 
 #sign-up-content {
@@ -57,10 +57,12 @@
     font-size: 3rem;
 }
 
+/* Flexbox layout for forms */
 #log-in-content, #sign-up-content {
     display: flex;
     flex-direction: column;
 }
+
 
 #log-in-button, #sign-up-button {
     max-width: 20vw;
@@ -70,9 +72,10 @@
     background-color: white;
 }
 
+/* Responsive design adjustments */
 @media only screen and (max-width: 900px) {
     #log-modal-content {
-        width: 48vw;
+        width: 48vw; /* Adjust modal size for smaller screens */
         height: 100vh;
     }
 
@@ -81,7 +84,7 @@
 
 @media only screen and (max-width: 590px) {
     #log-modal-content {
-        width: 68vw;
+        width: 68vw; /* Further adjust for very small screens */
         height: 100vh;
     }
 }
