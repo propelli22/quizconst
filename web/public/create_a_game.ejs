@@ -1,63 +1,91 @@
 <%- include('partials/header') %>
-<!DOCTYPE html>
-<html>
-<head>
-	<link rel="stylesheet" type="text/css" href="style/create_a_game.css">
-	<title>Create a Game - Quizconst</title>
-</head>
-<body>
+<link rel="stylesheet" type="text/css" href="style/create_a_game.css">
 	<main>
 	<div id="game-creation">
 		<div id="question-container">
 			<button id="open-question-modal">></button>
-			<div id="questionModal" class="modal">
+			<div id="question-modal" class="modal">
 				<div class="modal-content" id="question-modal-content">
-					<span class="close" id="closeQuestionModal">&times;</span>
-					<h2>Select Question</h2>
+					<span class="close" id="close-question-modal">&times;</span>
+					<h2><%= select_question %></h2>
 					<div id="question-list">
-						<div class="question-item">Question 1</div>
+						<div class="question-item"><%= first_question %></div>
 					</div>
-					<button id="add-question">Add question</button>
+					<button id="add-question"><%= add_question %></button>
 				</div>
 			</div>
 		</div>
-		<h2 id="aiheen-nimi">Skibidi!</h2>
+		<h2 id="aiheen-nimi">Pelin nimi</h2>
 		<div id="question-title">
-			<h1 id="selected-question-name">Question 1</h1>
+			<h1 id="selected-question-name"><%= first_question %></h1>
 			<label for="file-upload" id="custom-file-upload">
-				<i id="image-upload">Upload Image</i>
+				<i id="image-upload"><%= image_upload %></i>
 			</label>
 			<input type="file" id="file-upload" accept=".jpg,.jpeg,.png,.bmp,.webp,.svg,.apng,.avif" style="display: none;">
-			<div id="image-name-container" class="question-item" style="display: none; cursor: pointer;">
-				<span class="close" id="closeImageNameContainer">&times;</span>
+			<div id="image-name-container" class="question-item">
+				<span class="close" id="close-image-name-container">&times;</span>
 				<span id="image-name"></span>
 			</div>
-			<img id="uploaded-image" style="display: none; max-width: 100%; height: auto;" />
+			<img id="uploaded-image"/>
 
 		</div>
-		<!-- Fullscreen Image Modal -->
-	<div id="imageModal" class="modal" style="display: none;">
-		<span class="close" id="closeImageModal">&times;</span>
+	<div id="image-modal" class="modal" style="display: none;">
+		<span class="close" id="close-image-modal">&times;</span>
 		<img class="image-modal-content" id="fullscreen-image">
 	</div>
 	<div id="question-answers">
 		<div class="answer-container" id="triangle">
-			<p class="answer" id="answer1">Answer 1</p>
+			<p class="answer" id="answer1"><%= answer %> 1</p>
 		</div>
 		<div class="answer-container" id="rhombus">
-			<p class="answer" id="answer2">Answer 2</p>
+			<p class="answer" id="answer2"><%= answer %> 2</p>
 		</div>
 		<div class="answer-container" id="circle">
-			<p class="answer" id="answer3">Answer 3</p>
+			<p class="answer" id="answer3"><%= answer %> 3</p>
 		</div>
 		<div class="answer-container" id="square">
-			<p class="answer" id="answer4">Answer 4</p>
+			<p class="answer" id="answer4"><%= answer %> 4</p>
 		</div>
 	</div>
-	<button id="asetukset">Asetukset</button>
+	<button id="settings-button"><%= settings %></button>
+	<div id="settings-modal" class="modal">
+		<div class="modal-content">
+			<span id="close-settings-modal" class="close">&times;</span>
+			<h2><%= settings %></h2>
+			<div id="settings-list">
+				<div class="setting-item">
+					<label for="game-name">Pelin nimi</label>
+					<input type="text" id="game-name" value="<%= game_name_placeholder %>">
+				</div>
+				<div class="setting-item">
+					<label for="question-time"><%= question_time %></label>
+					<input type="number" id="question-time" min="5" max="30" value="5" onkeyup="questionTimeSliderChanger(this.value)"/> 
+					<input type="range" id="question-time-slider" min="20" max="120" value="30" step="1" oninput="questionTimeInputChanger(this.value)" />
+				</div>
+				<div class="setting-item">
+					<label for="answer-time"><%= answer_time %></label>
+					<input type="number" id="answer-time" min="20" max="120" value="30" onkeyup="answerTimeSliderChanger(this.value)"/> 
+					<input type="range" id="answer-time-slider" min="20" max="120" value="30" step="1" oninput="answerTimeInputChanger(this.value)" />
+				</div>
+				<div class="setting-item">
+					<label for="answer-count"><%= answer_count %></label>
+					<input type="number" id="question-count" min="2" max="4" value="4" onkeyup="questionCountSliderChanger(this.value)"/> 
+					<input type="range" id="question-count-slider" min="2" max="4" value="4" step="1" oninput="questionCountInputChanger(this.value)" />
+				</div>
+				<div class="setting-item">
+					<label for="answer-points"><%= answer_points %></label>
+					<input type="number" id="answer-points" min="100" max="5000" value="1000" onkeyup="answerPointsSliderChanger(this.value)"/> 
+					<input type="range" id="answer-points-slider" min="100" max="5000" value="1000" step="100" oninput="answerPointsInputChanger(this.value)" />
+				</div>
+				<div class="setting-item">
+					<button id="save-settings">Save Settings</button>
+			</div>
+		</div>
 	</main>
+
 	<script src="script/creating-game-image-upload.js"></script>
 	<script src="script/creating-game-question-modal.js"></script>
 	<script src="script/creating-game-text-renaming.js"></script>
-</body>
-</html>
+	<script src="script/creating-game-settings.js"></script>
+	<script type="module" src="script/creating-game-modal-open-and-close-logic.js"></script>
+<%- include('partials/footer') %>
