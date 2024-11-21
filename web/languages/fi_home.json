@@ -45,5 +45,15 @@
     "sign_button": "Rekisteröidy",
     "made_by": "Projektin tekijät:",
     "developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
-    "info": "2024, dev version 1"
+    "info": "2024, dev version 1",
+    "adminSetting": "Ylläpitäjän asetukset",
+    "playerSearch": "Pelaajan haku",
+    "Banbutton": "Anna porttikielto",
+    "Unbanbutton": "Poista porttikielto",
+    "manageLobbys": "Hallitse auloja",
+    "errorMessageUnban": "Käyttäjä ei löytynyt",
+    "errorMessageBan": "Käyttäjä ei löytynyt",
+    "lobbySearch": "Aulahaku",
+    "deleteLobby": "Poista aula",
+    "lobbyName": "Aulan nimi"
 }

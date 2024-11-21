@@ -1,0 +1,27 @@
+    <link rel="stylesheet" href="style/admin-modal.css">
+    <!-- Admin modal -->
+<div id="admin-modal">
+    <!-- This needs backend adding so it searches players from SQL database -->
+         <!-- Also reminder to put display block to none when its done! -->
+    <form id="adminModal">
+        <span id="admin-close-button" class="close" style="position: absolute; top: 0; left: 0;">&times;</span>
+        <h2><%=adminSetting %></h2>
+        <h3><%=playerSearch %></h3>
+        <input min="4" type="text" id="playerSearch" name="playerSearch" placeholder="<%=playerSearch %>"> 
+        <button id="banButton" type="button"><%=Banbutton%></button> 
+        <p class="errorMessage" style="display: block; color: red;"><%=errorMessageUnban%></p>
+        <button id="unbanButton" type="button"><%=Unbanbutton%></button> 
+        <p class="errorMessage" style="display: block; color: red;"><%=errorMessageBan%></p>
+
+        <!--This is only front change it when doing back end so it takes the lobby name via SQL and searches them from SQL-->
+        <h3><%=manageLobbys%></h3>
+        <div style="position: relative;">
+            <input type="text" id="lobbySearch" name="lobbySearch" placeholder="<%=lobbySearch%>">
+            <div class="lobby-container">
+                <p id="lobbyName"><%=lobbyName%></p>
+                <button id="deleteLobbyButton" type="button"><%=deleteLobby%></button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="../script/admin.js"></script>

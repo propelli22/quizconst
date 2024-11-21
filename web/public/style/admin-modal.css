@@ -1,0 +1,114 @@
+#adminModal {
+    background-color: #fefefe;
+    margin: auto; /* Center the modal horizontally */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 20%;
+    height: 75%;
+    z-index: 1;
+    position: fixed; /* Ensure the modal is positioned above other content */
+    top: 0; /* Anchor to the top of the viewport */
+    bottom: 0; /* Anchor to the bottom of the viewport */
+    right: 0; /* Anchor to the right side of the viewport */
+    overflow: auto; /* Handle overflow content */
+    display: none; /* Hide the modal by default */
+    background-color: rgb(212, 212, 212);
+}
+
+
+#adminModal h2{
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+#adminModal h3{
+    text-align: center;
+    font-size: 1.25rem;
+    margin-top: 1rem;
+}
+
+#playerSearch, #lobbySearch, #banButton, #unbanButton {
+    margin-top: 0.5rem;
+    background-color: white;
+    border: 0.2rem solid black;
+    width: 16vw;
+    height: 6vh;
+    text-align: center;
+    margin: 0.5rem auto;
+}
+
+#unbanButton{
+    background-color: rgb(95, 255, 95);
+    margin-bottom: 0.3rem;
+    cursor: pointer;
+}
+
+#banButton{
+    background-color: rgb(255, 95, 95);
+    margin-bottom: 0.3rem;
+    cursor: pointer;
+}
+
+.errorMessage{
+    text-align: center;
+}
+
+.lobby-container {
+    display: flex; /* Align items in a row */
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+    padding: 0.3rem;
+    border: 1px solid black;
+    background-color: #f9f9f9;
+    width: 16vw;
+}
+
+#lobbyName {
+    margin: 0;
+    font-size: 1rem;
+}
+
+#deleteLobbyButton {
+    padding: 0.5rem 1rem;
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+
+/* Media query for screens between 1370px and 765px */
+@media (max-width: 1370px) and (min-width: 765px) {
+    #adminModal {
+        width: 45%; /* Adjust the width of the modal */
+    }
+
+    #playerSearch, #lobbySearch, #banButton, #unbanButton, .lobby-container {
+        width: 100%; /* Adjust the width of the input fields */
+    }
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    #adminModal {
+        width: 55%;
+    }
+
+    #playerSearch, #lobbySearch, #banButton, #unbanButton, .lobby-container {
+        width: 100%;
+    }
+}
+
+/* Additional media query for very small screens */
+@media (max-width: 480px) {
+    #adminModal {
+        width: 95%;
+    }
+
+    #playerSearch, #lobbySearch, #banButton, #unbanButton, .lobby-container {
+        width: 100%;
+    }
+}
