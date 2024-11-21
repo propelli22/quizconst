@@ -197,4 +197,99 @@ app.post('/login', async (req, res) => {
     }
 });
 
+// this will
+app.post('/gamedata', async (req, res) => {
+    console.log("used /gamedata");
+
+    // this will be stupid af, BUT, the users browser will send out what action to run (for example, /question) on the data server.
+    // the users browser WILL run this multiple times during the game (by multiple users) so to avoid overloading the server, 
+    // OPTIMIZE CODE AS MUCH AS POSSIBLE!!! try and avoid all unnecesary actions.
+    const runAction = req.body.action;
+    const subject = req.body.subjectId;
+    const player = req.body.playerId;
+    const question = req.body.questionId;
+    const lobby = req.body.lobbyId;
+    const points = req.body.recivedPoints;
+
+    // try to optimize this later !!!
+    if (runAction == "allquestions") {
+        const body = {
+            subjectId: subject
+        };
+    
+        const getQuestions = await fetch(`http://localhost:4000/getquestions`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+    
+        const result = await getQuestions.json();
+
+        res.json(result);
+    } else if (runAction == "question") {
+        const body = {
+            subject: subject,
+            question: question
+        };
+    
+        const getQuestion = await fetch(`http://localhost:4000/question`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+    
+        const result = await getQuestion.json();
+
+        res.json(result);
+    } else if (runAction == "playerresult") {
+        const body = {
+            playerId: player,
+            recivedPoints: points
+        };
+    
+        const getPlayerResult = await fetch(`http://localhost:4000/playerresult`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+    
+        const result = await getPlayerResult.json();
+
+        res.json(result);
+    } else if(runAction == "questionready") { // THIS WILL BE HEAVY TO RUN, as the data server will only respond to this once everyone is ready!
+        const body = {
+            playerId: player,
+            lobbyId: lobby
+        };
+    
+        const getQuestionReady = await fetch(`http://localhost:4000/questionready`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+    
+        const result = await getQuestionReady.json();
+
+        res.json(result);
+    } else if (runAction == "results") {
+        const body = {
+            lobbyId: lobby,
+            playerId: player
+        };
+    
+        const getResults = await fetch(`http://localhost:4000/results`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+    
+        const result = await getResults.json();
+
+        res.json(result);
+    } else {
+        res.json({"message": "Failed to get action."})
+    }
+
+});
+
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}...`));

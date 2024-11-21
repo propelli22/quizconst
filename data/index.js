@@ -205,6 +205,28 @@ app.post('/createlobby', (req, res) => {
 // - Add input validation
 //
 // Main game data requests, done with post to make access of data as hidden as possible
+
+// untested
+app.post('/getquestions', (req, res) => {
+    console.log("used /getquestions");
+
+    const subject = req.body.subjectId;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+    const sql = 'SELECT * FROM question WHERE subject_id = ?';
+
+    connection.query(sql, [subject], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        res.json(rows);
+    });
+
+    connection.end();
+});
+
 app.post('/question', (req, res) => {
     console.log("used /question");
 
