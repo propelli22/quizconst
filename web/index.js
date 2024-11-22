@@ -1,8 +1,6 @@
 const express = require('express');
 const path = require('path');
 const bcrypt = require('bcrypt');
-const fetch = (...args) =>
-    import('node-fetch').then(({default: fetch}) => fetch(...args));
 const session = require('express-session');
 const { XMLParser, XMLBuilder, XMLValidator} = require("fast-xml-parser");
 
@@ -77,18 +75,28 @@ app.get('/', async (req, res) => {
     }
 });
 
-app.get('/create', (req, res) => {
-    console.log("loaded Create a game");
-	const language = req.query.language;
+app.get("/create", (req, res) => {
+	console.log("loaded Create a game")
+	const language = req.query.language
+	const sessionId = req.session.sessionId || null
 
-	if (language == 'fi') {
-		res.render('create_a_game', fi_create)
-	} else if (language == 'en') {
-		res.render('create_a_game', en_create)
+	if (language == "fi") {
+		res.render("create_a_game", {
+			...fi_create,
+			sessionId: sessionId,
+		})
+	} else if (language == "en") {
+		res.render("create_a_game", {
+			...en_create,
+			sessionId: sessionId,
+		})
 	} else {
-		res.render('create_a_game', fi_create)
+		res.render("create_a_game", {
+			...fi_create,
+			sessionId: sessionId,
+		})
 	}
-});
+})
 
 app.get('/game', async (req, res) => {
     // kalle does this. - Kalle
@@ -165,7 +173,7 @@ app.post('/login', async (req, res) => {
     console.log("used Login");
 
     const {input_name, input_log} = req.body;
-
+ 
     const body = {
         user: input_name,
         password: input_log
