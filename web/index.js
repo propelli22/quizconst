@@ -197,7 +197,6 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// this will
 app.post('/gamedata', async (req, res) => {
     console.log("used /gamedata");
 
@@ -287,7 +286,7 @@ app.post('/gamedata', async (req, res) => {
 
         res.json(result);
     } else {
-        res.json({"message": "Failed to get action."})
+        res.status(400).json({"message": "Failed to get action, please check input."});
     }
 
 });
