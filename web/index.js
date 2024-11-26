@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const { XMLParser, XMLBuilder, XMLValidator} = require("fast-xml-parser");
 
+
 const app = express();
 app.use(express.urlencoded({extended: 'false'}))
 app.use(express.json())
@@ -211,6 +212,7 @@ app.post('/gamedata', async (req, res) => {
     // this will be stupid af, BUT, the users browser will send out what action to run (for example, /question) on the data server.
     // the users browser WILL run this multiple times during the game (by multiple users) so to avoid overloading the server, 
     // OPTIMIZE CODE AS MUCH AS POSSIBLE!!! try and avoid all unnecesary actions.
+    // TODO: make sure code does not use too much resources when ran by multiple users at the same time, KALLE!!!!!
     const runAction = req.body.action;
     const subject = req.body.subjectId;
     const player = req.body.playerId;
@@ -235,7 +237,6 @@ app.post('/gamedata', async (req, res) => {
         res.json(result);
     } else if (runAction == "question") {
         const body = {
-            subject: subject,
             question: question
         };
     

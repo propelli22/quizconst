@@ -231,7 +231,6 @@ app.post('/question', (req, res) => {
     console.log("used /question");
 
     const questionId = req.body.question;
-    const subjectId = req.body.subject;
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
@@ -243,11 +242,7 @@ app.post('/question', (req, res) => {
             throw err;
         }
 
-        if (rows[0].subject_id != subjectId) { 
-            res.status(400).json({"message": "Something went wrong, please check input."})
-        } else {
-            res.json(rows);
-        }
+        res.json(rows);
     });
 
     connection.end();

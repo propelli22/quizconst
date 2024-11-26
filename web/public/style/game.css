@@ -4,6 +4,7 @@
 
 #loading-container {
     display: none;
+    text-align: center;
 }
 
 #question-container {
