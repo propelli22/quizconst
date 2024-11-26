@@ -23,7 +23,7 @@ app.post('/checklogin', (req, res) => {
 
     const {user, password} = req.body;
 
-    const sql = 'SELECT password FROM user WHERE username = ?';
+    const sql = `SELECT password FROM user WHERE username = ?`;
 
     const connection = mysql.createConnection(dbconfig);
 
@@ -52,7 +52,7 @@ app.get('/lobbydata', (req, res) => {
 
     let data = [];
 
-    const sql = 'SELECT * FROM lobby, player WHERE lobby.lobby_id = ?'
+    const sql = `SELECT * FROM lobby, player WHERE lobby.lobby_id = ?`
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
 
@@ -98,7 +98,7 @@ app.post('/checkuser', (req, res) => {
 
     const {user, email} = req.body;
 
-    const sql = 'SELECT * FROM user WHERE username = ? OR email = ?';
+    const sql = `SELECT * FROM user WHERE username = ? OR email = ?`;
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
@@ -133,7 +133,7 @@ app.post('/createuser', (req, res) => {
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
 
-    let sql = 'INSERT INTO user (`username`, `password`, `email`) VALUES (?, ?, ?)'
+    let sql = `INSERT INTO user (username, password, email) VALUES (?, ?, ?)`
 
     // check if all fields are valid
     if (username == undefined || password == undefined || email == undefined) {
@@ -178,7 +178,7 @@ app.post('/createlobby', (req, res) => {
     const subject = req.body.subject;
     const game_date = "2024-01-23" // TO DO: set game_date automatically to current date
 
-    let sql = "INSERT INTO `lobby`(`subject_id`, `lobby_name`, `max_players`, `game_date`) VALUES (?,?,?,?);"
+    let sql = `INSERT INTO lobby (subject_id, lobby_name, max_players, game_date) VALUES (?,?,?,?);`
 
     // remove comment tags if issues with inserting empty names
     //if (!name) {
@@ -222,6 +222,31 @@ app.get('/time', (req, res) => {
     });
     connection.end();
 })
+
+// Get player name by player ID
+// Input: player ID as a URL parameter
+// Output: JSON object containing player name
+app.get('/getPlayerName', (req, res) => {
+
+    const playerId = req.query.id;
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    let sql = `SELECT name FROM player WHERE player_id = ?`
+
+    connection.query(sql, [playerId], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        res.json(rows);
+    });
+
+    console.log(playerId)
+
+    connection.end();
+});
+
 
 
 
