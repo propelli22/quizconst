@@ -4,29 +4,29 @@
     <!-- INCLUDES ONLY PLACEHOLDER TEXT FOR STYLING, CHANGE TO BE MODIFIED BY JS SCRIPT -->
     <div id="question-container">
         <h3 id="subject-title-preview">Business College Helsinki trivia</h3>
-        <h2 id="preview-question">Loading...</h2>
+        <h2 id="preview-question"><%= loading %></h2>
         <p id="waiting-time"></p>
     </div>
 
     <div id="main-game-container">
         <div id="game-question-container">
             <h2 id="subject">Business College Helsinki trivia</h2>
-            <h3>Loading...</h3>
+            <h3><%= loading %></h3>
             <img src="style/content/public_img/testi.png" alt="Image related to question" id="question-img">
         </div>
 
         <div id="answers-container">
             <div id="answer1-container" class="answers">
-                <p>342 porrasta</p>
+                <p id="answer-1"><%= loading %></p>
             </div>
             <div id="answer2-container" class="answers">
-                <p>157 porrasta</p>
+                <p id="answer-2"><%= loading %></p>
             </div>
             <div id="answer3-container" class="answers">
-                <p>281 porrasta</p>
+                <p id="answer-3"><%= loading %></p>
             </div>
             <div id="answer4-container" class="answers">
-                <p id="answer4">Ei mikään näistä, kukaan ei ole laskenut :)</p>
+                <p id="answer-4"><%= loading %></p>
             </div>
         </div>
     </div>

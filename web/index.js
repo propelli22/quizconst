@@ -267,7 +267,8 @@ app.post('/gamedata', async (req, res) => {
     } else if(runAction == "questionready") { // THIS WILL BE HEAVY TO RUN, as the data server will only respond to this once everyone is ready!
         const body = {
             playerId: player,
-            lobbyId: lobby
+            lobbyId: lobby,
+            recivedPoints: points
         };
     
         const getQuestionReady = await fetch(`http://localhost:4000/questionready`, {
@@ -292,6 +293,20 @@ app.post('/gamedata', async (req, res) => {
         });
     
         const result = await getResults.json();
+
+        res.json(result);
+    } else if (runAction == "getanswers") {
+        const body = {
+            questionId: question
+        }
+
+        const getAnswers = await fetch(`http://localhost:4000/getanswers`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const result = await getAnswers.json();
 
         res.json(result);
     } else {

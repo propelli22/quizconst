@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "http://10.20.12.180:3000");
+    res.setHeader("Access-Control-Allow-Origin", "http://10.20.12.180:3000"); // TODO: change to current device ip
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     next();
@@ -276,11 +276,14 @@ app.post('/questionready', (req, res) => {
 
     const player = req.body.playerId;
     const lobby = req.body.lobbyId;
+    const points = req.body.recivedPoints;
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
-    const sql = "UPDATE `player` SET `ready`='1' WHERE player_id = ?";
-    const sql2 = "SELECT * FROM player WHERE lobby_id = ?"
+
+    const sql = "UPDATE player SET ready=1 WHERE player_id = ?";
+    const sql2 = "SELECT * FROM player WHERE lobby_id = ?";
+    const sql3 = "UPDATE player SET points = points + ? WHERE player_id = ?";
     let playersReady;
 
     // mark player as ready
@@ -291,6 +294,12 @@ app.post('/questionready', (req, res) => {
     });
 
     getReadyPlayers();
+
+    connection.query(sql3, [points, player], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+    });
 
     // query is in the function so that it can be ran again later in the checkReadyPlayers loop
     function getReadyPlayers() {
@@ -372,7 +381,27 @@ app.get('/time', (req, res) => {
         res.json(rows); 
     });
     connection.end();
-})
+});
+
+app.post('/getanswers', (req, res) => {
+    console.log("used /getanswers");
+
+    const question = req.body.questionId;
+
+    const connetion = mysql.createConnection(dbconfig);
+    connetion.connect();
+    const sql = 'SELECT * FROM answers WHERE question_id = ?';
+
+    connetion.query(sql, [question], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        res.json(rows);
+    });
+
+    connetion.end();
+});
 
 // run the server
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));
