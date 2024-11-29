@@ -1,7 +1,7 @@
 const fetch = (...args) =>
     import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
-export async function scoreCalculator(questionId) {
+async function scoreCalculator(questionId) {
     let recivedTime = await fetch(`http://localhost:4000/time?question=${questionId}`, {
         method: 'GET'
     });

@@ -112,6 +112,11 @@
     text-align: center;
 }
 
+#leaderboard-buttons-container {
+    text-align: center;
+    display: none;
+}
+
 /* Loader animation from https://loading.io/css/ */
 .lds-ripple,
 .lds-ripple div {

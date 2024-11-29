@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "http://10.20.12.180:3000"); // TODO: change to current device ip
+    res.setHeader("Access-Control-Allow-Origin", "http://10.20.12.230:3000"); // TODO: change to current device ip
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     next();
@@ -324,7 +324,7 @@ app.post('/questionready', (req, res) => {
 
         if (totalReady == playersReady.length) {
             clearInterval(checkIfAllReady);
-            res.json({"message": "ALL READY"}) // improve response, add status
+            res.status(200).json({"message": "ALL READY"}) // improve response, add status
             connection.end();
         }
     }
@@ -342,7 +342,7 @@ app.post('/results', (req, res) => {
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
-    const sql = "SELECT * FROM player WHERE lobby_id = ?";
+    const sql = "SELECT * FROM player WHERE lobby_id = ? ORDER BY points DESC";
     const sql2 = "UPDATE `player` SET `ready` = '0' WHERE player_id = ?";
 
     connection.query(sql, [lobby], (err, rows) => {
@@ -365,19 +365,20 @@ app.post('/results', (req, res) => {
 });
 
 // Get the time for the question based on questions ID
+app.post('/time', (req, res) => {
+    console.log("used /time");
 
-app.get('/time', (req, res) => {
-    const time = req.query.question;
+    const time = req.body.questionId;
     let sql = `SELECT time, points FROM question WHERE question_id = ?`
 
-    console.log(time)
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
 
     connection.query(sql, [time], (err, rows) => {
-        rows.forEach(row => {
-            console.log(row.time, row.points);
-        });
+        if (err) {
+            throw err;
+        }
+
         res.json(rows); 
     });
     connection.end();

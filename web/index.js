@@ -309,6 +309,20 @@ app.post('/gamedata', async (req, res) => {
         const result = await getAnswers.json();
 
         res.json(result);
+    } else if (runAction == "time") {
+        const body = {
+            questionId: question
+        }
+
+        const getTime = await fetch(`http://localhost:4000/time`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const result = await getTime.json();
+
+        res.json(result);
     } else {
         res.status(400).json({"message": "Failed to get action, please check input."});
     }

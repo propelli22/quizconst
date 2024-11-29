@@ -1,6 +1,4 @@
-import { scoreCalculator } from "./answer-value";
-
-const lobbyId = 0;  // placeholder for now, until the lobby sends cookies.
+const lobbyId = 2;  // placeholder for now, until the lobby sends cookies.
 const subjectId = 2; // placeholder for now, until the lobby sends cookies.
 let questionId = 1; // placeholder for now, retrive all question ID:s of a subject on game start as an list.
 const playerId = 3; // placeholder for now, until the lobby sends cookies.
@@ -19,6 +17,26 @@ const resultsContainer = document.getElementById("results-container");
 let questionCount = 1;
 const questionCountText = questionCountTag.innerHTML;
 let questionIDlist = [];
+
+// do not touch! easter egg :)
+console.log("Wrong place fool, there are no answers to be given here :) or is there?");
+// TODO FOR KALLE: as an easter egg, add an command that can be ran in the console
+// the command should output answers to the questions, BUT, they are all wrong :)
+
+// EASTER EGG FUNCTIONS, in the game
+Object.defineProperty(window, 'giveMaxPoints', { // rick rolls you :D
+    get: function () {
+        window.open('https://www.youtube.com/watch?v=xvFZjo5PgG0')
+        console.log("???, why are you trying to cheat the game???")
+    }
+});
+
+Object.defineProperty(window, 'addPoints', { // low taper fade
+    get: function () {
+        window.open('style/content/low_taper_fade.jpg')
+        console.log("imagine trying to cheat, you can still imagine if ninja got a low taper fade")
+    }
+});
 
 async function getQuestionCount() {
     let dataResponse;
@@ -41,6 +59,8 @@ async function getQuestionCount() {
     for (let i = 0; i < dataResponse.length; i++) {
         questionIDlist.push(dataResponse[i].question_id)
     }
+
+    return questionIDlist;
 }
 
 function setQuestionCount(currentQuestion) {
@@ -67,14 +87,12 @@ async function getQuestion(id) {
     .then(Response => Response.json())
     .then(data => dataResponse = data);
 
-    console.log(dataResponse);
-
     var questionData = {
-        questionId: dataResponse.question_id,
-        question: dataResponse.question,
-        points: dataResponse.points,
-        answerTime: dataResponse.time,
-        waitingTime: dataResponse.wait
+        questionId: dataResponse[0].question_id,
+        question: dataResponse[0].question,
+        points: dataResponse[0].points,
+        answerTime: dataResponse[0].time,
+        waitingTime: dataResponse[0].wait
     }
 
     return questionData;
@@ -91,7 +109,7 @@ async function setPlayerReady(recivedPoints) {
         action: "questionready",
         playerId: playerId,
         lobbyId: lobbyId,
-        points: recivedPoints
+        recivedPoints: recivedPoints
     }
 
     await fetch(`${currentAddress}/gamedata`, {
@@ -99,38 +117,43 @@ async function setPlayerReady(recivedPoints) {
         body: JSON.stringify(body),
         headers: {'Content-Type': 'application/json'}
     })
-    .then(Response => Response.json())
-    .then(data => dataResponse = data);
+    .then(Response => dataResponse = Response.status);
 
     loadingContainer.style.display = "none";
+
+    return dataResponse;
 }
 
-function questionPreview(questionData) {
+async function questionPreview(questionData) {
     questionContainer.style.display = "block";
     mainGameContainer.style.display = "none";
     loadingContainer.style.display = "none";
     resultsContainer.style.display = "none";
 
-    document.getElementById("preview-question").innerHTML = questionData[0].question;
+    document.getElementById("preview-question").innerHTML = questionData.question;
 
-    let previewTime = questionData[0].waitingTime;
+    let previewTime = questionData.waitingTime;
     document.getElementById("waiting-time").innerHTML = `${previewTime} s`;
-    const previewCountdown = setInterval(() => {
-        document.getElementById("waiting-time").innerHTML = `${previewTime} s`;
-        previewTime--;
 
-        if (previewTime < 0) {
-            clearInterval(previewCountdown);
-            questionContainer.style.display = "none";
-        }
-    }, 1000);
+    return new Promise((resolve) => {
+        const previewCountdown = setInterval(() => {
+            document.getElementById("waiting-time").innerHTML = `${previewTime} s`;
+            previewTime--;
+
+            if (previewTime < 0) {
+                clearInterval(previewCountdown);
+                questionContainer.style.display = "none";
+                resolve(true);
+            }
+        }, 1000);
+    });
 }
 
 async function fetchQuestionAnswers(questionData) {
     let dataResponse;
     const body = {
         action: "getanswers",
-        questionId: questionData[0].questionId
+        questionId: questionData.questionId
     }
 
     await fetch(`${currentAddress}/gamedata`, {
@@ -159,20 +182,21 @@ async function runQuestion(questionData) {
 
     let answers = await fetchQuestionAnswers(questionData);
     let playerAnswer;
-    let hasAnswered;
-    let correctAnswer;
-    console.log(answers);
+    let hasAnswered = false;
+    let correctAnswer = false;
 
     document.getElementById("answer-1").innerHTML = answers.answer1.answer;
     document.getElementById("answer-2").innerHTML = answers.answer2.answer;
     document.getElementById("answer-3").innerHTML = answers.answer3.answer;
     document.getElementById("answer-4").innerHTML = answers.answer4.answer;
 
+    document.getElementById("question-time").style.display = "block";
+
     document.getElementById("answer-1").addEventListener("click", function() {
         playerAnswer = 1;
         hasAnswered = true;
 
-        if(answers.answer1.correct == 1) {
+        if (answers.answer1.correct == 1) {
             correctAnswer = true;
         }
     });
@@ -180,7 +204,7 @@ async function runQuestion(questionData) {
         playerAnswer = 2;
         hasAnswered = true;
 
-        if(answers.answer2.correct == 1) {
+        if (answers.answer2.correct == 1) {
             correctAnswer = true;
         }
     });
@@ -188,7 +212,7 @@ async function runQuestion(questionData) {
         playerAnswer = 3;
         hasAnswered = true;
 
-        if(answers.answer3.correct == 1) {
+        if (answers.answer3.correct == 1) {
             correctAnswer = true;
         }
     });
@@ -196,42 +220,159 @@ async function runQuestion(questionData) {
         playerAnswer = 4;
         hasAnswered = true;
 
-        if(answers.answer4.correct == 1) {
+        if (answers.answer4.correct == 1) {
             correctAnswer = true;
         }
     });
 
-    let answerTime = questionData[0].answerTime;
+    let dataResponse;
+    const questionId = questionData.questionId;
+
+    const body = {
+        action: "time",
+        questionId: questionId
+    }
+    
+    await fetch(`${currentAddress}/gamedata`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {'Content-Type': 'application/json'}
+    })
+    .then(Response => Response.json())
+    .then(data => dataResponse = data);
+
+    let startingPoints;
+    let timeData = dataResponse;
+
+    let answerTime = questionData.answerTime;
     document.getElementById("remaining-time").innerHTML = `${answerTime} s`;
-    const answerCountdown = setInterval(() => {
-        document.getElementById("remaining-time").innerHTML = `${answerTime} s`;
-        answerTime--;
 
-        if (answerTime < 0 || hasAnswered) {
-            clearInterval(answerCountdown);
-            mainGameContainer.style.display = "none";
+    startingPoints = timeData[0].points;
+    
+    const ConvertedTime = timeData[0].time * 1000;
+    const reductionAmount = startingPoints / ConvertedTime;
+    let currentPoint = startingPoints;
+    const startTime = Date.now();
 
-            if (correctAnswer) {
-                setPlayerReady(recivedPoints) // recivedPoints does not exist yet, will be a avaible once the answer-value is imported and working
-            } else {
-                setPlayerReady(0);
+    return new Promise((resolve) => {
+        const gameTimer = setInterval(() => {
+            document.getElementById("remaining-time").innerHTML = `${answerTime} s`;
+            answerTime--;
+        
+            const elapsedTime = Date.now() - startTime;
+
+            currentPoint = Math.max(0, startingPoints - (reductionAmount * elapsedTime));
+        }, 1000);
+
+        const gameMonitor = setInterval(() => {
+            if (answerTime < 0 || hasAnswered) {
+                clearInterval(gameTimer);
+                clearInterval(gameMonitor);
+                mainGameContainer.style.display = "none";
+                let readyStatus;
+
+                if (correctAnswer) {
+                    readyStatus = setPlayerReady(currentPoint.toFixed(0));
+                } else {
+                    readyStatus = setPlayerReady(0);
+                }
+
+                if (readyStatus == 200) {
+                    console.log("able to continue");
+                }
+
+                document.getElementById("question-time").style.display = "none";
+                resolve(true);
             }
-        }
-    }, 1000);
+        }, 100);
+    });
 }
 
-// TODO torstaille:
-// - import answer-value.js tähän koodiin
+async function showResults() {
+    questionContainer.style.display = "none";
+    mainGameContainer.style.display = "none";
+    loadingContainer.style.display = "none";
+    resultsContainer.style.display = "block";
+
+    document.getElementById("no-more-players-message").style.display = "none";
+    document.getElementById("leaderboard-buttons-container").style.display = "block"
+    document.getElementById("question-count-container").style.display = "none";
+
+    let dataResponse;
+    const body = {
+        action: "results",
+        lobbyId: lobbyId,
+        playerId: playerId
+    }
+    
+    await fetch(`${currentAddress}/gamedata`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {'Content-Type': 'application/json'}
+    })
+    .then(Response => Response.json())
+    .then(data => dataResponse = data);
+
+    document.getElementById("podium-1-name").innerHTML = dataResponse[0].name;
+    document.getElementById("podium-1-points").innerHTML = dataResponse[0].points;
+
+    document.getElementById("podium-2-name").innerHTML = dataResponse[1].name;
+    document.getElementById("podium-2-points").innerHTML = dataResponse[1].points;
+
+    if(dataResponse.length >= 3) {
+        document.getElementById("podium-3-name").innerHTML = dataResponse[2].name;
+        document.getElementById("podium-3-points").innerHTML = dataResponse[2].points;
+
+        if(dataResponse.length > 3) {
+            let leaderboardContainer = document.getElementById("leaderboard-container")
+            let html = ``;
+
+            dataResponse.forEach((player, index) => {
+                // avoid duplicate prints of podium players
+                if (index === 0 || index === 1 || index === 2) return;
+
+                html += `
+                    <div id="player${index}" class="leaderboard-player">
+                        <p class="position">${index + 1}.</p>
+                        <p class="name">${dataResponse[index].name}</p>
+                        <p class="position">${dataResponse[index].points}</p>
+                    </div>
+                `;
+
+                leaderboardContainer.innerHTML = html;
+            });
+        } else {
+            document.getElementById("no-more-players-message").style.display = "block";
+        }
+    }
+}
+
+function leaveLobby() {
+    window.open(`${currentAddress}`)
+}
+
+function nextQuestion() {
+    // jotain jotain, host voi jatkaa peliä
+}
+
+// TODO torstaille ja loppu viikolle myöskin, viikonlopulle menee :) t perjantai kalle
+// - results osion napit, hostille contiue, muille ei mitään kunnes vika kysymys pelattu jolloin tulee nappi poistua
+// - gameController, funktioiden käyttäminen oikeilla ajoituksilla gameControllerissa.
+// - testaus yhdellä ja useammalla laitteella, mutta koska aula ei ole viellä valmis, ei voi testata vielä, eli siis odoteteaan aulaa :(
 
 // gameController is used to call all the functions in order using async.
 async function gameController() {
     // initalaize game, done separately from question cycle to avoid unnecesary looping of things that need to be called only once.
-    await getQuestionCount();
+    const questions = await getQuestionCount();
     countQuestions();
 
     // question cycle
-    for(let i = 0; i > questionCount; i++) {
-        // call functions here
+    for(let i = 0; i < questionCount; i++) {
+        const recivedQuestionData = await getQuestion(questions[i]);
+
+        await questionPreview(recivedQuestionData);
+        await runQuestion(recivedQuestionData);
+        await showResults();
     }
 }
 
