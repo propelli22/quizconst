@@ -19,11 +19,14 @@
         <button id="nav-dropdown" class="button" onclick="toggleMenu()">▼</button>
         <nav id="header-nav">
             <% if (sessionId) { %>
-                <button id="account" class="nav-button">Käyttäjä</button>
+                <button id="account" class="nav-button"><%= user %></button>
                 <button id="create-subject" class="nav-button" onclick="window.open(`/create?language=${document.getElementById('language-selection').value}`, '_self')"><%= create_subject %></button>
                 <button id="find-subject" class="nav-button"><%= find_subject %></button>
             <% } else { %>
                 <button id="log-in" class="nav-button"><%= login %></button>
             <% } %>
         </nav>
+        <div id="question-time">
+            <p>57 s</p>
+        </div>
     </header>

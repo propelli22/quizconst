@@ -23,19 +23,19 @@ document.getElementById("file-upload").addEventListener("change", function (even
 
 document.getElementById("image-name-container").addEventListener("click", function () {
 	var img = document.getElementById("uploaded-image")
-	var modal = document.getElementById("imageModal")
+	var modal = document.getElementById("image-modal")
 	var fullscreenImage = document.getElementById("fullscreen-image")
 
 	fullscreenImage.src = img.src
 	modal.style.display = "block"
 })
 
-document.getElementById("closeImageModal").addEventListener("click", function () {
-	var modal = document.getElementById("imageModal")
+document.getElementById("close-image-modal").addEventListener("click", function () {
+	var modal = document.getElementById("image-modal")
 	modal.style.display = "none"
 })
 
-document.getElementById("closeImageNameContainer").addEventListener("click", function (event) {
+document.getElementById("close-image-name-container").addEventListener("click", function (event) {
 	event.stopPropagation()
 	var imageNameContainer = document.getElementById("image-name-container")
 	imageNameContainer.style.display = "none"

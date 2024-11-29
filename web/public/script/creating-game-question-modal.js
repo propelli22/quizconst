@@ -1,6 +1,6 @@
-var questionModal = document.getElementById("questionModal")
 var questionModalButton = document.getElementById("open-question-modal")
-var closeModal = document.getElementById("closeQuestionModal")
+var questionModal = document.getElementById("question-modal")
+var closeModal = document.getElementById("close-question-modal")
 var addQuestionBtn = document.getElementById("add-question")
 var questionList = document.getElementById("question-list")
 var selectedQuestionName = document.getElementById("selected-question-name")
@@ -8,20 +8,6 @@ var selectedQuestionName = document.getElementById("selected-question-name")
 document.addEventListener("DOMContentLoaded", function () {
 	attachEventListeners(document.querySelector(".question-item"))
 })
-
-questionModalButton.onclick = function () {
-	questionModal.style.display = "block"
-}
-
-closeModal.onclick = function () {
-	questionModal.style.display = "none"
-}
-
-window.onclick = function (event) {
-	if (event.target == questionModal) {
-		questionModal.style.display = "none"
-	}
-}
 
 addQuestionBtn.onclick = function () {
 	var newQuestion = document.createElement("div")
