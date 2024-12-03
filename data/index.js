@@ -160,10 +160,9 @@ app.post('/createuser', (req, res) => {
     } else {
       res.status(400).json({ message: "Found user." });
     }
-  });
 
-  connection.end();
-});
+    connection.end();
+  });
 
 app.post("/createuser", (req, res) => {
   console.log("used Create user");
