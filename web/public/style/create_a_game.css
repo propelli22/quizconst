@@ -91,7 +91,7 @@
     position: relative;
 }
 
-#closeQuestionModal {
+#close-question-modal, #close-settings-modal, #close-image-modal {
     position: absolute;
     top: 15px;
     right: 15px;
@@ -101,11 +101,26 @@
     cursor: pointer;
 }
 
-#closeQuestionModal:hover,
-#closeQuestionModal:focus {
+#close-question-modal:hover,
+#close-question-modal:focus,
+#close-image-modal:hover,
+#close-image-modal:focus,
+#close-settings-modal:hover,
+#close-settings-modal:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+#image-name-container {
+	display: none;
+	cursor: pointer;
+}
+
+#uploaded-image {
+    display: none;
+	max-width: 100%;
+	height: auto;
 }
 
 #fullscreen-image {
@@ -116,35 +131,19 @@
     object-fit: contain;
 }
 
-#closeImageModal {
-    position: absolute;
-    top: 15px;
-    right: 35px;
-    color: #aaa;
-    font-size: 40px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-#closeImageModal:hover,
-#closeImageModal:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
 .question-item {
     margin: 10px 0;
     padding: 10px;
     border: 1px solid #ccc;
     cursor: pointer;
+	text-align: center;
 }
 
 #aiheen-nimi {
     text-align: center;
     margin: 0;
     margin-bottom: 5px;
-    margin-top: -20px; /* Add negative margin to remove space between header and #aiheen-nimi */
+    margin-top: -20px;
 }
 
 #question-answers {
@@ -152,10 +151,7 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: 10px;
-}
-
-.answer-container {
-    text-align: center;
+	margin-top: 15px;
 }
 
 #triangle {
@@ -178,7 +174,7 @@
     border: green solid 3px;
 }
 
-#asetukset {
+#settings-button {
     width: 100%;
     min-height: 50px;
     margin-top: 10px;
@@ -192,10 +188,17 @@
     text-align: center;
 }
 
-.question-item, .answer-container {
+.answer-container {
     text-align: center;
+	padding: 15px 0px 15px 0px;
 }
 
 .edit-input {
     line-height: 3em;
+}
+
+#open-question-modal, #add-question, #settings-button {
+	background-color: #aaa;
+	padding: 0px 5px 0px 5px;
+	border: black 2px solid;
 }

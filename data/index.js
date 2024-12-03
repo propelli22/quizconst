@@ -18,8 +18,8 @@ const port = "4000";
 const host = "localhost"; // runs on localhost to avoid external users access to database
 
 // Obvious: checks password, return is it is correct or not, does not tell if the user is also correct etc.
-app.post("/checklogin", (req, res) => {
-  console.log("used Check login");
+app.post('/checklogin', (req, res) => {
+    console.log("used /checklogin");
 
   const { user, password } = req.body;
 
@@ -49,8 +49,8 @@ app.post("/checklogin", (req, res) => {
 });
 
 // responds with all of the lobby info
-app.get("/lobbydata", (req, res) => {
-  console.log("used Lobby data");
+app.get('/lobbydata', (req, res) => {
+    console.log("used /lobbydata");
 
   const lobby = req.query.id;
 
@@ -97,8 +97,8 @@ app.get("/lobbydata", (req, res) => {
 });
 
 // check if user exists, returns true or false, if true, returns what info were the same, else returns only false
-app.post("/checkuser", (req, res) => {
-  console.log("used Check user");
+app.post('/checkuser', (req, res) => {
+    console.log("used /checkuser");
 
   const { user, email } = req.body;
 
@@ -107,9 +107,49 @@ app.post("/checkuser", (req, res) => {
   const connection = mysql.createConnection(dbconfig);
   connection.connect();
 
-  connection.query(sql, [user, email], (err, rows) => {
-    if (err) {
-      throw err;
+    connection.query(sql, [user, email], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        console.log(rows.length);
+
+        // send back result, could be improved with better response. TODO: change res to http status code
+        if (rows.length == 0) {
+            res.status(200).json({"message": "No user found."});
+        } else {
+            res.status(400).json({"message": "Found user."})
+        }
+    });
+
+    connection.end();
+});
+
+app.post('/createuser', (req, res) => {
+    console.log("used /createuser")
+
+    console.log(req.body);
+
+    const username = req.body.user;
+    const password = req.body.password;
+    const email = req.body.email;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    let sql = `INSERT INTO user (username, password, email) VALUES (?, ?, ?)`
+
+    // check if all fields are valid
+    if (username == undefined || password == undefined || email == undefined) {
+        res.status(400).json({"message": "Something went wrong, undefined details in request"})
+    } else {
+        connection.query(sql, [username, password, email], (err, rows) => {
+            if (err) {
+                throw err;
+            }
+    
+            res.status(201).json({"message": "User created successfully"})
+        });
     }
 
     console.log(rows.length);
@@ -210,6 +250,166 @@ app.post("/createlobby", (req, res) => {
   connection.end();
 });
 
+// TODO for the main game data requests:
+// - Improve responses
+// - Add input validation
+//
+// Main game data requests, done with post to make access of data as hidden as possible
+
+// untested
+app.post('/getquestions', (req, res) => {
+    console.log("used /getquestions");
+
+    const subject = req.body.subjectId;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+    const sql = 'SELECT * FROM question WHERE subject_id = ?';
+
+    connection.query(sql, [subject], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        res.json(rows);
+    });
+
+    connection.end();
+});
+
+app.post('/question', (req, res) => {
+    console.log("used /question");
+
+    const questionId = req.body.question;
+    const subjectId = req.body.subject;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    const sql = 'SELECT * FROM question WHERE question_id = ?'
+
+    connection.query(sql, [questionId], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        if (rows[0].subject_id != subjectId) { 
+            res.status(400).json({"message": "Something went wrong, please check input."})
+        } else {
+            res.json(rows);
+        }
+    });
+
+    connection.end();
+});
+
+app.post('/playerresult', (req, res) => {
+    console.log("used /playerresult");
+
+    const player = req.body.playerId;
+    const points = req.body.recivedPoints;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    const sql = "UPDATE `player` SET `points`= points + ? WHERE player_id = ?";
+
+    connection.query(sql, [points, player], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        res.status(200).json(rows); // improve response
+    });
+
+    connection.end();
+});
+
+// this looks like stupid code, and it probably is, so, TODO: maybe rewrite better
+app.post('/questionready', (req, res) => {
+    console.log("used /questionready");
+
+    const player = req.body.playerId;
+    const lobby = req.body.lobbyId;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+    const sql = "UPDATE `player` SET `ready`='1' WHERE player_id = ?";
+    const sql2 = "SELECT * FROM player WHERE lobby_id = ?"
+    let playersReady;
+
+    // mark player as ready
+    connection.query(sql, [player], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+    });
+
+    getReadyPlayers();
+
+    // query is in the function so that it can be ran again later in the checkReadyPlayers loop
+    function getReadyPlayers() {
+        connection.query(sql2, [lobby], (err, rows) => {
+            if (err) {
+                throw err;
+            }
+    
+            playersReady = rows;
+        });
+    }
+
+    function allPlayersReady() {
+        let totalReady = 0;
+        getReadyPlayers();
+
+        for (let i = 0; i < playersReady.length; i++) {
+            if (playersReady[i].ready == 1) {
+                totalReady++
+            }
+        }
+
+        if (totalReady == playersReady.length) {
+            clearInterval(checkIfAllReady);
+            res.json({"message": "ALL READY"}) // improve response, add status
+            connection.end();
+        }
+    }
+
+    // every 1s, check if all is ready.
+    const checkIfAllReady = setInterval(allPlayersReady, 1000);
+});
+
+// TODO: add logic to check if the last question was the last question of the subject, add to response if it was.
+app.post('/results', (req, res) => {
+    console.log("used /results");
+
+    const lobby = req.body.lobbyId;
+    const player = req.body.playerId;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+    const sql = "SELECT * FROM player WHERE lobby_id = ?";
+    const sql2 = "UPDATE `player` SET `ready` = '0' WHERE player_id = ?";
+
+    connection.query(sql, [lobby], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        res.status(200).json(rows); // improve response
+    });
+
+    // no need to respond back, sets players as not ready.
+    // maybe run this before the other query in case this one throws an error?
+    connection.query(sql2, [player], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+    });
+
+    connection.end();
+});
+
 // Get the time for the question based on questions ID
 
 app.get("/time", (req, res) => {
@@ -287,4 +487,5 @@ app.post("/unbanPlayer", (req, res) => {
   connection.end();
 });
 
+// run the server
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));

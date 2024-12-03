@@ -3,7 +3,7 @@ var selectedQuestionName = document.getElementById("selected-question-name")
 document.addEventListener("DOMContentLoaded", function () {
 	editTextTitle(selectedQuestionName)
 
-	var answerItems = document.querySelectorAll(".answer-container")
+	var answerItems = document.querySelectorAll(".answer")
 	answerItems.forEach(function (answerItem) {
 		addLongPressListener(answerItem)
 	})
@@ -16,8 +16,7 @@ function attachEventListeners(element) {
 	addLongPressListener(element)
 }
 
-function editTextTitle(container) {
-	var questionItem = container.querySelector("p") || container
+function editTextTitle(questionItem) {
 	var currentTitle = questionItem.textContent
 	var input = document.createElement("input")
 	input.type = "text"
@@ -31,7 +30,7 @@ function editTextTitle(container) {
 
 	var saveTitle = function () {
 		if (input.parentNode) {
-			saveTextTitle(input, questionItem, container)
+			saveTextTitle(input, questionItem)
 		}
 	}
 
@@ -44,13 +43,13 @@ function editTextTitle(container) {
 	})
 }
 
-function saveTextTitle(input, questionItem, container) {
+function saveTextTitle(input, questionItem) {
 	var newTitle = input.value
 	questionItem.textContent = newTitle
 	if (input.parentNode) {
 		input.replaceWith(questionItem)
 	}
-	attachEventListeners(container)
+	attachEventListeners(questionItem)
 }
 
 function addLongPressListener(element) {
