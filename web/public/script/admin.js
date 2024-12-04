@@ -124,7 +124,13 @@ document.getElementById("lobbySearch").addEventListener("keypress", async (e) =>
             document.getElementById("error3").style.display = "block";
         } else {
             document.getElementById("error3").style.display = "none";
-            
+
+        try {
+            // Add logic here
+        } catch (error) {
+            console.error("An error occurred:", error);
+            alert(`An error occurred: ${error.message}`);
+        }
         }
     }
-});
+}); 
