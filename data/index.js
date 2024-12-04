@@ -156,7 +156,7 @@ app.post('/createuser', (req, res) => {
 
     // send back result, could be improved with better response. TODO: change res to http status code
     if (rows.length == 0) {
-      res.status(200).json({ message: "No user found." });
+      res.status(200).json({ message: "No user found." });ö
     } else {
       res.status(400).json({ message: "Found user." });
     }

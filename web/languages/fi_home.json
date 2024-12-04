@@ -56,5 +56,6 @@
     "errorMessageBan": "Käyttäjä ei löytynyt",
     "lobbySearch": "Aulahaku",
     "deleteLobby": "Poista aula",
-    "lobbyName": "Aulan nimi"
+    "lobbyName": "Aulan nimi",
+    "errorMessageLobby": "Aulaa ei löytynyt"
 }

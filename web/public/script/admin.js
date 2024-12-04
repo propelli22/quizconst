@@ -116,3 +116,15 @@ document.getElementById("unbanButton").addEventListener("click", async () => {
     }
   }
 });
+
+document.getElementById("lobbySearch").addEventListener("keypress", async (e) => {
+    if(e.key == "Enter") {
+        let lobbySearch = document.getElementById("lobbySearch").value;
+        if (lobbySearch == ""){
+            document.getElementById("error3").style.display = "block";
+        } else {
+            document.getElementById("error3").style.display = "none";
+            
+        }
+    }
+});
