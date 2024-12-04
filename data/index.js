@@ -156,7 +156,7 @@ app.post('/createuser', (req, res) => {
 
     // send back result, could be improved with better response. TODO: change res to http status code
     if (rows.length == 0) {
-      res.status(200).json({ message: "No user found." });
+      res.status(200).json({ message: "No user found." });ö
     } else {
       res.status(400).json({ message: "Found user." });
     }
@@ -455,36 +455,36 @@ app.get("/getPlayerName", (req, res) => {
 });
 
 app.post("/banPlayer", (req, res) => {
-  const playerId = req.body.id;
-  const connection = mysql.createConnection(dbconfig);
-  let sql = `UPDATE player SET banned = 1 WHERE player_id = ?`;
-
-  connection.connect();
-
-  connection.query(sql, [playerId], (err, rows) => {
-    if (err) {
-      throw err;
-    }
-    res.status(201).json({ message: "Player banned successfully" });
+    const playerId = req.body.id;
+    const connection = mysql.createConnection(dbconfig);
+    let sql = `UPDATE player SET banned = 1 WHERE player_id = ?`;
+  
+    connection.connect();
+  
+    connection.query(sql, [playerId], (err, rows) => {
+      if (err) {
+        throw err;
+      }
+      res.status(201).json({ message: "Player banned successfully" });
+    });
+  
+    connection.end();
   });
-
-  connection.end();
-});
-
-app.post("/unbanPlayer", (req, res) => {
-  const playerId = req.body.id;
-  const connection = mysql.createConnection(dbconfig);
-
-  connection.connect();
-  let sql = `UPDATE player SET banned = 0 WHERE player_id = ?`;
-  connection.query(sql, [playerId], (err, rows) => {
-    if (err) {
-      throw err;
-    }
-    res.status(201).json({ message: "Player unbanned successfully" });
+  
+  app.post("/unbanPlayer", (req, res) => {
+    const playerId = req.body.id;
+    const connection = mysql.createConnection(dbconfig);
+  
+    connection.connect();
+    let sql = `UPDATE player SET banned = 0 WHERE player_id = ?`;
+    connection.query(sql, [playerId], (err, rows) => {
+      if (err) {
+        throw err;
+      }
+      res.status(201).json({ message: "Player unbanned successfully" });
+    });
+    connection.end();
   });
-  connection.end();
-});
 
 // run the server
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));
