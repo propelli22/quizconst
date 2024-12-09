@@ -58,5 +58,6 @@
     "errorMessageBan": "User was not found",
     "lobbySearch": "Lobby search",
     "deleteLobby": "Delete lobby",
-    "lobbyName": "Lobby name"
+    "lobbyName": "Lobby name",
+    "errorMessageLobby": "Lobby was not found"
 }
