@@ -2,9 +2,15 @@ const lobbyId = 2;  // placeholder for now, until the lobby sends cookies.
 const subjectId = 2; // placeholder for now, until the lobby sends cookies.
 let questionId = 1; // placeholder for now, retrive all question ID:s of a subject on game start as an list.
 const playerId = 3; // placeholder for now, until the lobby sends cookies.
+const isHost = true; // placeholder for now, until the lobby sends cookies.
+let lastQuestion = false;
+
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
 
 const currentAddress = window.location.origin;
-const currentLanguage = "fi"; // TODO: fetch current language from url parameters, should be the only parameter in the url.
+const currentLanguage = urlParams.get('language');
+console.log(urlParams.get('language')) // TODO: fetch current language from url parameters, should be the only parameter in the url.
 let currentQuestion = 0;
 
 const questionCountTag = document.getElementById("question-count");
@@ -17,26 +23,6 @@ const resultsContainer = document.getElementById("results-container");
 let questionCount = 1;
 const questionCountText = questionCountTag.innerHTML;
 let questionIDlist = [];
-
-// do not touch! easter egg :)
-console.log("Wrong place fool, there are no answers to be given here :) or is there?");
-// TODO FOR KALLE: as an easter egg, add an command that can be ran in the console
-// the command should output answers to the questions, BUT, they are all wrong :)
-
-// EASTER EGG FUNCTIONS, in the game
-Object.defineProperty(window, 'giveMaxPoints', { // rick rolls you :D
-    get: function () {
-        window.open('https://www.youtube.com/watch?v=xvFZjo5PgG0')
-        console.log("???, why are you trying to cheat the game???")
-    }
-});
-
-Object.defineProperty(window, 'addPoints', { // low taper fade
-    get: function () {
-        window.open('style/content/low_taper_fade.jpg')
-        console.log("imagine trying to cheat, you can still imagine if ninja got a low taper fade")
-    }
-});
 
 async function getQuestionCount() {
     let dataResponse;
@@ -181,7 +167,6 @@ async function runQuestion(questionData) {
     resultsContainer.style.display = "none";
 
     let answers = await fetchQuestionAnswers(questionData);
-    let playerAnswer;
     let hasAnswered = false;
     let correctAnswer = false;
 
@@ -264,7 +249,7 @@ async function runQuestion(questionData) {
             currentPoint = Math.max(0, startingPoints - (reductionAmount * elapsedTime));
         }, 1000);
 
-        const gameMonitor = setInterval(() => {
+        const gameMonitor = setInterval(async () => {
             if (answerTime < 0 || hasAnswered) {
                 clearInterval(gameTimer);
                 clearInterval(gameMonitor);
@@ -272,14 +257,16 @@ async function runQuestion(questionData) {
                 let readyStatus;
 
                 if (correctAnswer) {
-                    readyStatus = setPlayerReady(currentPoint.toFixed(0));
+                    readyStatus = await setPlayerReady(currentPoint.toFixed(0));
                 } else {
-                    readyStatus = setPlayerReady(0);
+                    readyStatus = await setPlayerReady(0);
                 }
 
                 if (readyStatus == 200) {
                     console.log("able to continue");
                 }
+
+                console.log("testingggg")
 
                 document.getElementById("question-time").style.display = "none";
                 resolve(true);
@@ -287,6 +274,26 @@ async function runQuestion(questionData) {
         }, 100);
     });
 }
+
+// do not touch! easter egg :)
+console.log("Wrong place fool, there are no answers to be given here :) or is there?");
+// TODO FOR KALLE: as an easter egg, add an command that can be ran in the console
+// the command should output answers to the questions, BUT, they are all wrong :)
+
+// EASTER EGG FUNCTIONS, in the game
+Object.defineProperty(window, 'giveMaxPoints', { // rick rolls you :D
+    get: function () {
+        window.open('https://www.youtube.com/watch?v=xvFZjo5PgG0')
+        console.log("???, why are you trying to cheat the game???")
+    }
+});
+
+Object.defineProperty(window, 'addPoints', { // low taper fade
+    get: function () {
+        window.open('style/content/low_taper_fade.jpg')
+        console.log("imagine trying to cheat, you can still imagine if ninja got a low taper fade")
+    }
+});
 
 async function showResults() {
     questionContainer.style.display = "none";
@@ -297,6 +304,8 @@ async function showResults() {
     document.getElementById("no-more-players-message").style.display = "none";
     document.getElementById("leaderboard-buttons-container").style.display = "block"
     document.getElementById("question-count-container").style.display = "none";
+
+    resultsButtonVisibility();
 
     let dataResponse;
     const body = {
@@ -345,14 +354,32 @@ async function showResults() {
             document.getElementById("no-more-players-message").style.display = "block";
         }
     }
+
+    return new Promise((resolve) => {
+        document.getElementById("continue-button").addEventListener("click", function () {
+            document.getElementById("continue-button").style.display = "none";
+            resolve(true);
+        });
+
+        document.getElementById("leave-button").addEventListener("click", function () {
+            document.getElementById("leave-button").style.display = "none";
+            resolve(true);
+        });
+    })
 }
 
 function leaveLobby() {
     window.open(`${currentAddress}`)
 }
 
-function nextQuestion() {
+function resultsButtonVisibility() {
     // jotain jotain, host voi jatkaa peliä
+    if(isHost && !lastQuestion) {
+        document.getElementById("continue-button").style.display = "block";
+        document.getElementById("leave-button").style.display = "none";
+    } else if (lastQuestion) {
+        document.getElementById("leave-button").style.display = "block";
+    }
 }
 
 // TODO torstaille ja loppu viikolle myöskin, viikonlopulle menee :) t perjantai kalle
@@ -369,6 +396,13 @@ async function gameController() {
     // question cycle
     for(let i = 0; i < questionCount; i++) {
         const recivedQuestionData = await getQuestion(questions[i]);
+
+        console.log(i + 1)
+        console.log(questionCount)
+
+        if (i + 1 == questionCount) {
+            lastQuestion = true;
+        }
 
         await questionPreview(recivedQuestionData);
         await runQuestion(recivedQuestionData);

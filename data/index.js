@@ -205,8 +205,6 @@ app.post('/createlobby', (req, res) => {
 // - Add input validation
 //
 // Main game data requests, done with post to make access of data as hidden as possible
-
-// untested
 app.post('/getquestions', (req, res) => {
     console.log("used /getquestions");
 
@@ -362,6 +360,66 @@ app.post('/results', (req, res) => {
     });
 
     connection.end();
+});
+
+app.post('/continuegame', (req, res) => {
+    console.log("used /continuegame");
+
+    const lobby = req.body.lobbyId;
+
+    const sql = 'UPDATE lobby SET continue_game = 1 WHERE lobby_id = ?';
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    connection.query(sql, [lobby], (err, rows) => {
+        if (err) {
+            throw err
+        }
+
+        res.status(200).json({"message": "OK"});
+    });
+
+    connection.end();
+});
+
+app.post('/checkcontinue', (req, res) => {
+    console.log("used /checkcontinue");
+
+    const lobby = req.body.lobby;
+
+    if (isNaN(lobby)) {
+        res.json({"message": "An error occured, please check input values."})
+    } else {
+        const sql = 'SELECT * FROM lobby WHERE lobby_id = ?';
+        const connection = mysql.createConnection(dbconfig);
+        connection.connect();
+
+        let lobbyStatus;
+
+        getLobbyStatus();
+
+        function getLobbyStatus() {
+            connection.query(sql, [lobby], (err, rows) => {
+                if (err) {
+                    throw err
+                }
+
+                lobbyStatus = rows
+            });
+        }
+
+        function continueGame() {
+            getLobbyStatus();
+
+            if (lobbyStatus[0].continue_game == 1) {
+                res.status(200).json({"message": "Ready to continue!"})
+                connection.end();
+                clearInterval(checkGameStatus);
+            }
+        }
+
+        const checkGameStatus = setInterval(continueGame, 500);
+    }
 });
 
 // Get the time for the question based on questions ID

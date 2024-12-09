@@ -1,3 +1,7 @@
+#language-form {
+    display: none;
+}
+
 #main-game-container {
     display: none;
 }
@@ -37,6 +41,10 @@
 #question-time {
     grid-column: 6;
     margin: auto;
+}
+
+#continue-button, #leave-button {
+    display: none;
 }
 
 .answers {

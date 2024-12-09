@@ -101,15 +101,22 @@ app.get("/create", (req, res) => {
 
 app.get('/game', async (req, res) => {
     // kalle does this. - Kalle
+    // shit desicion - Kalle
     console.log("loaded Game");
-    const lobby = req.body.lobby;
-    const language = req.body.language;
+    const lobby = req.query.lobby;
+    const language = req.query.language;
     const sessionId = req.headers.cookie || null;
 
     if (language == 'fi') {
-        res.render('game', fi_game);
+        res.render('game', {
+            ...fi_game,
+            sessionId: sessionId    
+        });
     } else if (language == 'en') {
-        res.render('game', en_game);
+        res.render('game', {
+            ...en_game,
+            sessionId: sessionId
+        });
     } else { // by default, render the finnish version
         res.render('game', {
             ...fi_game,
