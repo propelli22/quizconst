@@ -14,6 +14,8 @@ const fi_home = require('./languages/fi_home.json')
 const en_home = require('./languages/en_home.json')
 const fi_create = require('./languages/fi_create.json')
 const en_create = require('./languages/en_create.json')
+const en_lobby = require('./languages/en_lobby.json');
+const fi_lobby = require('./languages/fi_lobby.json');
 const fi_game = require('./languages/fi_game.json');
 const en_game = require('./languages/en_game.json')
 
@@ -33,6 +35,14 @@ app.use(
 
 const port = "3000";
 const host = "0.0.0.0"; // run on device local ip
+
+
+
+app.get('/aula', (req, res) => {
+    const hostPlayer = players.slice(0, 1); // Get only the first player
+    res.render('aula', { ...fi_home, players: hostPlayer });
+});
+
 
 app.get('/', async (req, res) => {
     console.log("loaded Frontpage");
@@ -335,5 +345,6 @@ app.post('/gamedata', async (req, res) => {
     }
 
 });
+
 
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}...`));

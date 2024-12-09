@@ -10,6 +10,11 @@ body {
     overflow: hidden;
 }
 
+h1 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
 header {
     height: 25vh;
     display: grid;
@@ -29,6 +34,7 @@ footer {
 main {
     height: 50vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -92,6 +98,214 @@ input[type="number"], select {
 #header-nav {
     text-align: right;
 }
+
+/* New styles for the players grid */
+.players-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-box {
+    border: 1px solid #ccc;
+    padding: 18px;
+    border-radius: 5px;     
+    background-color: #f9f9f9;
+    width: 145px;
+    text-align: center;
+    margin: 5px;
+}
+
+@media (max-width: 1200px) {
+    .players-grid {
+        grid-template-columns: repeat(4, 1fr); /* 4 columns on medium screens */
+    }
+}
+
+@media (max-width: 900px) {
+    .players-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on smaller screens */
+    }
+}
+
+@media (max-width: 600px) {
+    .players-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on small screens */
+    }
+
+    .player-box {
+        width: 100px; /* Adjust width for smaller screens */
+        padding: 15px; /* Adjust padding for smaller screens */
+    }
+
+    main {
+        height: auto; /* Adjust height for smaller screens */
+    }
+
+    h1 {
+        font-size: 1.5em; /* Adjust font size for smaller screens */
+    }
+
+    button {
+        margin-bottom: 10px; /* Add some space below the button */
+    }
+}
+
+@media (max-width: 400px) {
+    .players-grid {
+        grid-template-columns: 1fr 1fr; /* 2 columns on very small screens */
+        justify-content: center; /* Center the grid on very small screens */
+    }
+
+    .player-box {
+        width: 130px; /* Adjust width for very small screens */
+        padding: 10px; /* Adjust padding for very small screens */
+        margin: 5px; /* Add margin to separate the boxes */
+    }
+
+    .players-grid .player-box:nth-child(odd) {
+        grid-column: 1; /* First column */
+    }
+
+    .players-grid .player-box:nth-child(even) {
+        grid-column: 2; /* Second column */
+    }
+}
+
+@media (max-width: 375px) {
+    .players-grid {
+        grid-template-columns: repeat(5, 1fr); /* 5 columns on very small screens */
+        justify-content: center; /* Center the grid on very small screens */
+    }
+
+    .player-box {
+        width: 70px; /* Adjust width for very small screens */
+        padding: 10px; /* Adjust padding for very small screens */
+        margin: 5px; /* Add margin to separate the boxes */
+    }
+
+    .players-grid .player-box:nth-child(n+6) {
+        grid-column: span 5; /* Span 5 columns for the second row */
+    }
+
+    #admin-settings-button {
+        position: relative;
+        margin-top: 20px;
+        width: 90%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    main {
+        padding-bottom: 60px; /* Add extra space at the bottom for the admin settings button */
+    }
+}
+
+#credits {
+    display: none;
+}   
+
+
+
+/* Sign up/ Log in modal */
+#log-modal {
+    display: none;
+    background-color: gray;
+    position: fixed;
+    width: 28vw;
+    height: 70vh;
+    z-index: 1;;
+}
+
+#log-in-content p{
+    margin-bottom: 7px;
+}
+
+/* Sign up/ Log in modal */
+#log-modal {
+    display: none;
+    background-color: gray;
+    position: fixed;
+    width: 28vw;
+    height: 70vh;
+    z-index: 1;;
+}
+
+#log-in-content p{
+    margin-bottom: 7px;
+}
+
+#log-in-content h2{
+    margin-bottom: 10px;
+}
+
+#log-in-content input {
+    background-color: white;
+    max-width: 21vh;
+    margin-bottom: 7px;
+}
+
+#log-in-content {
+    margin-top: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+#sign-up-content p{
+    margin-bottom: 7px;
+}
+
+#sign-up-content h2{
+    margin-bottom: 10px;
+}
+
+#sign-up-content input {
+    background-color: white;
+    max-width: 21vh;
+    margin-bottom: 7px;
+}
+
+#sign-up-content {
+    margin-top: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+.close{
+    float: right;
+    font-size: 3rem;
+}
+
+#log-in-content, #sign-up-content {
+    display: flex;
+    flex-direction: column;
+}
+
+#log-in-button, #sign-up-button {
+    max-width: 20vw;
+    height: 3vh;
+    margin-top: 10px;
+    align-self: flex-start;
+    background-color: white;
+}
+
+@media only screen and (max-width: 900px) {
+    #log-modal {
+        width: 48vw;
+        height: 70vh;
+    }
+
+    
+}
+
+@media only screen and (max-width: 590px) {
+    #log-modal {
+        width: 68vw;
+        height: 70vh;
+    }
+}
+
   
 #nav-dropdown {
     grid-column: 6;
