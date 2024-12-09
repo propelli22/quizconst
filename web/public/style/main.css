@@ -62,6 +62,10 @@ input[type="number"], select {
     border: 2px #4E4C67 solid;
 }
 
+.textInput {
+    border: #4E4C67 2px solid;
+}
+
 #language-form {
     grid-column: 1;
     margin: auto;
@@ -301,6 +305,7 @@ input[type="number"], select {
         height: 70vh;
     }
 }
+
   
 #nav-dropdown {
     grid-column: 6;
@@ -313,6 +318,14 @@ input[type="number"], select {
 #admin-settings-button {
     width: 90%;
     margin: 5%;
+}
+
+#find-subject, #create-subject {
+    display: none;
+}
+
+#question-time {
+    display: none;
 }
 
 /* tablet size */
@@ -341,9 +354,18 @@ input[type="number"], select {
         justify-content: center;
         align-items: center;
     }
+
+    #find-subject, #create-subject {
+        display: none;
+    }
 }
 
 #developers {
 	margin-top: 10px;
 	margin-bottom: 10px;
+}
+
+#question-count {
+    display: none;
+    text-align: center;
 }

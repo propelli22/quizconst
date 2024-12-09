@@ -5,7 +5,7 @@
         <h2><%= create_lobby %></h2>
         <form method="post" action="localhost:4000/createlobby">
             <h3><%= lobby_name %></h3>
-            <input type="text" name="lobbyname" id="lobbyName" placeholder="testi">
+            <input type="text" name="lobbyname" id="lobbyName" placeholder="testi" class="textInput">
             <h3><%= max_players %></h3>
             <div id="player-count-div">
                 <input type="button" id="count-up" class="button" value="+" onclick="countUp()">
@@ -15,7 +15,7 @@
             <h3><%= select_subject %></h3>
             <div id="selected-subject">
                 <p id="no-selection"><%= no_subject %></p>
-                <input type="button" class="button" onclick="alert('Toimii!')" value="<%= select_subject %>">
+                <input type="button" class="button" id="c-lobby-select-subject" onclick="alert('Toimii!')" value="<%= select_subject %>">
             </div>
             <input type="button" value="<%= create %>" class="button" onclick="newLobby()">
         </form>
