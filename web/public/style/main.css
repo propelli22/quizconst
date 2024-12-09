@@ -6,13 +6,14 @@ body {
     margin: 0;
     padding: 0;
     color: #4E4C67;
+    height: 100%;
+    overflow: hidden;
 }
 
 h1 {
     margin-bottom: 20px;
     text-align: center;
 }
-
 
 header {
     height: 25vh;
@@ -203,6 +204,20 @@ input[type="number"], select {
 }   
 
 
+
+/* Sign up/ Log in modal */
+#log-modal {
+    display: none;
+    background-color: gray;
+    position: fixed;
+    width: 28vw;
+    height: 70vh;
+    z-index: 1;;
+}
+
+#log-in-content p{
+    margin-bottom: 7px;
+}
 
 /* Sign up/ Log in modal */
 #log-modal {
