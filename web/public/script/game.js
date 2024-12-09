@@ -10,7 +10,7 @@ const urlParams = new URLSearchParams(queryString);
 
 const currentAddress = window.location.origin;
 const currentLanguage = urlParams.get('language');
-console.log(urlParams.get('language')) // TODO: fetch current language from url parameters, should be the only parameter in the url.
+console.log(urlParams.get('language'));
 let currentQuestion = 0;
 
 const questionCountTag = document.getElementById("question-count");
@@ -177,7 +177,7 @@ async function runQuestion(questionData) {
 
     document.getElementById("question-time").style.display = "block";
 
-    document.getElementById("answer-1").addEventListener("click", function() {
+    document.getElementById("answer1-container").addEventListener("click", function() {
         playerAnswer = 1;
         hasAnswered = true;
 
@@ -185,7 +185,7 @@ async function runQuestion(questionData) {
             correctAnswer = true;
         }
     });
-    document.getElementById("answer-2").addEventListener("click", function() {
+    document.getElementById("answer2-container").addEventListener("click", function() {
         playerAnswer = 2;
         hasAnswered = true;
 
@@ -193,7 +193,7 @@ async function runQuestion(questionData) {
             correctAnswer = true;
         }
     });
-    document.getElementById("answer-3").addEventListener("click", function() {
+    document.getElementById("answer3-container").addEventListener("click", function() {
         playerAnswer = 3;
         hasAnswered = true;
 
@@ -201,7 +201,7 @@ async function runQuestion(questionData) {
             correctAnswer = true;
         }
     });
-    document.getElementById("answer-4").addEventListener("click", function() {
+    document.getElementById("answer4-container").addEventListener("click", function() {
         playerAnswer = 4;
         hasAnswered = true;
 
@@ -295,6 +295,19 @@ Object.defineProperty(window, 'addPoints', { // low taper fade
     }
 });
 
+Object.defineProperty(window, 'getCorrectAnswer', {
+    get: function () {
+        console.log("The answer to the current question is:")
+
+        const minCeiled = Math.ceil(1);
+        const maxFloored = Math.floor(4);
+
+        let questionAnswerId = Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+        let questionAnswer = document.getElementById(`answer-${questionAnswerId}`).innerHTML;
+        console.log(`${questionAnswer}`);
+    }
+});
+
 async function showResults() {
     questionContainer.style.display = "none";
     mainGameContainer.style.display = "none";
@@ -383,8 +396,6 @@ function resultsButtonVisibility() {
 }
 
 // TODO torstaille ja loppu viikolle myöskin, viikonlopulle menee :) t perjantai kalle
-// - results osion napit, hostille contiue, muille ei mitään kunnes vika kysymys pelattu jolloin tulee nappi poistua
-// - gameController, funktioiden käyttäminen oikeilla ajoituksilla gameControllerissa.
 // - testaus yhdellä ja useammalla laitteella, mutta koska aula ei ole viellä valmis, ei voi testata vielä, eli siis odoteteaan aulaa :(
 
 // gameController is used to call all the functions in order using async.
