@@ -11,7 +11,6 @@ body {
 h1 {
     margin-bottom: 20px;
     text-align: center;
-    
 }
 
 
@@ -97,8 +96,8 @@ input[type="number"], select {
 
 /* New styles for the players grid */
 .players-grid {
-    display: grid   ;
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
     grid-gap: 10px;
     justify-content: center;
     align-items: center;
@@ -106,10 +105,10 @@ input[type="number"], select {
 
 .player-box {
     border: 1px solid #ccc;
-    padding: 20px;
+    padding: 18px;
     border-radius: 5px;     
     background-color: #f9f9f9;
-    width: 120px;
+    width: 145px;
     text-align: center;
     margin: 5px;
 }
@@ -132,7 +131,7 @@ input[type="number"], select {
     }
 
     .player-box {
-        width: 10   0px; /* Adjust width for smaller screens */
+        width: 100px; /* Adjust width for smaller screens */
         padding: 15px; /* Adjust padding for smaller screens */
     }
 
@@ -151,10 +150,8 @@ input[type="number"], select {
 
 @media (max-width: 400px) {
     .players-grid {
-        display: grid;
         grid-template-columns: 1fr 1fr; /* 2 columns on very small screens */
-        grid-gap: 10px;
-        justify-content: start; /* Align grid to the start */
+        justify-content: center; /* Center the grid on very small screens */
     }
 
     .player-box {
@@ -172,10 +169,40 @@ input[type="number"], select {
     }
 }
 
+@media (max-width: 375px) {
+    .players-grid {
+        grid-template-columns: repeat(5, 1fr); /* 5 columns on very small screens */
+        justify-content: center; /* Center the grid on very small screens */
+    }
+
+    .player-box {
+        width: 70px; /* Adjust width for very small screens */
+        padding: 10px; /* Adjust padding for very small screens */
+        margin: 5px; /* Add margin to separate the boxes */
+    }
+
+    .players-grid .player-box:nth-child(n+6) {
+        grid-column: span 5; /* Span 5 columns for the second row */
+    }
+
+    #admin-settings-button {
+        position: relative;
+        margin-top: 20px;
+        width: 90%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    main {
+        padding-bottom: 60px; /* Add extra space at the bottom for the admin settings button */
+    }
+}
+
 #credits {
     display: none;
 }   
-}
+
+
 
 /* Sign up/ Log in modal */
 #log-modal {

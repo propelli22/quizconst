@@ -165,4 +165,3 @@ document.getElementById("sign-up-button").addEventListener("click", () => {
     }
   
   });
-}

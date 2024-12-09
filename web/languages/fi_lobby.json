@@ -1,8 +1,8 @@
-{
+{   
     "page": "Etusivu",
+    "title": "Aula",
     "language": "fi",
     "join_game": "Liity",
-    "input_code": "Syötä koodi...",
     "create_lobby": "Luo aula",
     "lobby_name": "Aulan nimi:",
     "max_players": "Pelaaja rajoitus:",
@@ -13,7 +13,7 @@
     "find_subject": "Etsi aihe",
     "login": "Kirjaudu sisään",
     "admin_settings": "Ylläpitäjän asetukset",
-    "select": "Valitse",
+    "select": "Valitse",    
     "log_title": "Kirjaudu sisään",
     "log_name": "Nimi:",
     "log_password": "Salasana:",

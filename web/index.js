@@ -11,6 +11,8 @@ const fi_home = require('./languages/fi_home.json')
 const en_home = require('./languages/en_home.json')
 const fi_create = require('./languages/fi_create.json')
 const en_create = require('./languages/en_create.json')
+const en_lobby = require('./languages/en_lobby.json');
+const fi_lobby = require('./languages/fi_lobby.json');
 
 // EJS setup
 app.set('view engine', 'ejs');
@@ -21,15 +23,18 @@ const port = "3000";
 const host = "0.0.0.0"; // run on device local ip
 
 
-const players = [
-    { name: 'Player 1' },
-    // Add more players as needed
-];
+app.get('/lobby', (req, res) => {
+    const language = req.query.language;
 
-app.get('/aula', (req, res) => {
-    const hostPlayer = players.slice(0, 1); // Get only the first player
-    res.render('aula', { ...fi_home, players: hostPlayer });
+    if (language == 'fi') {
+        res.render('aula', fi_lobby);
+    } else if (language == 'en') {
+        res.render('aula', en_lobby);
+    } else {
+        res.render('aula', fi_lobby);
+    }
 });
+
 
 
 app.get('/', async (req, res) => {
@@ -79,5 +84,6 @@ app.get('/create', (req, res) => {
 		res.render('create_a_game', fi_create)
 	}
 });
+
 
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}...`));

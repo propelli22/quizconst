@@ -1,41 +1,13 @@
 <%- include('partials/header') %>
 <main>
-    <h1>Aula</h1>
-    <button id="add-player-button">Add Player</button>
+    <h1><%= title %></h1>
+    <button id="add-player-button">Lisää pelaaja</button>
     <div class="players-grid" id="players-grid">
         <div class="player-box host" id="host-player">
-            <p>Player 1 (Host)</p>
+            <p>Pelaaja 1 (Host)</p>
         </div>
-        <% for (var i = 1; i < players.length; i++) { %>
-            <div class="player-box">
-                <p><%= players[i].name %></p>
-            </div>
-        <% } %>
     </div>
 </main>
 <%- include('partials/footer') %>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const playersGrid = document.getElementById('players-grid');
-        const hostPlayer = document.getElementById('host-player');
-
-        playersGrid.style.justifyContent = 'center';
-
-        document.getElementById('add-player-button').addEventListener('click', function() {
-            const playerCount = playersGrid.getElementsByClassName('player-box').length;
-
-            if (playerCount < 15) {
-                const newPlayerBox = document.createElement('div');
-                newPlayerBox.className = 'player-box';
-                newPlayerBox.innerHTML = `<p>Player ${playerCount + 1}</p>`;
-                playersGrid.appendChild(newPlayerBox);
-
-                if (playerCount >= 1) {
-                    playersGrid.style.justifyContent = 'flex-start';
-                    playersGrid.style.gridTemplateColumns = 'repeat(5, 1fr)';
-                }
-            }
-        });
-    });
-</script>
+<script src="script/script.js"></script>
+<script src="script/aula.js"></script>
