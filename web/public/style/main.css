@@ -110,6 +110,10 @@ input[type="number"], select {
     display: none;
 }
 
+#question-time {
+    display: none;
+}
+
 /* tablet size */
 @media screen and (min-width: 660px) {
     #admin-settings-button {

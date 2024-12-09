@@ -1,6 +1,8 @@
 {
 	"page": "Luo aihe",
 	"language": "fi",
+	"loading": "Ladataan...",
+	"questions": "Kysymyksiä:",
 	"create_subject": "Luo aihe",
 	"find_subject": "Etsi aihe",
 	"login": "Kirjaudu sisään",

@@ -1,6 +1,8 @@
 {
     "page": "Etusivu",
     "language": "fi",
+    "loading": "Ladataan...",
+    "questions": "Kysymyksiä:",
     "join_game": "Liity",
     "input_code": "Syötä koodi...",
     "create_lobby": "Luo aula",

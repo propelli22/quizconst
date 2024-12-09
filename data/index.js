@@ -8,11 +8,11 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://10.18.7.64:3000");
-  res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  next();
-});
+    res.setHeader("Access-Control-Allow-Origin", "http://10.20.12.230:3000"); // TODO: change to current device ip
+    res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    next();
+})
 
 const port = "4000";
 const host = "localhost"; // runs on localhost to avoid external users access to database
@@ -254,8 +254,6 @@ app.post("/createlobby", (req, res) => {
 // - Add input validation
 //
 // Main game data requests, done with post to make access of data as hidden as possible
-
-// untested
 app.post('/getquestions', (req, res) => {
     console.log("used /getquestions");
 
@@ -280,7 +278,6 @@ app.post('/question', (req, res) => {
     console.log("used /question");
 
     const questionId = req.body.question;
-    const subjectId = req.body.subject;
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
@@ -292,11 +289,7 @@ app.post('/question', (req, res) => {
             throw err;
         }
 
-        if (rows[0].subject_id != subjectId) { 
-            res.status(400).json({"message": "Something went wrong, please check input."})
-        } else {
-            res.json(rows);
-        }
+        res.json(rows);
     });
 
     connection.end();
@@ -330,11 +323,14 @@ app.post('/questionready', (req, res) => {
 
     const player = req.body.playerId;
     const lobby = req.body.lobbyId;
+    const points = req.body.recivedPoints;
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
-    const sql = "UPDATE `player` SET `ready`='1' WHERE player_id = ?";
-    const sql2 = "SELECT * FROM player WHERE lobby_id = ?"
+
+    const sql = "UPDATE player SET ready=1 WHERE player_id = ?";
+    const sql2 = "SELECT * FROM player WHERE lobby_id = ?";
+    const sql3 = "UPDATE player SET points = points + ? WHERE player_id = ?";
     let playersReady;
 
     // mark player as ready
@@ -345,6 +341,12 @@ app.post('/questionready', (req, res) => {
     });
 
     getReadyPlayers();
+
+    connection.query(sql3, [points, player], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+    });
 
     // query is in the function so that it can be ran again later in the checkReadyPlayers loop
     function getReadyPlayers() {
@@ -369,7 +371,7 @@ app.post('/questionready', (req, res) => {
 
         if (totalReady == playersReady.length) {
             clearInterval(checkIfAllReady);
-            res.json({"message": "ALL READY"}) // improve response, add status
+            res.status(200).json({"message": "ALL READY"}) // improve response, add status
             connection.end();
         }
     }
@@ -387,7 +389,7 @@ app.post('/results', (req, res) => {
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
-    const sql = "SELECT * FROM player WHERE lobby_id = ?";
+    const sql = "SELECT * FROM player WHERE lobby_id = ? ORDER BY points DESC";
     const sql2 = "UPDATE `player` SET `ready` = '0' WHERE player_id = ?";
 
     connection.query(sql, [lobby], (err, rows) => {
@@ -409,8 +411,67 @@ app.post('/results', (req, res) => {
     connection.end();
 });
 
-// Get the time for the question based on questions ID
+app.post('/continuegame', (req, res) => {
+    console.log("used /continuegame");
 
+    const lobby = req.body.lobbyId;
+
+    const sql = 'UPDATE lobby SET continue_game = 1 WHERE lobby_id = ?';
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    connection.query(sql, [lobby], (err, rows) => {
+        if (err) {
+            throw err
+        }
+
+        res.status(200).json({"message": "OK"});
+    });
+
+    connection.end();
+});
+
+app.post('/checkcontinue', (req, res) => {
+    console.log("used /checkcontinue");
+
+    const lobby = req.body.lobby;
+
+    if (isNaN(lobby)) {
+        res.json({"message": "An error occured, please check input values."})
+    } else {
+        const sql = 'SELECT * FROM lobby WHERE lobby_id = ?';
+        const connection = mysql.createConnection(dbconfig);
+        connection.connect();
+
+        let lobbyStatus;
+
+        getLobbyStatus();
+
+        function getLobbyStatus() {
+            connection.query(sql, [lobby], (err, rows) => {
+                if (err) {
+                    throw err
+                }
+
+                lobbyStatus = rows
+            });
+        }
+
+        function continueGame() {
+            getLobbyStatus();
+
+            if (lobbyStatus[0].continue_game == 1) {
+                res.status(200).json({"message": "Ready to continue!"})
+                connection.end();
+                clearInterval(checkGameStatus);
+            }
+        }
+
+        const checkGameStatus = setInterval(continueGame, 500);
+    }
+});
+
+// Get the time for the question based on questions ID
 app.get("/time", (req, res) => {
   const time = req.query.question;
   let sql = `SELECT time, points FROM question WHERE question_id = ?`;
@@ -485,6 +546,27 @@ app.post("/banPlayer", (req, res) => {
     });
     connection.end();
   });
+
+
+app.post('/getanswers', (req, res) => {
+    console.log("used /getanswers");
+
+    const question = req.body.questionId;
+
+    const connetion = mysql.createConnection(dbconfig);
+    connetion.connect();
+    const sql = 'SELECT * FROM answers WHERE question_id = ?';
+
+    connetion.query(sql, [question], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        res.json(rows);
+    });
+
+    connetion.end();
+});
 
 // run the server
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));

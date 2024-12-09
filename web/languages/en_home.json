@@ -1,6 +1,8 @@
 {
     "page": "Homepage",
     "language": "en",
+    "loading": "Loading...",
+    "questions": "Questions:",
     "join_game": "Join",
     "input_code": "Insert code...",
     "create_lobby": "Create a lobby",

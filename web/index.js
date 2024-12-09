@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const { XMLParser, XMLBuilder, XMLValidator} = require("fast-xml-parser");
 
+
 const app = express();
 app.use(express.urlencoded({extended: 'false'}))
 app.use(express.json())
@@ -100,15 +101,22 @@ app.get("/create", (req, res) => {
 
 app.get('/game', async (req, res) => {
     // kalle does this. - Kalle
+    // shit desicion - Kalle
     console.log("loaded Game");
-    const lobby = req.body.lobby;
-    const language = req.body.language;
+    const lobby = req.query.lobby;
+    const language = req.query.language;
     const sessionId = req.headers.cookie || null;
 
     if (language == 'fi') {
-        res.render('game', fi_game);
+        res.render('game', {
+            ...fi_game,
+            sessionId: sessionId    
+        });
     } else if (language == 'en') {
-        res.render('game', en_game);
+        res.render('game', {
+            ...en_game,
+            sessionId: sessionId
+        });
     } else { // by default, render the finnish version
         res.render('game', {
             ...fi_game,
@@ -211,6 +219,7 @@ app.post('/gamedata', async (req, res) => {
     // this will be stupid af, BUT, the users browser will send out what action to run (for example, /question) on the data server.
     // the users browser WILL run this multiple times during the game (by multiple users) so to avoid overloading the server, 
     // OPTIMIZE CODE AS MUCH AS POSSIBLE!!! try and avoid all unnecesary actions.
+    // TODO: make sure code does not use too much resources when ran by multiple users at the same time, KALLE!!!!!
     const runAction = req.body.action;
     const subject = req.body.subjectId;
     const player = req.body.playerId;
@@ -235,7 +244,6 @@ app.post('/gamedata', async (req, res) => {
         res.json(result);
     } else if (runAction == "question") {
         const body = {
-            subject: subject,
             question: question
         };
     
@@ -266,7 +274,8 @@ app.post('/gamedata', async (req, res) => {
     } else if(runAction == "questionready") { // THIS WILL BE HEAVY TO RUN, as the data server will only respond to this once everyone is ready!
         const body = {
             playerId: player,
-            lobbyId: lobby
+            lobbyId: lobby,
+            recivedPoints: points
         };
     
         const getQuestionReady = await fetch(`http://localhost:4000/questionready`, {
@@ -291,6 +300,34 @@ app.post('/gamedata', async (req, res) => {
         });
     
         const result = await getResults.json();
+
+        res.json(result);
+    } else if (runAction == "getanswers") {
+        const body = {
+            questionId: question
+        }
+
+        const getAnswers = await fetch(`http://localhost:4000/getanswers`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const result = await getAnswers.json();
+
+        res.json(result);
+    } else if (runAction == "time") {
+        const body = {
+            questionId: question
+        }
+
+        const getTime = await fetch(`http://localhost:4000/time`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const result = await getTime.json();
 
         res.json(result);
     } else {
