@@ -10,7 +10,6 @@ const urlParams = new URLSearchParams(queryString);
 
 const currentAddress = window.location.origin;
 const currentLanguage = urlParams.get('language');
-console.log(urlParams.get('language'));
 let currentQuestion = 0;
 
 const questionCountTag = document.getElementById("question-count");
@@ -263,10 +262,8 @@ async function runQuestion(questionData) {
                 }
 
                 if (readyStatus == 200) {
-                    console.log("able to continue");
+                    // TODO: wtf, something i was supposed to do here???
                 }
-
-                console.log("testingggg")
 
                 document.getElementById("question-time").style.display = "none";
                 resolve(true);
@@ -407,9 +404,6 @@ async function gameController() {
     // question cycle
     for(let i = 0; i < questionCount; i++) {
         const recivedQuestionData = await getQuestion(questions[i]);
-
-        console.log(i + 1)
-        console.log(questionCount)
 
         if (i + 1 == questionCount) {
             lastQuestion = true;
