@@ -2,7 +2,7 @@
     width: 100%;
     height: 100%;
 }
-    
+
 #question-container {
     position: relative;
     top: 55px;
@@ -15,7 +15,7 @@
     margin: 0;
 }
 
-#custom-file-upload {
+.custom-file-upload {
     cursor: pointer;
 }
 
@@ -28,11 +28,11 @@
     margin-bottom: 5px;
 }
 
-#image-upload {
+.image-upload {
     text-decoration: underline;
 }
 
-#image-name-container {
+.image-name-container {
     padding: 10px;
     padding-right: 30px;
     margin: 5px auto;
@@ -47,7 +47,7 @@
     position: relative;
 }
 
-#image-name-container .close {
+.image-name-container .close {
     position: absolute;
     top: 50%;
     right: 10px;
@@ -58,8 +58,8 @@
     cursor: pointer;
 }
 
-#image-name-container .close:hover,
-#image-name-container .close:focus {
+.image-name-container .close:hover,
+.image-name-container .close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
@@ -91,7 +91,7 @@
     position: relative;
 }
 
-#close-question-modal, #close-settings-modal, #close-image-modal {
+.close {
     position: absolute;
     top: 15px;
     right: 15px;
@@ -101,29 +101,20 @@
     cursor: pointer;
 }
 
-#close-question-modal:hover,
-#close-question-modal:focus,
-#close-image-modal:hover,
-#close-image-modal:focus,
-#close-settings-modal:hover,
-#close-settings-modal:focus {
+.close:hover,
+.close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
 }
 
-#image-name-container {
-	display: none;
-	cursor: pointer;
-}
-
-#uploaded-image {
+.uploaded-image {
     display: none;
-	max-width: 100%;
-	height: auto;
+    max-width: 100%;
+    height: auto;
 }
 
-#fullscreen-image {
+.image-modal-content {
     margin: auto;
     display: block;
     width: 100%;
@@ -136,10 +127,10 @@
     padding: 10px;
     border: 1px solid #ccc;
     cursor: pointer;
-	text-align: center;
+    text-align: center;
 }
 
-#aiheen-nimi {
+#game-name {
     text-align: center;
     margin: 0;
     margin-bottom: 5px;
@@ -151,7 +142,7 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: 10px;
-	margin-top: 15px;
+    margin-top: 15px;
 }
 
 #triangle {
@@ -190,7 +181,7 @@
 
 .answer-container {
     text-align: center;
-	padding: 15px 0px 15px 0px;
+    padding: 15px 0px 15px 0px;
 }
 
 .edit-input {
@@ -198,7 +189,7 @@
 }
 
 #open-question-modal, #add-question, #settings-button {
-	background-color: #aaa;
-	padding: 0px 5px 0px 5px;
-	border: black 2px solid;
+    background-color: #aaa;
+    padding: 0px 5px 0px 5px;
+    border: black 2px solid;
 }
