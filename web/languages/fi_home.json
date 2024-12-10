@@ -1,6 +1,8 @@
 {
     "page": "Etusivu",
     "language": "fi",
+    "loading": "Ladataan...",
+    "questions": "Kysymyksiä:",
     "join_game": "Liity",
     "input_code": "Syötä koodi...",
     "create_lobby": "Luo aula",
@@ -10,6 +12,7 @@
     "no_subject": "Ei valittua aihetta.",
     "create": "Luo",
     "create_subject": "Luo aihe",
+    "user": "Käyttäjä",
     "find_subject": "Etsi aihe",
     "login": "Kirjaudu sisään",
     "account": "Käyttäjä",
@@ -45,5 +48,16 @@
     "sign_button": "Rekisteröidy",
     "made_by": "Projektin tekijät:",
     "developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
-    "info": "2024, dev version 1"
+    "info": "2024, dev version 1",
+    "adminSetting": "Ylläpitäjän asetukset",
+    "playerSearch": "Pelaajan haku",
+    "Banbutton": "Anna porttikielto",
+    "Unbanbutton": "Poista porttikielto",
+    "manageLobbys": "Hallitse auloja",
+    "errorMessageUnban": "Käyttäjä ei löytynyt",
+    "errorMessageBan": "Käyttäjä ei löytynyt",
+    "lobbySearch": "Aulahaku",
+    "deleteLobby": "Poista aula",
+    "lobbyName": "Aulan nimi",
+    "errorMessageLobby": "Aulaa ei löytynyt"
 }
