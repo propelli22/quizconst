@@ -327,14 +327,8 @@ app.post('/gamedata', async (req, res) => {
 
         res.json(result);
     } else if (runAction == "time") {
-        const body = {
-            questionId: question
-        }
-
-        const getTime = await fetch(`http://localhost:4000/time`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {'Content-Type': 'application/json'}
+        const getTime = await fetch(`http://localhost:4000/time?question=${question}`, {
+            method: 'GET'
         });
 
         const result = await getTime.json();
