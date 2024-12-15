@@ -1,6 +1,6 @@
 {
     "title": "Lobby",
-    "page": "Homepage",
+    "page": "Lobby",
     "language": "en",
     "join_game": "Join",
     "create_lobby": "Create a lobby",
@@ -23,6 +23,9 @@
     "sign_email": "Email:",
     "sign_password": "Password:",
     "sign_button": "Sign up",
+    "loading": "Loading...",
+    "questions": "Questions: ",
+    "user": "User",
     "made_by": "Built by:",
     "developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
     "info": "2024, v1"
