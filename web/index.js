@@ -2,8 +2,7 @@ const express = require('express');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
-const { XMLParser, XMLBuilder, XMLValidator} = require("fast-xml-parser");
-
+const { XMLParser, XMLBuilder, XMLValidator } = require("fast-xml-parser");
 
 const app = express();
 app.use(express.urlencoded({extended: 'false'}))
@@ -17,7 +16,7 @@ const en_create = require('./languages/en_create.json')
 const en_lobby = require('./languages/en_lobby.json');
 const fi_lobby = require('./languages/fi_lobby.json');
 const fi_game = require('./languages/fi_game.json');
-const en_game = require('./languages/en_game.json')
+const en_game = require('./languages/en_game.json');
 
 // EJS setup
 app.set('view engine', 'ejs');
@@ -36,11 +35,56 @@ app.use(
 const port = "3000";
 const host = "0.0.0.0"; // run on device local ip
 
+app.get('/lobby', async (req, res) => {
+    console.log("loaded Lobby")
 
+    const language = req.query.language;
+    const sessionId = req.headers.cookie || null;
+    const lobbyId = req.query.lobby;
 
-app.get('/aula', (req, res) => {
-    const hostPlayer = players.slice(0, 1); // Get only the first player
-    res.render('aula', { ...fi_home, players: hostPlayer });
+    const lobbyDataUrl = `http://localhost:4000/lobbydata?id=${lobbyId}`
+    let lobbyData;
+
+    const settings = {
+        method: 'GET'
+    }
+
+    try {
+        const xmlSite = await fetch(lobbyDataUrl, settings);
+        const xml = await xmlSite.text();
+
+        const isValid = XMLValidator.validate(xml);
+        if(isValid) {
+            const parser = new XMLParser();
+            lobbyData = parser.parse(xml).lobbydata;
+        } else {
+            lobbyData = 'An error occurred while fetching lobbydata :('
+        }
+    } catch (err) {
+        console.log(err);
+    }
+
+    console.log(lobbyData);
+
+    if(language === 'fi') {
+        res.render('aula', {
+            ...fi_lobby,
+            sessionId: sessionId,
+            lobbyData: lobbyData
+        });
+    } else if(language === "en") {
+        res.render('aula', {
+            ...en_lobby,
+            sessionId: sessionId,
+            lobbyData: lobbyData
+        });
+    } else {
+        res.render('aula', {
+            ...en_lobby,
+            sessionId: sessionId,
+            lobbyData: lobbyData
+        });
+    }
 });
 
 
@@ -187,6 +231,31 @@ app.post('/register', (req, res) => {
 
 });
 
+app.post('/joinplayer', async (req, res) => {
+    console.log("used /joinplayer");
+
+    const body = {
+        lobby: req.body.lobbyId,
+        name: req.body.name,
+        accountId: req.body.accountId
+    }
+
+    const responeJoin = await fetch('http://localhost:4000/joingame', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {'Content-Type': 'application/json'}
+    });
+
+    const joinData = await responeJoin.json();
+
+    console.log(joinData);
+
+    res.cookie('lobby', req.body.lobbyId);
+    res.cookie('playerId', joinData);
+
+    res.status(200).json({"message": "Ok"})
+});
+
 app.post('/login', async (req, res) => {
     console.log("used Login");
 
@@ -221,6 +290,25 @@ app.post('/login', async (req, res) => {
     } else {
         res.status(401).json({ "message": "Failed to authenticate user, please check input."})
     }
+});
+
+app.post('/createlobby', async (req, res) => {
+    console.log("used /createlobby")
+
+    const body = {
+        name: req.body.name,
+        playercount: req.body.playercount,
+        subject: req.body.subject,
+        game_date: req.body.game_date
+    }
+
+    const createLobbyResponse = await fetch('http://localhost:4000/createlobby', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {"Content-Type": "application/json"}
+    });
+
+    const result = await createLobbyResponse.json();
 });
 
 app.post('/gamedata', async (req, res) => {
@@ -327,14 +415,8 @@ app.post('/gamedata', async (req, res) => {
 
         res.json(result);
     } else if (runAction == "time") {
-        const body = {
-            questionId: question
-        }
-
-        const getTime = await fetch(`http://localhost:4000/time`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {'Content-Type': 'application/json'}
+        const getTime = await fetch(`http://localhost:4000/time?question=${question}`, {
+            method: 'GET'
         });
 
         const result = await getTime.json();
@@ -346,5 +428,55 @@ app.post('/gamedata', async (req, res) => {
 
 });
 
+app.post('/createsubject', async (req, res) => {
+    console.log("used /createsubject");
+
+    const body = req.body;
+    console.log(body);
+
+    const saveData = await fetch('http://localhost:4000/createsubject', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {'Content-Type': 'application/json'}
+    });
+
+    const result = await saveData.json();
+
+    res.status(200).json({"message": "OK", "subjectId": result.subjectId});
+});
+
+app.post('/createquestion', async (req, res) => {
+    console.log("used /createquestion");
+
+    const body = req.body
+    console.log(body);
+
+    const saveData = await fetch('http://localhost:4000/createquestion', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {'Content-Type': 'application/json'}
+    });
+
+    const result = await saveData.json();
+
+    res.status(200).json({"message": "OK", "questionId": result.questionId});
+});
+
+app.post('/createanswer', async (req, res) => {
+    console.log("used /createanswer");
+
+    const body = req.body
+    console.log(body);
+
+    const saveData = await fetch('http://localhost:4000/createanswer', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {'Content-Type': 'application/json'}
+    });
+
+    const result = await saveData.json();
+
+    res.status(200).json({"message": "OK", "answerId": result.answerId});
+});
 
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}...`));

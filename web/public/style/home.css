@@ -1,6 +1,11 @@
 #credits {
+    display: block;
     grid-column-start: 2;
     text-align: center;
+}
+
+#leaderboard-buttons-container {
+    display: none;
 }
 
 #home-container {
