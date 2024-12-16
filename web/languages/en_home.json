@@ -1,6 +1,8 @@
 {
     "page": "Homepage",
     "language": "en",
+    "loading": "Loading...",
+    "questions": "Questions:",
     "join_game": "Join",
     "input_code": "Insert code...",
     "create_lobby": "Create a lobby",
@@ -10,6 +12,7 @@
     "no_subject": "No selected subject.",
     "create": "Create",
     "create_subject": "Create subject",
+    "user": "User", 
     "find_subject": "Search subject",
     "login": "Log in",
     "account": "Account",
@@ -45,5 +48,16 @@
     "sign_button": "Sign up",
     "made_by": "Built by:",
     "developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
-    "info": "2024, dev version 1"
+    "info": "2024, dev version 1",
+    "adminSetting": "Admin settings",
+    "playerSearch": "Player search",
+    "Banbutton": "Ban",
+    "Unbanbutton": "Unban",
+    "manageLobbys": "Manage lobbys",
+    "errorMessageUnban": "User was not found",
+    "errorMessageBan": "User was not found",
+    "lobbySearch": "Lobby search",
+    "deleteLobby": "Delete lobby",
+    "lobbyName": "Lobby name",
+    "errorMessageLobby": "Lobby was not found"
 }

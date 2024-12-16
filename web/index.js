@@ -1,9 +1,9 @@
 const express = require('express');
 const path = require('path');
 const bcrypt = require('bcrypt');
-const fetch = (...args) =>
-    import('node-fetch').then(({default: fetch}) => fetch(...args));
 const session = require('express-session');
+const { XMLParser, XMLBuilder, XMLValidator} = require("fast-xml-parser");
+
 
 const app = express();
 app.use(express.urlencoded({extended: 'false'}))
@@ -14,6 +14,8 @@ const fi_home = require('./languages/fi_home.json')
 const en_home = require('./languages/en_home.json')
 const fi_create = require('./languages/fi_create.json')
 const en_create = require('./languages/en_create.json')
+const fi_game = require('./languages/fi_game.json');
+const en_game = require('./languages/en_game.json')
 
 // EJS setup
 app.set('view engine', 'ejs');
@@ -36,7 +38,7 @@ app.get('/', async (req, res) => {
     console.log("loaded Frontpage");
 
     const language = req.query.language;
-    const sessionId = req.session.sessionId || null;
+    const sessionId = req.headers.cookie || null;
 
     let subjectsURL = 'http://localhost:4000/getsubjects'
     const settings = {
@@ -97,6 +99,32 @@ app.get("/create", (req, res) => {
 	}
 })
 
+app.get('/game', async (req, res) => {
+    // kalle does this. - Kalle
+    // shit desicion - Kalle
+    console.log("loaded Game");
+    const lobby = req.query.lobby;
+    const language = req.query.language;
+    const sessionId = req.headers.cookie || null;
+
+    if (language == 'fi') {
+        res.render('game', {
+            ...fi_game,
+            sessionId: sessionId    
+        });
+    } else if (language == 'en') {
+        res.render('game', {
+            ...en_game,
+            sessionId: sessionId
+        });
+    } else { // by default, render the finnish version
+        res.render('game', {
+            ...fi_game,
+            sessionId: sessionId
+        });
+    }
+});
+
 app.post('/register', (req, res) => {
     console.log("used Register");
 
@@ -127,11 +155,11 @@ app.post('/register', (req, res) => {
             });
     
             if (responeCreate.status == 201) {
-                const sessionId = `${username}-${Date.now()}`
+                const loggedUser = `${username}`
                 req.session.userId = username;
-                req.session.sessionId = sessionId;
+                req.session.sessionId = loggedUser;
 
-                res.cookie('sessionId', sessionId, {
+                res.cookie('sessionId', loggedUser, {
                     httpOnly: true,
                     secure: false,
                     maxAge: 24 * 60 * 60 * 1000
@@ -168,11 +196,11 @@ app.post('/login', async (req, res) => {
     const checkResult = await checkLogin.json();
 
     if (checkResult === true) {
-        const sessionId = `${input_name}-${Date.now()}`
+        const loggedUser = `${input_name}`
         req.session.userId = input_name;
-        req.session.sessionId = sessionId;
+        req.session.sessionId = loggedUser;
 
-        res.cookie('sessionId', sessionId, {
+        res.cookie('sessionId', loggedUser, {
             httpOnly: true,
             secure: false,
             maxAge: 24 * 60 * 60 * 1000
@@ -183,6 +211,129 @@ app.post('/login', async (req, res) => {
     } else {
         res.status(401).json({ "message": "Failed to authenticate user, please check input."})
     }
+});
+
+app.post('/gamedata', async (req, res) => {
+    console.log("used /gamedata");
+
+    // this will be stupid af, BUT, the users browser will send out what action to run (for example, /question) on the data server.
+    // the users browser WILL run this multiple times during the game (by multiple users) so to avoid overloading the server, 
+    // OPTIMIZE CODE AS MUCH AS POSSIBLE!!! try and avoid all unnecesary actions.
+    // TODO: make sure code does not use too much resources when ran by multiple users at the same time, KALLE!!!!!
+    const runAction = req.body.action;
+    const subject = req.body.subjectId;
+    const player = req.body.playerId;
+    const question = req.body.questionId;
+    const lobby = req.body.lobbyId;
+    const points = req.body.recivedPoints;
+
+    // try to optimize this later !!!
+    if (runAction == "allquestions") {
+        const body = {
+            subjectId: subject
+        };
+    
+        const getQuestions = await fetch(`http://localhost:4000/getquestions`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+    
+        const result = await getQuestions.json();
+
+        res.json(result);
+    } else if (runAction == "question") {
+        const body = {
+            question: question
+        };
+    
+        const getQuestion = await fetch(`http://localhost:4000/question`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+    
+        const result = await getQuestion.json();
+
+        res.json(result);
+    } else if (runAction == "playerresult") {
+        const body = {
+            playerId: player,
+            recivedPoints: points
+        };
+    
+        const getPlayerResult = await fetch(`http://localhost:4000/playerresult`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+    
+        const result = await getPlayerResult.json();
+
+        res.json(result);
+    } else if(runAction == "questionready") { // THIS WILL BE HEAVY TO RUN, as the data server will only respond to this once everyone is ready!
+        const body = {
+            playerId: player,
+            lobbyId: lobby,
+            recivedPoints: points
+        };
+    
+        const getQuestionReady = await fetch(`http://localhost:4000/questionready`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+    
+        const result = await getQuestionReady.json();
+
+        res.json(result);
+    } else if (runAction == "results") {
+        const body = {
+            lobbyId: lobby,
+            playerId: player
+        };
+    
+        const getResults = await fetch(`http://localhost:4000/results`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+    
+        const result = await getResults.json();
+
+        res.json(result);
+    } else if (runAction == "getanswers") {
+        const body = {
+            questionId: question
+        }
+
+        const getAnswers = await fetch(`http://localhost:4000/getanswers`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const result = await getAnswers.json();
+
+        res.json(result);
+    } else if (runAction == "time") {
+        const body = {
+            questionId: question
+        }
+
+        const getTime = await fetch(`http://localhost:4000/time`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const result = await getTime.json();
+
+        res.json(result);
+    } else {
+        res.status(400).json({"message": "Failed to get action, please check input."});
+    }
+
 });
 
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}...`));

@@ -1,0 +1,26 @@
+    <link rel="stylesheet" href="style/admin-modal.css">
+    <!-- Admin modal -->
+<div id="admin-modal">
+    <!-- This needs backend adding so it searches players from SQL database -->
+    <form id="adminModal">
+        <span id="admin-close-button" class="close" style="position: absolute; top: 0; left: 0;">&times;</span>
+        <h2><%=adminSetting %></h2>
+        <h3><%=playerSearch %></h3>
+        <input type="number" required id="playerSearch" name="playerSearch" placeholder="<%=playerSearch %>"/> 
+        <button id="banButton" type="button"><%=Banbutton%></button> 
+        <p class="errorMessage" id="error1" style="display: none; color: red;"><%=errorMessageUnban%></p>
+        <button id="unbanButton" type="button"><%=Unbanbutton%></button> 
+        <p class="errorMessage" id="error2" style="display: none; color: red;"><%=errorMessageBan%></p>
+
+        <h3><%=manageLobbys%></h3>
+        <div style="position: relative;">
+            <input type="number" id="lobbySearch" name="lobbySearch" placeholder="<%=lobbySearch%>">
+            <p class="errorMessage" id="error3" style="display: none; color: red;"><%=errorMessageLobby%></p>
+            <div class="lobby-container">
+                <p id="lobbyName"><%=lobbyName%></p>
+                <button id="deleteLobbyButton" type="button"><%=deleteLobby%></button>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="script/admin"></script>
