@@ -287,4 +287,3 @@ document.getElementById("log-in-button").addEventListener("click", () => {
         document.getElementById("log-in-content").onsubmit = function() { return false; };
     }
 });
-
