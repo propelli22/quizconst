@@ -1,11 +1,9 @@
 export function saveSettings(questionIndex) {
-	var gameName = document.getElementById("game-name-settings").value
 	var questionTime = document.getElementById(`question${questionIndex}-time`).value
 	var answerTime = document.getElementById(`question${questionIndex}-answer-time`).value
 	var questionCount = document.getElementById(`question${questionIndex}-count`).value
 	var answerPoints = document.getElementById(`question${questionIndex}-answer-points`).value
 
-	localStorage.setItem("gameName", gameName)
 	localStorage.setItem(`question${questionIndex}_settingsAnswerPoints`, questionTime)
 	localStorage.setItem(`question${questionIndex}_settingsAnswerTime`, answerTime)
 	localStorage.setItem(`question${questionIndex}_settingsQuestionCount`, questionCount)
@@ -13,8 +11,7 @@ export function saveSettings(questionIndex) {
 }
 
 export function setLocalStrogeForNewQuestion(questionIndex) {
-	localStorage.setItem(`question${questionIndex}_questionName`, `<%= question %> ${questionIndex}`)
-	localStorage.setItem(`question${questionIndex}_uploadedImage`, "none")
+	localStorage.setItem(`question${questionIndex}_questionName`, `${question} ${questionIndex}`)
 
 	localStorage.setItem(`question${questionIndex}_answer1`, answer  + " 1")
 	localStorage.setItem(`question${questionIndex}_answer2`, answer + " 2")
