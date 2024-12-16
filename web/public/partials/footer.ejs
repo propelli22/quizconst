@@ -8,10 +8,14 @@
             <p id="info"><%= info %></p>
         </div>
         <div id="question-count-container">
-            <p id="question-count">Kysymyksiä: 5/7</p>
+            <p id="question-count"><%= questions %></p>
+        </div>
+        <div id="leaderboard-buttons-container">
+            <button id="continue-button" class="button" style="display: none;"><!--EJS TAG PLACEHOLDER, CHANGE!!-->Jatka</button>
+            <button id="leave-button" class="button" onclick="leaveLobby()"><!--EJS TAG PLACEHOLDER, CHANGE!!-->Lopeta</button>
         </div>
         <div id="footer-right">
-            <!-- nothing to see here :), yet! -->
+            <!-- nothing to see here :), yet! (and there wont be anything here most likely!) -->
         </div>
     </footer>
     <script src="script/script.js"></script> <!-- DO NOT MOVE, breaks the site if moved!!! -->

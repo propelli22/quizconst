@@ -1,9 +1,14 @@
+#language-form {
+    display: none;
+}
+
 #main-game-container {
     display: none;
 }
 
 #loading-container {
     display: none;
+    text-align: center;
 }
 
 #question-container {
@@ -36,6 +41,10 @@
 #question-time {
     grid-column: 6;
     margin: auto;
+}
+
+#continue-button, #leave-button {
+    display: none;
 }
 
 .answers {
@@ -111,6 +120,11 @@
     text-align: center;
 }
 
+#leaderboard-buttons-container {
+    text-align: center;
+    display: none;
+}
+
 /* Loader animation from https://loading.io/css/ */
 .lds-ripple,
 .lds-ripple div {
@@ -181,4 +195,31 @@ body {
 	100% {
 		background-position: 0% 50%;
 	}
+}
+
+#low-taper-fade-container, #cheats-container {
+    position: absolute;
+    z-index: 2;
+}
+
+#low-taper-fade {
+    height: 100vh;
+}
+
+@keyframes zoom-in-zoom-out {
+    0% {
+        display: block;
+        scale: 0%;
+        rotate: 0deg;
+    }
+
+    50% {
+        scale: 100%;
+        rotate: 360deg;
+    }
+
+    100% {
+        scale: 0%;
+        display: none;
+    }
 }

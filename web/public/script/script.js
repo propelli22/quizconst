@@ -287,3 +287,8 @@ document.getElementById("log-in-button").addEventListener("click", () => {
         document.getElementById("log-in-content").onsubmit = function() { return false; };
     }
 });
+
+console.log("Quizconst");
+console.log("Project made by: Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra");
+console.log("2024")
+console.log("Project made in Business College Helsinki, course Ohjelmistokehittäjänä toimiminen")

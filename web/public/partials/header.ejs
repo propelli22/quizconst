@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="style/content/low_taper_fade.jpg" type="image/jpg">
     <title><%= page %> - Quizconst</title>
     <link rel="stylesheet" href="style/reset.css">
     <link rel="stylesheet" href="style/main.css">
@@ -27,6 +28,6 @@
             <% } %>
         </nav>
         <div id="question-time">
-            <p>57 s</p>
+            <p id="remaining-time"><%= loading %></p>
         </div>
     </header>

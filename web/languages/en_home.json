@@ -1,6 +1,8 @@
 {
     "page": "Homepage",
     "language": "en",
+    "loading": "Loading...",
+    "questions": "Questions:",
     "join_game": "Join",
     "input_code": "Insert code...",
     "create_lobby": "Create a lobby",
@@ -57,5 +59,6 @@
     "lobbySearch": "Lobby search",
     "deleteLobby": "Delete lobby",
     "lobbyName": "Lobby name",
-    "errorMessageLobby": "Lobby was not found"
+    "errorMessageLobby": "Lobby was not found",
+    "typeHere": "Type here"
 }

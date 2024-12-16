@@ -8,11 +8,11 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://10.18.7.64:3000");
-  res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  next();
-});
+    res.setHeader("Access-Control-Allow-Origin", "*"); // TODO: change to current device ip
+    res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    next();
+})
 
 const port = "4000";
 const host = "localhost"; // runs on localhost to avoid external users access to database
@@ -56,7 +56,7 @@ app.get('/lobbydata', (req, res) => {
 
   let data = [];
 
-  const sql = `SELECT * FROM lobby, player WHERE lobby.lobby_id = ?`;
+  const sql = `SELECT * FROM lobby JOIN player ON lobby.lobby_id = player.lobby_id WHERE lobby.lobby_id = ?`;
   const connection = mysql.createConnection(dbconfig);
   connection.connect();
 
@@ -76,6 +76,7 @@ app.get('/lobbydata', (req, res) => {
         name: `${row.name}`,
         points: `${row.points}`,
         account: `${row.account}`,
+        host: `${row.host}`
       };
       data.push(newData);
     }
@@ -223,7 +224,7 @@ app.post("/createlobby", (req, res) => {
   const subject = req.body.subject;
   const game_date = "2024-01-23"; // TO DO: set game_date automatically to current date
 
-  let sql = `INSERT INTO lobby (subject_id, lobby_name, max_players, game_date) VALUES (?,?,?,?);`;
+  let sql = `INSERT INTO lobby (subject_id, lobby_name, max_players, game_date) VALUES (?,?,?,?)`;
 
   // remove comment tags if issues with inserting empty names
   //if (!name) {
@@ -254,8 +255,6 @@ app.post("/createlobby", (req, res) => {
 // - Add input validation
 //
 // Main game data requests, done with post to make access of data as hidden as possible
-
-// untested
 app.post('/getquestions', (req, res) => {
     console.log("used /getquestions");
 
@@ -280,7 +279,6 @@ app.post('/question', (req, res) => {
     console.log("used /question");
 
     const questionId = req.body.question;
-    const subjectId = req.body.subject;
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
@@ -292,11 +290,7 @@ app.post('/question', (req, res) => {
             throw err;
         }
 
-        if (rows[0].subject_id != subjectId) { 
-            res.status(400).json({"message": "Something went wrong, please check input."})
-        } else {
-            res.json(rows);
-        }
+        res.json(rows);
     });
 
     connection.end();
@@ -330,11 +324,14 @@ app.post('/questionready', (req, res) => {
 
     const player = req.body.playerId;
     const lobby = req.body.lobbyId;
+    const points = req.body.recivedPoints;
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
-    const sql = "UPDATE `player` SET `ready`='1' WHERE player_id = ?";
-    const sql2 = "SELECT * FROM player WHERE lobby_id = ?"
+
+    const sql = "UPDATE player SET ready=1 WHERE player_id = ?";
+    const sql2 = "SELECT * FROM player WHERE lobby_id = ?";
+    const sql3 = "UPDATE player SET points = points + ? WHERE player_id = ?";
     let playersReady;
 
     // mark player as ready
@@ -345,6 +342,12 @@ app.post('/questionready', (req, res) => {
     });
 
     getReadyPlayers();
+
+    connection.query(sql3, [points, player], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+    });
 
     // query is in the function so that it can be ran again later in the checkReadyPlayers loop
     function getReadyPlayers() {
@@ -369,7 +372,7 @@ app.post('/questionready', (req, res) => {
 
         if (totalReady == playersReady.length) {
             clearInterval(checkIfAllReady);
-            res.json({"message": "ALL READY"}) // improve response, add status
+            res.status(200).json({"message": "ALL READY"}) // improve response, add status
             connection.end();
         }
     }
@@ -387,7 +390,7 @@ app.post('/results', (req, res) => {
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
-    const sql = "SELECT * FROM player WHERE lobby_id = ?";
+    const sql = "SELECT * FROM player WHERE lobby_id = ? ORDER BY points DESC";
     const sql2 = "UPDATE `player` SET `ready` = '0' WHERE player_id = ?";
 
     connection.query(sql, [lobby], (err, rows) => {
@@ -409,8 +412,67 @@ app.post('/results', (req, res) => {
     connection.end();
 });
 
-// Get the time for the question based on questions ID
+app.post('/continuegame', (req, res) => {
+    console.log("used /continuegame");
 
+    const lobby = req.body.lobbyId;
+
+    const sql = 'UPDATE lobby SET continue_game = 1 WHERE lobby_id = ?';
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+
+    connection.query(sql, [lobby], (err, rows) => {
+        if (err) {
+            throw err
+        }
+
+        res.status(200).json({"message": "OK"});
+    });
+
+    connection.end();
+});
+
+app.post('/checkcontinue', (req, res) => {
+    console.log("used /checkcontinue");
+
+    const lobby = req.body.lobby;
+
+    if (isNaN(lobby)) {
+        res.json({"message": "An error occured, please check input values."})
+    } else {
+        const sql = 'SELECT * FROM lobby WHERE lobby_id = ?';
+        const connection = mysql.createConnection(dbconfig);
+        connection.connect();
+
+        let lobbyStatus;
+
+        getLobbyStatus();
+
+        function getLobbyStatus() {
+            connection.query(sql, [lobby], (err, rows) => {
+                if (err) {
+                    throw err
+                }
+
+                lobbyStatus = rows
+            });
+        }
+
+        function continueGame() {
+            getLobbyStatus();
+
+            if (lobbyStatus[0].continue_game == 1) {
+                res.status(200).json({"message": "Ready to continue!"})
+                connection.end();
+                clearInterval(checkGameStatus);
+            }
+        }
+
+        const checkGameStatus = setInterval(continueGame, 500);
+    }
+});
+
+// Get the time for the question based on questions ID
 app.get("/time", (req, res) => {
   const time = req.query.question;
   let sql = `SELECT time, points FROM question WHERE question_id = ?`;
@@ -521,6 +583,111 @@ app.post("/deleteLobby", (req, res) => {
         res.json(rows);
     });
     connection.end();
+});
+
+app.post('/getanswers', (req, res) => {
+    console.log("used /getanswers");
+
+    const question = req.body.questionId;
+
+    const connetion = mysql.createConnection(dbconfig);
+    connetion.connect();
+    const sql = 'SELECT * FROM answers WHERE question_id = ?';
+
+    connetion.query(sql, [question], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        res.json(rows);
+    });
+
+    connetion.end();
+});
+
+app.post('/joingame', (req, res) => {
+    console.log("used /joingame");
+
+    const lobbyId = req.body.lobby;
+    const name = req.body.name;
+    const account = req.body.accountId;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+    const sql = 'INSERT INTO player (lobby_id, banned, name, account) VALUES (?,0,?,?)';   
+
+    connection.query(sql, [lobbyId, name, account], (err, rows) => {
+      if (err) {
+        throw err;
+      }
+
+      res.status(200).json(rows.insertId)
+    });
+
+    connection.end();
+});
+
+app.post('/createsubject', (req, res) => {
+    console.log("used /createsubject");
+
+    const body = req.body;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+    const sql = 'INSERT INTO subject (subject_title, subject_description, subject_author, subject_image) VALUES (?, ?, ?, ?)';
+
+    // create the question
+    connection.query(sql, [body.subjectName, body.subjectDescription, body.subjectAuthor, body.subjectImage], (err, rows) => {
+        if (err) {
+          throw err
+        }
+
+        res.status(200).json({"message": `OK`, "subjectId": rows.insertId})
+    });
+
+    connection.end();
+});
+
+app.post('/createquestion', (req, res) => {
+  console.log("used /createanswer");
+
+  const body = req.body;
+
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+  const sql = 'INSERT INTO question (subject_id, question, time, wait, points) VALUES (?, ?, ?, ?, ?)';
+
+  // create the question
+  connection.query(sql, [body.subjectId, body.question, body.ansTime, body.waitTime, body.maxPoints], (err, rows) => {
+      if (err) {
+        throw err
+      }
+
+      res.status(200).json({"message": `OK`, "questionId": rows.insertId})
+  });
+
+  connection.end();
+});
+
+app.post('/createanswer', (req, res) => {
+  console.log("used /createanswer");
+
+  const body = req.body;
+
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+  const sql = 'INSERT INTO answers (question_id, answer, correct, position) VALUES (?, ?, ?, ?)';
+
+  // create the question
+  connection.query(sql, [body.questionId, body.ans, body.cor, body.pos], (err, rows) => {
+      if (err) {
+        throw err
+      }
+
+      res.status(200).json({"message": `OK`, "answerId": rows.insertId})
+  });
+
+  connection.end();
 });
 
 // run the server
