@@ -444,8 +444,8 @@ app.post('/getUserBan', async (req, res) => {
         id: req.body.id
     }
 
-    const banReq = await fetch(`http://localhost:4000/banPlayer?id=${req.body.id}`, {
-        method: 'POST',
+    const banReq = await fetch(`http://localhost:4000/banPlayer`, {
+        method: 'POST', 
         body: JSON.stringify(body),
         headers: {"Content-Type": "application/json"}
     });
@@ -453,6 +453,8 @@ app.post('/getUserBan', async (req, res) => {
     const banResult = await banReq.json();
 
     const respone = [userResult, banResult]
+
+    console.log(respone)
 
     res.json(respone);
 });
@@ -556,7 +558,9 @@ app.post(`/deleteLobby`, async (req, res) => {
         id: req.body.id
     }
 
-    const getDelete = await fetch(`http://localhost:4000/deleteLobby?id=${req.body.id}`, {
+    console.log(req.body.id)
+
+    const getDelete = await fetch(`http://localhost:4000/deleteLobby`, {
         method: `POST`,
         body: JSON.stringify(body),
         headers: {'Content-Type': 'application/json'}

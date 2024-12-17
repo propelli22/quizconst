@@ -528,7 +528,7 @@ app.post("/banPlayer", (req, res) => {
       if (err) {
         throw err;
       }
-      res.status(201).json({ message: "Player banned successfully" });
+      res.status(201).json(rows);
     });
   
     connection.end();
@@ -575,6 +575,8 @@ app.post("/deleteLobby", (req, res) => {
 
     connection.connect();
     let sql = `DELETE FROM lobby WHERE lobby_id = ?`;
+
+    console.log(deleteName)
 
     connection.query(sql, [deleteName], (err, rows) => {
         if (err) {
