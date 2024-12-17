@@ -3,6 +3,9 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const { XMLParser, XMLBuilder, XMLValidator } = require("fast-xml-parser");
+const { get } = require('http');
+const { getEventListeners } = require('events');
+
 
 const app = express();
 app.use(express.urlencoded({extended: 'false'}))
@@ -17,8 +20,6 @@ const en_lobby = require('./languages/en_lobby.json');
 const fi_lobby = require('./languages/fi_lobby.json');
 const fi_game = require('./languages/fi_game.json');
 const en_game = require('./languages/en_game.json');
-const { get } = require('http');
-
 
 // EJS setup
 app.set('view engine', 'ejs');
@@ -311,6 +312,8 @@ app.post('/createlobby', async (req, res) => {
     });
 
     const result = await createLobbyResponse.json();
+
+    res.status(200).json(result);
 });
 
 app.post('/gamedata', async (req, res) => {
@@ -441,13 +444,17 @@ app.post('/getUserBan', async (req, res) => {
         id: req.body.id
     }
 
-    const banReq = await fetch(`http://localhost:4000/banPlayer?id=${req.body.id}`, {
-        method: 'GET'
+    const banReq = await fetch(`http://localhost:4000/banPlayer`, {
+        method: 'POST', 
+        body: JSON.stringify(body),
+        headers: {"Content-Type": "application/json"}
     });
     const userResult = await getUser.json();
     const banResult = await banReq.json();
 
     const respone = [userResult, banResult]
+
+    console.log(respone)
 
     res.json(respone);
 });
@@ -503,6 +510,13 @@ app.post(`/getLobbyName`, async (req, res) => {
 
     const getLobby = await fetch (`http://localhost:4000/lobbySearch?id=${req.body.id}`, {
         method: `POST`,
+        body: JSON.stringify(body),
+        headers: {"Content-Type": "application/json"}
+    });
+
+    const lobbyResult = await getLobby.json();
+    res.json(lobbyResult)
+});
 
 app.post('/createquestion', async (req, res) => {
     console.log("used /createquestion");
@@ -519,7 +533,7 @@ app.post('/createquestion', async (req, res) => {
     const result = await saveData.json();
 
     res.status(200).json({"message": "OK", "questionId": result.questionId});
-});
+  });
 
 app.post('/createanswer', async (req, res) => {
     console.log("used /createanswer");
@@ -529,12 +543,13 @@ app.post('/createanswer', async (req, res) => {
 
     const saveData = await fetch('http://localhost:4000/createanswer', {
         method: 'POST',
-       body: JSON.stringify(body),
+        body: JSON.stringify(body),
         headers: {'Content-Type': 'application/json'}
     });
 
-    const lobbyResult = await getLobby.json();
-    res.json(lobbyResult)
+    const result = await saveData.json();
+
+    res.status(200).json({"message": "OK", "answerId": result.answerId});
 }); 
 
 //Send request to data server to delete certain lobby
@@ -543,7 +558,9 @@ app.post(`/deleteLobby`, async (req, res) => {
         id: req.body.id
     }
 
-    const getDelete = await fetch(`http://localhost:4000/deleteLobby?id=${req.body.id}`, {
+    console.log(req.body.id)
+
+    const getDelete = await fetch(`http://localhost:4000/deleteLobby`, {
         method: `POST`,
         body: JSON.stringify(body),
         headers: {'Content-Type': 'application/json'}
@@ -551,11 +568,6 @@ app.post(`/deleteLobby`, async (req, res) => {
 
     const deleteResult = await getDelete.json();
     res.json(deleteResult)
-  
-      const result = await saveData.json();
-
-    res.status(200).json({"message": "OK", "answerId": result.answerId});
-
 });
 
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}...`));

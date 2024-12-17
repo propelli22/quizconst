@@ -59,10 +59,12 @@ document.getElementById("banButton").addEventListener("click", async () => {
         .then(Response => Response.json())
         .then(data => postResponse = data);
 
+        console.log(banResponse)
+
 // Check if the request was unsuccesful
-        if (!banResponse.ok) {
+        if (banResponse == undefined) {
             throw new Error("Failed to ban player");
-          }
+        }
 
         alert(`You have successfully banned ${playerData[0][0].name}`);
       } else {
@@ -137,6 +139,7 @@ document.getElementById("unbanButton").addEventListener("click", async () => {
 // Search for lobby from data
 document.getElementById("lobbySearch").addEventListener("keypress", async (e) => {
     if (e.key === "Enter") {
+        document.getElementById("lobbyResults").style.display = "block"
         let lobbySearch = document.getElementById("lobbySearch").value;
         if (lobbySearch === "") {
             document.getElementById("error3").style.display = "block";
@@ -170,8 +173,7 @@ document.getElementById("lobbySearch").addEventListener("keypress", async (e) =>
 
                         // Delete the lobby from existance
                         document.getElementById("deleteLobbyButton").addEventListener("click", async () => {
-                            let deleteValue = document.getElementById("lobbyName").value
-
+                            let deleteValue = document.getElementById("lobbySearch").value
                             const response = await fetch(`${currectaddress}/deleteLobby`, {
                                 method: "POST",
                                 headers: {
@@ -180,7 +182,13 @@ document.getElementById("lobbySearch").addEventListener("keypress", async (e) =>
                                 body: JSON.stringify({ id: deleteValue })
                               });
                               const dataDelete = await response.json()
+
                               console.log(dataDelete)
+
+                              if(dataDelete.affectedRows >= 1) {
+                                console.log("vitun vittu")
+                                document.getElementById("lobbyResults").style.display = "none";
+                              }
                         });
                     });
                 } else {
