@@ -1,0 +1,68 @@
+<%- include('partials/header') %>
+<link rel="stylesheet" href="style/game.css">
+<main>
+    <!-- INCLUDES ONLY PLACEHOLDER TEXT FOR STYLING, CHANGE TO BE MODIFIED BY JS SCRIPT -->
+    <div id="question-container">
+        <h3 id="subject-title-preview">Business College Helsinki trivia</h3>
+        <h2 id="preview-question"><%= loading %></h2>
+        <p id="waiting-time"></p>
+    </div>
+
+    <div id="main-game-container">
+        <div id="game-question-container">
+            <h2 id="subject">Business College Helsinki trivia</h2>
+            <h3><%= loading %></h3>
+            <img src="style/content/public_img/testi.png" alt="Image related to question" id="question-img">
+        </div>
+
+        <div id="answers-container">
+            <div id="answer1-container" class="answers">
+                <p id="answer-1"><%= loading %></p>
+            </div>
+            <div id="answer2-container" class="answers">
+                <p id="answer-2"><%= loading %></p>
+            </div>
+            <div id="answer3-container" class="answers">
+                <p id="answer-3"><%= loading %></p>
+            </div>
+            <div id="answer4-container" class="answers">
+                <p id="answer-4"><%= loading %></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading-container">
+        <div class="lds-ripple"><div></div><div></div></div> <!-- Loader animation from https://loading.io/css/ -->
+        <p><%= waitingForOthers %></p>
+    </div>
+
+    <div id="results-container">
+        <div id="podium-container">
+            <div id="podium-3" class="podium-player">
+                <p class="podium-position">3.</p>
+                <p class="podium-name" id="podium-3-name">Pelaaja 3</p>
+                <p class="podium-score" id="podium-3-points">2342</p>
+            </div>
+            <div id="podium-1" class="podium-player">
+                <p class="podium-position">1.</p>
+                <p class="podium-name" id="podium-1-name">Pelaaja 1</p>
+                <p class="podium-score" id="podium-1-points">2342</p>
+            </div>
+            <div id="podium-2" class="podium-player">
+                <p class="podium-position">2.</p>
+                <p class="podium-name" id="podium-2-name">Pelaaja 2</p>
+                <p class="podium-score" id="podium-2-points">2342</p>
+            </div>
+        </div>
+
+        <div id="leaderboard-container">
+
+        </div>
+
+        <div id="no-more-players-message" style="display: none;">
+            <p><!-- HEITÄ TÄHÄN EJS TÄGI!!!!!-->Ei muita :D</p>
+        </div>
+    </div>
+</main>
+<%- include('partials/footer') %>
+<script src="script/game.js"></script> <!-- DO NOT MOVE OR TOUCH, will cause issues otherwise!!! -->
