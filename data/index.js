@@ -19,11 +19,11 @@ const host = "localhost"; // runs on localhost to avoid external users access to
 
 // Obvious: checks password, return is it is correct or not, does not tell if the user is also correct etc.
 app.post('/checklogin', (req, res) => {
-    console.log("used /checklogin");
+  console.log("used /checklogin");
 
   const { user, password } = req.body;
 
-  const sql = `SELECT password FROM user WHERE username = ?`;
+  const sql = `SELECT password, user_id FROM user WHERE username = ?`;
 
   const connection = mysql.createConnection(dbconfig);
 
@@ -40,7 +40,11 @@ app.post('/checklogin', (req, res) => {
       password,
       result[0].password,
       function (err, passwordResult) {
-        res.send(passwordResult);
+        const body = {
+          passwordResult: passwordResult,
+          userId: rows[0].user_id
+        }
+        res.send(body);
       }
     );
   });
@@ -50,7 +54,7 @@ app.post('/checklogin', (req, res) => {
 
 // responds with all of the lobby info
 app.get('/lobbydata', (req, res) => {
-    console.log("used /lobbydata");
+  console.log("used /lobbydata");
 
   const lobby = req.query.id;
 
@@ -113,8 +117,6 @@ app.post('/checkuser', (req, res) => {
             throw err;
         }
 
-        console.log(rows.length);
-
         // send back result, could be improved with better response. TODO: change res to http status code
         if (rows.length == 0) {
             res.status(200).json({"message": "No user found."});
@@ -128,8 +130,6 @@ app.post('/checkuser', (req, res) => {
 
 app.post('/createuser', (req, res) => {
     console.log("used /createuser")
-
-    console.log(req.body);
 
     const username = req.body.user;
     const password = req.body.password;
@@ -153,52 +153,11 @@ app.post('/createuser', (req, res) => {
         });
     }
 
-    console.log(rows.length);
-
-    // send back result, could be improved with better response. TODO: change res to http status code
-    if (rows.length == 0) {
-      res.status(200).json({ message: "No user found." });ö
-    } else {
-      res.status(400).json({ message: "Found user." });
-    }
-
     connection.end();
-  });
-
-app.post("/createuser", (req, res) => {
-  console.log("used Create user");
-
-  console.log(req.body);
-
-  const username = req.body.user;
-  const password = req.body.password;
-  const email = req.body.email;
-
-  const connection = mysql.createConnection(dbconfig);
-  connection.connect();
-
-  let sql = `INSERT INTO user (username, password, email) VALUES (?, ?, ?)`;
-
-  // check if all fields are valid
-  if (username == undefined || password == undefined || email == undefined) {
-    res
-      .status(400)
-      .json({ message: "Something went wrong, undefined details in request" });
-  } else {
-    connection.query(sql, [username, password, email], (err, rows) => {
-      if (err) {
-        throw err;
-      }
-
-      res.status(201).json({ message: "User created successfully" });
-    });
-  }
-
-  connection.end();
 });
 
 app.get("/getsubjects", (req, res) => {
-  console.log("used Get subjects");
+  console.log("used /getsubjects");
 
   const connection = mysql.createConnection(dbconfig);
   connection.connect();
@@ -217,12 +176,12 @@ app.get("/getsubjects", (req, res) => {
 });
 
 app.post("/createlobby", (req, res) => {
-  console.log("used Create lobby");
+  console.log("used /createlobby");
 
   const name = req.body.name;
   const max_players = req.body.playercount;
   const subject = req.body.subject;
-  const game_date = "2024-01-23"; // TO DO: set game_date automatically to current date
+  const game_date = req.body.game_date;
 
   let sql = `INSERT INTO lobby (subject_id, lobby_name, max_players, game_date) VALUES (?,?,?,?)`;
 
@@ -477,7 +436,6 @@ app.get("/time", (req, res) => {
   const time = req.query.question;
   let sql = `SELECT time, points FROM question WHERE question_id = ?`;
 
-  console.log(time);
   const connection = mysql.createConnection(dbconfig);
   connection.connect();
 
@@ -486,9 +444,6 @@ app.get("/time", (req, res) => {
       throw err;
     }
 
-    rows.forEach((row) => {
-      console.log(row.time, row.points);
-    });
     res.json(rows);
   });
   connection.end();
@@ -510,8 +465,6 @@ app.get("/getPlayerName", (req, res) => {
 
     res.json(rows);
   });
-
-  console.log(playerId);
 
   connection.end();
 });
