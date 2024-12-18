@@ -22,12 +22,7 @@ app.use(express.static(__dirname + '/public'));
 const port = "3000";
 const host = "0.0.0.0"; // run on device local ip
 
-
-
-app.get('/aula', (req, res) => {
-    const hostPlayer = players.slice(0, 1); // Get only the first player
-    res.render('aula', { ...fi_home, players: hostPlayer });
-});
+const players = [];
 
 
 app.get('/', async (req, res) => {
@@ -76,7 +71,22 @@ app.get('/create', (req, res) => {
 	} else {
 		res.render('create_a_game', fi_create)
 	}
+
 });
+
+app.get('/aula', (req, res) => {
+	const language = req.query.language;
+
+	if (language == 'fi') {
+		res.render('aula', fi_lobby)
+	} else if (language == 'en') {
+		res.render('aula', en_lobby)
+	} else {
+		res.render('aula', fi_lobby)
+	}
+
+});
+
 
 
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}...`));
