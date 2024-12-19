@@ -43,6 +43,12 @@ Backend toteutettin Node.js express palvelimena, Node.js valittiin ryhmän kokem
 
 Testaus/tuomio -päivä, 13.1.2025. WEB23A kaverit kutsuttu testaamaan / rikkomaan projektimme täysin.
 
+## Kiitokset!
+
+Projektissa avusti:
+
+* Aava Kiesilä - värimäärittely
+
 ## Info
 
 Quizconstin toteutti,
@@ -50,11 +56,58 @@ Quizconstin toteutti,
 Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra
 
 Projekti toteutettu osana Business College Helsingin ohjelmistokehittäjänä toimiminen -kurssia, 2024-2025
+  
 
-## Kiitokset
+## 🇬🇧
+# Quizconst
 
-Projektissa avusti:
+Quizconst is a multiplayer trivia game where you can compete against your friend in different subjects, and figure out whos the smartest in the group.
 
-* Aava Kiesilä - värikoodaus
-* Elina Kuutti - teemoitus
-* Laura Järvinen - teemoitus
+## Idea
+
+The idea for quizconst was inspired from quizlet and other sources from the internet. The goal of the project was to fill all the requirements of the group project, so alot of creative (and not so creative) solutions had be figured out.
+
+We came up with multiple different ideas, like, a price comparison website, a story game, a forum website, a webstore, etc. In the end we ended up on a trivia game, because it had a lot of versatile things to do and we knew it would meet most of the grading requirements.
+
+## Planning of the project
+
+During the planning phase of the project, we made a wireframe model of the websites structure, server side planning and the database structure.
+
+In the planning phase, we went trough the visual style of the website, how everything would be structred in the final result, these were changed later on as the project went further. We also went trough different color palettes and themes.
+
+After planning all the main stuff that we knew the project needed/we wanted in it, we listed different extra functions that we could implement like, user profiles, custom games, admin settings, etc.
+
+The technical implementation was also planned, we discussed how data would be sent from a server to another, and what would be sent to the user.
+
+## Task distributation
+
+The distributation of tasks was made fairly aknowledging the skills of all participants
+
+* Boris Savushkin - frontend (create a game)
+* Kalle Kahri - front- ja backend (frontpage, main game, lobby, create a game), database implementation
+* Mike Luong - front- ja backend (frontpage, admin setting, login- and register modal, point calculator)
+* Thomas Zeilstra - frontend (lobby)
+
+## Developement
+
+The frontend was made using EJS, we chose EJS as we needed to implement multiple languages and reusable compnents, we didn't chose something like React as the only one in the project who knew React in the beginning was Kalle, so using anything else was not really an option.
+
+The backend was built using an Node.js express server, we chose Node.js as that was what everyone in the project knew best in the beginning of the project. For the same reason, we chose MySQL for the database.
+
+## Testing
+
+Testing of v1 -day, 13.1.2025. WEB23A friends have been invited to test / break the project entirely.
+
+## Special thanks to!
+
+This project was made with the help of:
+
+* Aava Kiesilä - color selection
+
+## Info
+
+Quizconst was made by,
+
+Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra
+
+Project done at Business College Helsinki, as part of the "Ohjelmistokehittäjänä toimiminen" -course, 2024-2025
