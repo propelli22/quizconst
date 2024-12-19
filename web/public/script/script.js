@@ -1,6 +1,8 @@
 // Part of log in modal!
 var logModal = document.getElementById("log-modal");
 
+const currentAddress = window.location.origin;
+
 function toggleMenu() {
     const buttons = document.querySelectorAll('.nav-button');
 
@@ -122,7 +124,7 @@ function newLobby() {
   let gameDate = date.toISOString();
   const selectedLanguage = document.getElementById("language-selection").value;
 
-  fetch("http://localhost:4000/createlobby", {
+  fetch(`${currentAddress}/createlobby`, {
     method: "POST",
     body: JSON.stringify({
       name: lobbyName,
@@ -135,23 +137,50 @@ function newLobby() {
     }
   })
     .then((response) => response.json())
-    .then((json) => window.open(`/lobby?id=${json.lobbyId}&language=${selectedLanguage}`, "_self"));
+    .then((json) => window.location.href = `${currentAddress}/lobby?lobby=${json.lobbyId}&language=${selectedLanguage}`, "_self");
 }
 
 // fetch all lobby data of selected id, throw user into lobby, if user has no account, username = player/pelaaja {i}
-function joinLobby() {
+async function joinLobby() {
   const lobbyId = document.getElementById("lobby-code").value;
+  const playerName = "Oodi"
 
-  fetch("http://10.20.12.180:4000/lobbydata", {
-    method: "GET"
+  let dataResult;
+  let joinResult;
+
+  const dataBody = {
+    lobbyId: lobbyId
+  }
+
+  const joinBody = {
+    lobbyId: lobbyId,
+    name: playerName
+  }
+
+  await fetch(`${currentAddress}/joinplayer`, {
+    method: 'POST',
+    body: JSON.stringify(joinBody),
+    headers: {"Content-Type": "application/json"}
   })
-    .then((response)) // not finsihed :(
+  .then(Respone => Respone.json())
+  .then(data => joinResult = data);
+
+
+  await fetch(`${currentAddress}/lobbydata`, {
+    method: "POST",
+    body: JSON.stringify(dataBody),
+    headers: {"Content-Type": "application/json"}
+  })
+  .then(Response => Response.json())
+  .then(data => dataResult = data);
 }
 
-//Log in module do not change!
-document.getElementById("log-in").addEventListener("click", () => {
+//Log in module do not change! (i changed it :) - Kalle)
+if(document.getElementById("log-in")) {
+  document.getElementById("log-in").addEventListener("click", () => {
     logModal.style.display = "block";
-});
+  });
+}
 
 document.getElementById("log-close-button").addEventListener("click", () => {
     logModal.style.display = "none";

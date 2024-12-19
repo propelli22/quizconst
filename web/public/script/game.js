@@ -8,7 +8,7 @@ let lastQuestion = false;
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 
-const currentAddress = window.location.origin;
+const currentAddressGame = window.location.origin;  
 const currentLanguage = urlParams.get('language');
 let currentQuestion = 0;
 
