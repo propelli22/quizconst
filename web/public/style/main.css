@@ -4,7 +4,7 @@ body {
     font-family: "laca-variable", sans-serif;
     margin: 0;
     padding: 0;
-    color: #4E4C67;
+    color: #164F4D;
     height: 100%;
     overflow: hidden;
 }
@@ -45,7 +45,7 @@ nav {
 }
 
 input[type="number"], select {
-    border: #4E4C67 2px solid;
+    border: #164F46 2px solid;
 }
 
 .nav-button {
@@ -55,14 +55,15 @@ input[type="number"], select {
 .nav-button, .button {
     font-family: "laca-variable", sans-serif;
     font-weight: 800;
-    background-color: #A6B1E1;
-    color: #4E4C67;
+    background-color: #d1e7e3;
+    color: #164F46;
     width: 50%;
-    border: 2px #4E4C67 solid;
+    border: 2px #164F46 solid;
+    box-shadow: 1px 1px 2px #113D3B;
 }
 
 .textInput {
-    border: #4E4C67 2px solid;
+    border: #164F46 2px solid;
 }
 
 #language-form {
@@ -76,16 +77,17 @@ input[type="number"], select {
 }
 
 #language-selection {
-    background-color: #A6B1E1;
+    background-color: #bcdbd6;
     font-family: "laca-variable", sans-serif;
     font-weight: 800;
     text-align: center;
-    color: #4E4C67;
+    color: #164F46;
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    box-shadow: 1px 1px #113D3B;
 }
 
 #main-title {
