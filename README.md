@@ -1,5 +1,5 @@
 > [!NOTE]
-> Tämä projekti on viellä kesken ;(  / Project is still under developement ;(
+> Tämä projekti on vielä kesken ;(  / Project is still under developement ;(
 > 
 > Versio 1 valmiina 13 tammikuuta 2025 mennessä / Version 1 to be finished by 13 of January 2025
 
@@ -50,3 +50,11 @@ Quizconstin toteutti,
 Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra
 
 Projekti toteutettu osana Business College Helsingin ohjelmistokehittäjänä toimiminen -kurssia, 2024-2025
+
+## Kiitokset
+
+Projektissa avusti:
+
+* Aava Kiesilä - värikoodaus
+* Elina Kuutti - teemoitus
+* Laura Järvinen - teemoitus
