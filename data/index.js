@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "http://10.20.12.230:3000"); // TODO: change to current device ip
+    res.setHeader("Access-Control-Allow-Origin", "*"); // TODO: change to current device ip
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     next();
@@ -19,11 +19,11 @@ const host = "localhost"; // runs on localhost to avoid external users access to
 
 // Obvious: checks password, return is it is correct or not, does not tell if the user is also correct etc.
 app.post('/checklogin', (req, res) => {
-    console.log("used /checklogin");
+  console.log("used /checklogin");
 
   const { user, password } = req.body;
 
-  const sql = `SELECT password FROM user WHERE username = ?`;
+  const sql = `SELECT password, user_id FROM user WHERE username = ?`;
 
   const connection = mysql.createConnection(dbconfig);
 
@@ -40,7 +40,11 @@ app.post('/checklogin', (req, res) => {
       password,
       result[0].password,
       function (err, passwordResult) {
-        res.send(passwordResult);
+        const body = {
+          passwordResult: passwordResult,
+          userId: rows[0].user_id
+        }
+        res.send(body);
       }
     );
   });
@@ -50,13 +54,13 @@ app.post('/checklogin', (req, res) => {
 
 // responds with all of the lobby info
 app.get('/lobbydata', (req, res) => {
-    console.log("used /lobbydata");
+  console.log("used /lobbydata");
 
   const lobby = req.query.id;
 
   let data = [];
 
-  const sql = `SELECT * FROM lobby, player WHERE lobby.lobby_id = ?`;
+  const sql = `SELECT * FROM lobby JOIN player ON lobby.lobby_id = player.lobby_id WHERE lobby.lobby_id = ?`;
   const connection = mysql.createConnection(dbconfig);
   connection.connect();
 
@@ -76,6 +80,7 @@ app.get('/lobbydata', (req, res) => {
         name: `${row.name}`,
         points: `${row.points}`,
         account: `${row.account}`,
+        host: `${row.host}`
       };
       data.push(newData);
     }
@@ -112,8 +117,6 @@ app.post('/checkuser', (req, res) => {
             throw err;
         }
 
-        console.log(rows.length);
-
         // send back result, could be improved with better response. TODO: change res to http status code
         if (rows.length == 0) {
             res.status(200).json({"message": "No user found."});
@@ -127,8 +130,6 @@ app.post('/checkuser', (req, res) => {
 
 app.post('/createuser', (req, res) => {
     console.log("used /createuser")
-
-    console.log(req.body);
 
     const username = req.body.user;
     const password = req.body.password;
@@ -152,52 +153,11 @@ app.post('/createuser', (req, res) => {
         });
     }
 
-    console.log(rows.length);
-
-    // send back result, could be improved with better response. TODO: change res to http status code
-    if (rows.length == 0) {
-      res.status(200).json({ message: "No user found." });ö
-    } else {
-      res.status(400).json({ message: "Found user." });
-    }
-
     connection.end();
-  });
-
-app.post("/createuser", (req, res) => {
-  console.log("used Create user");
-
-  console.log(req.body);
-
-  const username = req.body.user;
-  const password = req.body.password;
-  const email = req.body.email;
-
-  const connection = mysql.createConnection(dbconfig);
-  connection.connect();
-
-  let sql = `INSERT INTO user (username, password, email) VALUES (?, ?, ?)`;
-
-  // check if all fields are valid
-  if (username == undefined || password == undefined || email == undefined) {
-    res
-      .status(400)
-      .json({ message: "Something went wrong, undefined details in request" });
-  } else {
-    connection.query(sql, [username, password, email], (err, rows) => {
-      if (err) {
-        throw err;
-      }
-
-      res.status(201).json({ message: "User created successfully" });
-    });
-  }
-
-  connection.end();
 });
 
 app.get("/getsubjects", (req, res) => {
-  console.log("used Get subjects");
+  console.log("used /getsubjects");
 
   const connection = mysql.createConnection(dbconfig);
   connection.connect();
@@ -216,14 +176,14 @@ app.get("/getsubjects", (req, res) => {
 });
 
 app.post("/createlobby", (req, res) => {
-  console.log("used Create lobby");
+  console.log("used /createlobby");
 
   const name = req.body.name;
   const max_players = req.body.playercount;
   const subject = req.body.subject;
-  const game_date = "2024-01-23"; // TO DO: set game_date automatically to current date
+  const game_date = req.body.game_date;
 
-  let sql = `INSERT INTO lobby (subject_id, lobby_name, max_players, game_date) VALUES (?,?,?,?);`;
+  let sql = `INSERT INTO lobby (subject_id, lobby_name, max_players, game_date) VALUES (?,?,?,?)`;
 
   // remove comment tags if issues with inserting empty names
   //if (!name) {
@@ -476,7 +436,6 @@ app.get("/time", (req, res) => {
   const time = req.query.question;
   let sql = `SELECT time, points FROM question WHERE question_id = ?`;
 
-  console.log(time);
   const connection = mysql.createConnection(dbconfig);
   connection.connect();
 
@@ -485,9 +444,6 @@ app.get("/time", (req, res) => {
       throw err;
     }
 
-    rows.forEach((row) => {
-      console.log(row.time, row.points);
-    });
     res.json(rows);
   });
   connection.end();
@@ -510,11 +466,10 @@ app.get("/getPlayerName", (req, res) => {
     res.json(rows);
   });
 
-  console.log(playerId);
-
   connection.end();
 });
 
+// Answer request and ban player
 app.post("/banPlayer", (req, res) => {
     const playerId = req.body.id;
     const connection = mysql.createConnection(dbconfig);
@@ -526,12 +481,13 @@ app.post("/banPlayer", (req, res) => {
       if (err) {
         throw err;
       }
-      res.status(201).json({ message: "Player banned successfully" });
+      res.status(201).json(rows);
     });
   
     connection.end();
   });
   
+  // Answer request and unban player
   app.post("/unbanPlayer", (req, res) => {
     const playerId = req.body.id;
     const connection = mysql.createConnection(dbconfig);
@@ -547,6 +503,42 @@ app.post("/banPlayer", (req, res) => {
     connection.end();
   });
 
+// Get lobbby name by ID to display in the admin setting page
+
+app.post("/lobbySearch", (req, res) => {
+    const lobby = req.body.id;
+    const connection = mysql.createConnection(dbconfig);
+
+    connection.connect();
+    let sql = `SELECT lobby_name FROM lobby WHERE lobby_id = ?`;
+
+    connection.query(sql, [lobby], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        res.json(rows);
+    });
+    connection.end();
+});
+
+// Answer request and delete lobby
+app.post("/deleteLobby", (req, res) => {
+    const deleteName = req.body.id;
+    const connection = mysql.createConnection(dbconfig);
+
+    connection.connect();
+    let sql = `DELETE FROM lobby WHERE lobby_id = ?`;
+
+    console.log(deleteName)
+
+    connection.query(sql, [deleteName], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        res.json(rows);
+    });
+    connection.end();
+});
 
 app.post('/getanswers', (req, res) => {
     console.log("used /getanswers");
@@ -566,6 +558,91 @@ app.post('/getanswers', (req, res) => {
     });
 
     connetion.end();
+});
+
+app.post('/joingame', (req, res) => {
+    console.log("used /joingame");
+
+    const lobbyId = req.body.lobby;
+    const name = req.body.name;
+    const account = req.body.accountId;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+    const sql = 'INSERT INTO player (lobby_id, banned, name, account) VALUES (?,0,?,?)';   
+
+    connection.query(sql, [lobbyId, name, account], (err, rows) => {
+      if (err) {
+        throw err;
+      }
+
+      res.status(200).json(rows.insertId)
+    });
+
+    connection.end();
+});
+
+app.post('/createsubject', (req, res) => {
+    console.log("used /createsubject");
+
+    const body = req.body;
+
+    const connection = mysql.createConnection(dbconfig);
+    connection.connect();
+    const sql = 'INSERT INTO subject (subject_title, subject_description, subject_author, subject_image) VALUES (?, ?, ?, ?)';
+
+    // create the question
+    connection.query(sql, [body.subjectName, body.subjectDescription, body.subjectAuthor, body.subjectImage], (err, rows) => {
+        if (err) {
+          throw err
+        }
+
+        res.status(200).json({"message": `OK`, "subjectId": rows.insertId})
+    });
+
+    connection.end();
+});
+
+app.post('/createquestion', (req, res) => {
+  console.log("used /createanswer");
+
+  const body = req.body;
+
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+  const sql = 'INSERT INTO question (subject_id, question, time, wait, points) VALUES (?, ?, ?, ?, ?)';
+
+  // create the question
+  connection.query(sql, [body.subjectId, body.question, body.ansTime, body.waitTime, body.maxPoints], (err, rows) => {
+      if (err) {
+        throw err
+      }
+
+      res.status(200).json({"message": `OK`, "questionId": rows.insertId})
+  });
+
+  connection.end();
+});
+
+app.post('/createanswer', (req, res) => {
+  console.log("used /createanswer");
+
+  const body = req.body;
+
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+  const sql = 'INSERT INTO answers (question_id, answer, correct, position) VALUES (?, ?, ?, ?)';
+
+  // create the question
+  connection.query(sql, [body.questionId, body.ans, body.cor, body.pos], (err, rows) => {
+      if (err) {
+        throw err
+      }
+
+      res.status(200).json({"message": `OK`, "answerId": rows.insertId})
+  });
+
+  connection.end();
 });
 
 // run the server

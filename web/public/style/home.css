@@ -1,6 +1,11 @@
 #credits {
+    display: block;
     grid-column-start: 2;
     text-align: center;
+}
+
+#leaderboard-buttons-container {
+    display: none;
 }
 
 #home-container {
@@ -23,9 +28,9 @@
 }
 
 body {
-    background: linear-gradient(45deg, #DCD6F7, #B4869F, #985F6F);
-    background-size: 400% 400%;
-    animation: gradient 20s ease infinite;
+    background: linear-gradient(45deg, #a6d0c9, #4e958a);
+    background-size: 500% 500%;
+    animation: gradient 10s ease infinite;
 }
 
 @keyframes gradient {
@@ -38,4 +43,3 @@ body {
 	100% {
 		background-position: 0% 50%;
 	}
-}

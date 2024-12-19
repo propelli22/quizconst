@@ -8,9 +8,8 @@ let lastQuestion = false;
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 
-const currentAddress = window.location.origin;
+const currentAddressGame = window.location.origin;  
 const currentLanguage = urlParams.get('language');
-console.log(urlParams.get('language'));
 let currentQuestion = 0;
 
 const questionCountTag = document.getElementById("question-count");
@@ -19,6 +18,9 @@ const questionContainer = document.getElementById("question-container");
 const mainGameContainer = document.getElementById("main-game-container");
 const loadingContainer = document.getElementById("loading-container");
 const resultsContainer = document.getElementById("results-container");
+
+document.getElementById("low-taper-fade").style.display = "none";
+document.getElementById("rick-roll-video").style.display = "none";
 
 let questionCount = 1;
 const questionCountText = questionCountTag.innerHTML;
@@ -263,10 +265,8 @@ async function runQuestion(questionData) {
                 }
 
                 if (readyStatus == 200) {
-                    console.log("able to continue");
+                    // TODO: wtf, something i was supposed to do here???
                 }
-
-                console.log("testingggg")
 
                 document.getElementById("question-time").style.display = "none";
                 resolve(true);
@@ -283,21 +283,28 @@ console.log("Wrong place fool, there are no answers to be given here :) or is th
 // EASTER EGG FUNCTIONS, in the game
 Object.defineProperty(window, 'giveMaxPoints', { // rick rolls you :D
     get: function () {
-        window.open('https://www.youtube.com/watch?v=xvFZjo5PgG0')
+        document.getElementById("rick-roll-video").style.display = "block";
         console.log("???, why are you trying to cheat the game???")
+        setTimeout(() => {
+            document.getElementById("rick-roll-video").style.display = "none";
+        }, 8500);
     }
 });
 
 Object.defineProperty(window, 'addPoints', { // low taper fade
     get: function () {
-        window.open('style/content/low_taper_fade.jpg')
-        console.log("imagine trying to cheat, you can still imagine if ninja got a low taper fade")
+        document.getElementById("low-taper-fade").style.display = "block";
+        document.getElementById("low-taper-fade").style.animation = "zoom-in-zoom-out 5s ease"
+        console.log("imagine trying to cheat, you can still imagine if ninja got a low taper fade") 
+        setTimeout(() => {
+            document.getElementById("low-taper-fade").style.display = "none";
+        }, 5001);
     }
 });
 
 Object.defineProperty(window, 'getCorrectAnswer', {
     get: function () {
-        console.log("The answer to the current question is:")
+        console.log("The answer to the current question is:");
 
         const minCeiled = Math.ceil(1);
         const maxFloored = Math.floor(4);
@@ -407,9 +414,6 @@ async function gameController() {
     // question cycle
     for(let i = 0; i < questionCount; i++) {
         const recivedQuestionData = await getQuestion(questions[i]);
-
-        console.log(i + 1)
-        console.log(questionCount)
 
         if (i + 1 == questionCount) {
             lastQuestion = true;

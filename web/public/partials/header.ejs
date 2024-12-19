@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="style/content/low_taper_fade.jpg" type="image/jpg">
     <title><%= page %> - Quizconst</title>
     <link rel="stylesheet" href="style/reset.css">
     <link rel="stylesheet" href="style/main.css">
 </head>
 <body>
+    <%- include('background') %>
     <header>
         <form method="get" id="language-form">
-            <select name="language" id="language-selection" onchange="this.form.submit()">
+            <select name="language" id="language-selection" class="button" onchange="this.form.submit()">
                 <option value="fi" <%= language === 'fi' ? 'selected' : '' %>>FI</option>
                 <option value="en" <%= language === 'en' ? 'selected' : '' %>>EN</option>
             </select>

@@ -11,8 +11,6 @@ async function scoreCalculator(questionId) {
 
     startingPoints = timeData[0].points;
 
-    console.log(`Time: ${timeData[0].time}, Points: ${startingPoints}`);
-
     const ConvertedTime = timeData[0].time * 1000;
     const reductionAmount = startingPoints / ConvertedTime;
     let currentPoint = startingPoints;
@@ -22,8 +20,6 @@ async function scoreCalculator(questionId) {
         const elapsedTime = Date.now() - startTime;
 
         currentPoint = Math.max(0, startingPoints - (reductionAmount * elapsedTime));
-
-        console.log(currentPoint.toFixed(2));
 
         // prevent infinity loops
         if (currentPoint <= 0) {

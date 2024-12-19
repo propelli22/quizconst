@@ -59,5 +59,6 @@
     "lobbySearch": "Lobby search",
     "deleteLobby": "Delete lobby",
     "lobbyName": "Lobby name",
-    "errorMessageLobby": "Lobby was not found"
+    "errorMessageLobby": "Lobby was not found",
+    "typeHere": "Type here"
 }

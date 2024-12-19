@@ -59,5 +59,6 @@
     "lobbySearch": "Aulahaku",
     "deleteLobby": "Poista aula",
     "lobbyName": "Aulan nimi",
-    "errorMessageLobby": "Aulaa ei löytynyt"
+    "errorMessageLobby": "Aulaa ei löytynyt",
+    "typeHere": "Kirjoita tähän"
 }

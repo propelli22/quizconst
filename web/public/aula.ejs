@@ -1,0 +1,31 @@
+<%- include('partials/header') %>
+<main>
+    <% if (lobbyData.lobbydata) { %>
+        <h1><%= lobbyData.lobbydata.lobbyName %></h1>
+        <div class="players-grid" id="players-grid">
+            <!--<div class="player-box host" id="host-player">
+                <p>Pelaaja 1 (Host)</p>
+            </div>-->
+            <% for(let player of lobbyData.lobbydata) { %>
+                <div class="player-box" id="player-<%= player.player %>">
+                    <p><%= player.name %></p>
+                </div>
+            <% } %>
+        </div>
+    <% } else { %>
+        <h1><%= lobbyData.lobbydata[0].lobbyName %></h1>
+        <div class="players-grid" id="players-grid">
+            <!--<div class="player-box host" id="host-player">
+                <p>Pelaaja 1 (Host)</p>
+            </div>-->
+            <% for(let player of lobbyData.lobbydata) { %>
+                <div class="player-box" id="player-<%= player.player %>">
+                    <p><%= player.name %></p>
+                </div>
+            <% } %>
+        </div>
+    <% } %>
+</main>
+<%- include('partials/footer') %>
+<script src="script/script.js"></script>
+<script src="script/aula.js"></script>
