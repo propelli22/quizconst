@@ -1,4 +1,4 @@
-import { saveSettings } from "./save-to-localStorage.js"
+import { saveSettings } from "./LocalStorage-logic.js"
 
 // Function to get the question index from the question container
 function getQuestionIndex(questionContainer) {
@@ -7,55 +7,64 @@ function getQuestionIndex(questionContainer) {
 }
 
 // Function to close the question settings modal and set the answer presets
-function closeQuestionSettingsModalFunc(questionContainer, questionIndex) {
+export function presetFor2answers(questionContainer) {
 	const answer3 = questionContainer.querySelector("#answer3")
 	const answer4 = questionContainer.querySelector("#answer4")
 	const answerContainer3 = questionContainer.querySelector("#answer-container3")
 	const answerContainer4 = questionContainer.querySelector("#answer-container4")
 	const questionAnswers = questionContainer.querySelector("#question-answers")
 
-	// Function to set the display for 2 answers
-	function presetFor2answers() {
-		answer3.style.display = "none"
-		answer4.style.display = "none"
-		answerContainer3.style.display = "none"
-		answerContainer4.style.display = "none"
-		questionAnswers.classList.remove("three-answers", "four-answers")
-		questionAnswers.classList.add("two-answers")
-	}
+	answer3.style.display = "none"
+	answer4.style.display = "none"
+	answerContainer3.style.display = "none"
+	answerContainer4.style.display = "none"
+	questionAnswers.classList.remove("three-answers", "four-answers")
+	questionAnswers.classList.add("two-answers")
+}
 
-	// Function to set the display for 3 answers
-	function presetFor3answers() {
-		answer3.style.display = "block"
-		answer4.style.display = "none"
-		answerContainer3.style.display = "block"
-		answerContainer4.style.display = "none"
-		questionAnswers.classList.remove("two-answers", "four-answers")
-		questionAnswers.classList.add("three-answers")
-	}
+export function presetFor3answers(questionContainer) {
+	const answer3 = questionContainer.querySelector("#answer3")
+	const answer4 = questionContainer.querySelector("#answer4")
+	const answerContainer3 = questionContainer.querySelector("#answer-container3")
+	const answerContainer4 = questionContainer.querySelector("#answer-container4")
+	const questionAnswers = questionContainer.querySelector("#question-answers")
 
-	// Function to set the display for 4 answers
-	function presetFor4answers() {
-		answer3.style.display = "block"
-		answer4.style.display = "block"
-		answerContainer3.style.display = "block"
-		answerContainer4.style.display = "block"
-		questionAnswers.classList.remove("two-answers", "three-answers")
-		questionAnswers.classList.add("four-answers")
-	}
+	answer3.style.display = "block"
+	answer4.style.display = "none"
+	answerContainer3.style.display = "block"
+	answerContainer4.style.display = "none"
+	questionAnswers.classList.remove("two-answers", "four-answers")
+	questionAnswers.classList.add("three-answers")
+}
 
+export function presetFor4answers(questionContainer) {
+	const answer3 = questionContainer.querySelector("#answer3")
+	const answer4 = questionContainer.querySelector("#answer4")
+	const answerContainer3 = questionContainer.querySelector("#answer-container3")
+	const answerContainer4 = questionContainer.querySelector("#answer-container4")
+	const questionAnswers = questionContainer.querySelector("#question-answers")
+
+	answer3.style.display = "block"
+	answer4.style.display = "block"
+	answerContainer3.style.display = "block"
+	answerContainer4.style.display = "block"
+	questionAnswers.classList.remove("two-answers", "three-answers")
+	questionAnswers.classList.add("four-answers")
+}
+
+function closeQuestionSettingsModalFunc(questionContainer, questionIndex) {
 	// Set the answer presets based on the question settings
 	const count = localStorage.getItem(`question${questionIndex}_settingsQuestionCount`)
 	switch (parseInt(count, 10)) {
 		case 2:
-			presetFor2answers()
+			presetFor2answers(questionContainer)
 			break
 		case 3:
-			presetFor3answers()
+			presetFor3answers(questionContainer)
 			break
 		case 4:
 		default:
-			presetFor4answers()
+			presetFor4answers(questionContainer)
 			break
 	}
 

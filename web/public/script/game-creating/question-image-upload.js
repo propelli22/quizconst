@@ -64,7 +64,7 @@ function attachImageUploaderEvent(element, questionIndex) {
 				}
 
 				const uploadLabel = document.getElementById(
-					`question${questionIndex}_custom-file-upload`
+					`question${questionIndex}_image-upload`
 				)
 				uploadLabel.style.display = "none"
 			}
@@ -106,7 +106,7 @@ function attachCloseImageNameContainerEvent(element, questionIndex) {
 		}
 
 		// Show the upload label and clear the file input and fullscreen image
-		const uploadLabel = document.getElementById(`question${questionIndex}_custom-file-upload`)
+		const uploadLabel = document.getElementById(`question${questionIndex}_image-upload`)
 		uploadLabel.style.display = "inline-block"
 
 		const fileInput = document.getElementById(`question${questionIndex}_file-upload`)
