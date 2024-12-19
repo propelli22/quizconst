@@ -1,5 +1,5 @@
-async function saveToDatabase(dataArray) {
-    const currentAddress = 'http://192.168.1.102:3000'; //window.location.origin;
+export async function saveToDatabase(dataArray) {
+    const currentAddress = window.location.origin;
 
     let subjectResponse;
 
@@ -11,11 +11,7 @@ async function saveToDatabase(dataArray) {
     .then(Response => Response.json())
     .then(data => subjectResponse = data);
 
-    console.log(subjectResponse)
-
     for(let i = 0; i < dataArray.questions.length; i++) {
-        console.log(dataArray.questions[i]);
-
         const questionBody = {
             ...dataArray.questions[i],
             subjectId: subjectResponse.subjectId
@@ -32,8 +28,6 @@ async function saveToDatabase(dataArray) {
         .then(Response => Response.json())
         .then(data => questionResponse = data);
 
-        console.log(questionResponse);
-
         for(let y = 0; y < dataArray.questions[i].answers.length; y++) {
             const subjectBody = {
                 ...dataArray.questions[i].answers[y],
@@ -47,14 +41,13 @@ async function saveToDatabase(dataArray) {
             })
             .then(Response => Response.json())
             .then(data => answerResponse = data);
-
-            console.log (answerResponse);
         }
     }
 }
 
 // pass the data like this to the function
 // also notify me if anything is missing that needs to be saved to the database - Kalle
+// these are filled with testing data, you need to make an object like this with the actual data
 const dataArray = {
     "subjectName": "JOS OLEN TIETOKANNASSA, TOIMIN!",
     "subjectDescription": "JOS OLEN TIETOKANNASSA, TOIMIN!",
@@ -179,5 +172,3 @@ const dataArray = {
         }
     ]
 }
-
-saveToDatabase(dataArray)
