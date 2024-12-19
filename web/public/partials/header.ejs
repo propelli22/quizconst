@@ -9,9 +9,10 @@
     <link rel="stylesheet" href="style/main.css">
 </head>
 <body>
+    <%- include('background') %>
     <header>
         <form method="get" id="language-form">
-            <select name="language" id="language-selection" onchange="this.form.submit()">
+            <select name="language" id="language-selection" class="button" onchange="this.form.submit()">
                 <option value="fi" <%= language === 'fi' ? 'selected' : '' %>>FI</option>
                 <option value="en" <%= language === 'en' ? 'selected' : '' %>>EN</option>
             </select>
