@@ -23,6 +23,8 @@
     "sign_email": "Sähköposti:",
     "sign_password": "Salasana:",
     "sign_button": "Rekisteröidy",
+    "loading": "Ladataan...",
+    "questions": "Kysymyksiä:",
     "made_by": "Projektin tekijät:",
     "developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
     "info": "2024, v1"

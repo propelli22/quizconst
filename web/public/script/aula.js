@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const playersGrid = document.getElementById('players-grid');
+    const playersFlex = document.getElementById('players-flex');
 
     document.getElementById('add-player-button').addEventListener('click', function () {
-        const playerCount = playersGrid.getElementsByClassName('player-box').length;
+        const playerCount = playersFlex.getElementsByClassName('player-box').length;
 
         if (playerCount < 15) {
             const newPlayerBox = document.createElement('div');
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
             newPlayerBox.innerHTML = `<p>Pelaaja ${playerCount + 1}</p>`;
 
             // Lisätään uusi pelaaja
-            playersGrid.appendChild(newPlayerBox);
+            playersFlex.appendChild(newPlayerBox);
         }
     });
 });

@@ -108,13 +108,23 @@ app.get("/create", (req, res) => {
 
 app.get('/aula', (req, res) => {
 	const language = req.query.language;
+    const sessionId = req.session.sessionId || null
 
 	if (language == 'fi') {
-		res.render('aula', fi_lobby)
+		res.render("aula", {
+			...fi_lobby,
+			sessionId: sessionId
+		})
 	} else if (language == 'en') {
-		res.render('aula', en_lobby)
+		res.render("aula", {
+			...en_lobby,
+			sessionId: sessionId
+		})
 	} else {
-		res.render('create_a_game', fi_create)
+		res.render("aula", {
+			...fi_lobby,
+			sessionId: sessionId
+		})
 	}
 });
 
