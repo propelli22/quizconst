@@ -37,13 +37,11 @@ Projektissa työnjako toteutettiin tasaisesti huomioiden kaikkien taidot
 
 Sivuston frontend päätettiin toteuttaa käyttäen EJS -muotoa kieli tuen ja uudelleen käytettävien komponenttien takia, oli tiedossa projektin alusta alkaen jo että sivustoille ladataan lähes aina eri tietoa ja todettiin että EJS on tässä tapauksessa sopiva, toinen vaihtoehto olisi ollut React, mutta sitä ei valittu koska Kalle oli projektissa ainut joka osasi käyttää Reactia.
 
-Backend toteutettin Node.js express palvelimena, Node.js valittiin ryhmän kokemuksen takia, ryhmässä ei projektin aloituksessa oikein osattu muita backend kieliä joten Node.js oli helppo valinta. Samasta syystä valittiin myös MySQL tietokannan puolelle
+Backend toteutettin Node.js express palvelimena, Node.js valittiin ryhmän kokemuksen takia, ryhmässä ei projektin aloituksessa oikein osattu muita backend kieliä joten Node.js oli helppo valinta. Samasta syystä valittiin myös MySQL tietokannan puolelle.
 
 ## Testaus
 
 Testaus/tuomio -päivä, 13.1.2025. WEB23A kaverit kutsuttu testaamaan / rikkomaan projektimme täysin.
-
-## Miten quizconst toimii? / Tekninen selitys
 
 ## Info
 
