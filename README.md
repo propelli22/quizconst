@@ -3,8 +3,7 @@
 > 
 > Versio 1 valmiina 13 tammikuuta 2025 mennessä / Version 1 to be finished by 13 of January 2025
 
-## 🇫🇮
-# Quizconst
+# Quizconst 🇫🇮
 
 Quizconst on (kröhm... quizletin ja kahootin kopio/sekoitus) tietovisa peli jossa voi pelata kavereiden kanssa kisaa eri aiheiden kanssa ja selvittää kuka on kaikista fiksuin jossakin aiheessa.
 
@@ -56,10 +55,9 @@ Quizconstin toteutti,
 Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra
 
 Projekti toteutettu osana Business College Helsingin ohjelmistokehittäjänä toimiminen -kurssia, 2024-2025
-  
 
-## 🇬🇧
-# Quizconst
+  
+# Quizconst 🇬🇧
 
 Quizconst is a multiplayer trivia game where you can compete against your friend in different subjects, and figure out whos the smartest in the group.
 
