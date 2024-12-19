@@ -1,10 +1,20 @@
 @import url("https://use.typekit.net/kuq8csk.css");
 
+* {
+    z-index: 6;
+    position: static;
+}
+
+.modal, #admin-modal {
+    z-index: 500 !important;
+    position: absolute;
+}
+
 body {
     font-family: "laca-variable", sans-serif;
     margin: 0;
     padding: 0;
-    color: #4E4C67;
+    color: #383D3B;
     height: 100%;
     overflow: hidden;
 }
@@ -45,7 +55,7 @@ nav {
 }
 
 input[type="number"], select {
-    border: #4E4C67 2px solid;
+    border: #383D3B 2px solid;
 }
 
 .nav-button {
@@ -55,14 +65,14 @@ input[type="number"], select {
 .nav-button, .button {
     font-family: "laca-variable", sans-serif;
     font-weight: 800;
-    background-color: #A6B1E1;
-    color: #4E4C67;
+    background-color: #fdfdfd;
+    color: #383D3B;
     width: 50%;
-    border: 2px #4E4C67 solid;
+    border: 2px #383D3B solid;
 }
 
 .textInput {
-    border: #4E4C67 2px solid;
+    border: #383D3B 2px solid;
 }
 
 #language-form {
@@ -76,11 +86,9 @@ input[type="number"], select {
 }
 
 #language-selection {
-    background-color: #A6B1E1;
     font-family: "laca-variable", sans-serif;
     font-weight: 800;
     text-align: center;
-    color: #4E4C67;
     width: 100%;
     height: 100%;
     margin: 0;
