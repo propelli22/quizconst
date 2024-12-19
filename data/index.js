@@ -469,6 +469,7 @@ app.get("/getPlayerName", (req, res) => {
   connection.end();
 });
 
+// Answer request and ban player
 app.post("/banPlayer", (req, res) => {
     const playerId = req.body.id;
     const connection = mysql.createConnection(dbconfig);
@@ -480,12 +481,13 @@ app.post("/banPlayer", (req, res) => {
       if (err) {
         throw err;
       }
-      res.status(201).json({ message: "Player banned successfully" });
+      res.status(201).json(rows);
     });
   
     connection.end();
   });
   
+  // Answer request and unban player
   app.post("/unbanPlayer", (req, res) => {
     const playerId = req.body.id;
     const connection = mysql.createConnection(dbconfig);
@@ -501,6 +503,42 @@ app.post("/banPlayer", (req, res) => {
     connection.end();
   });
 
+// Get lobbby name by ID to display in the admin setting page
+
+app.post("/lobbySearch", (req, res) => {
+    const lobby = req.body.id;
+    const connection = mysql.createConnection(dbconfig);
+
+    connection.connect();
+    let sql = `SELECT lobby_name FROM lobby WHERE lobby_id = ?`;
+
+    connection.query(sql, [lobby], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        res.json(rows);
+    });
+    connection.end();
+});
+
+// Answer request and delete lobby
+app.post("/deleteLobby", (req, res) => {
+    const deleteName = req.body.id;
+    const connection = mysql.createConnection(dbconfig);
+
+    connection.connect();
+    let sql = `DELETE FROM lobby WHERE lobby_id = ?`;
+
+    console.log(deleteName)
+
+    connection.query(sql, [deleteName], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        res.json(rows);
+    });
+    connection.end();
+});
 
 app.post('/getanswers', (req, res) => {
     console.log("used /getanswers");

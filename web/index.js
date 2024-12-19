@@ -3,6 +3,9 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const { XMLParser, XMLBuilder, XMLValidator } = require("fast-xml-parser");
+const { get } = require('http');
+const { getEventListeners } = require('events');
+
 
 const app = express();
 app.use(express.urlencoded({extended: 'false'}))
@@ -367,7 +370,7 @@ app.post('/gamedata', async (req, res) => {
         const result = await getPlayerResult.json();
 
         res.json(result);
-    } else if(runAction == "questionready") { // THIS WILL BE HEAVY TO RUN, as the data server will only respond to this once everyone is ready!
+    } else if(runAction == "questionready") { // This might be heavy to run (RAM)
         const body = {
             playerId: player,
             lobbyId: lobby,
@@ -426,6 +429,57 @@ app.post('/gamedata', async (req, res) => {
 
 });
 
+//Request searched username from data and ban
+app.post('/getUserBan', async (req, res) => {
+
+    const getUser = await fetch(`http://localhost:4000/getPlayerName?id=${req.body.id}`, {
+        method: 'GET'
+    });
+
+    const body = {
+        id: req.body.id
+    }
+
+    const banReq = await fetch(`http://localhost:4000/banPlayer`, {
+        method: 'POST', 
+        body: JSON.stringify(body),
+        headers: {"Content-Type": "application/json"}
+    });
+    const userResult = await getUser.json();
+    const banResult = await banReq.json();
+
+    const respone = [userResult, banResult]
+
+    console.log(respone)
+
+    res.json(respone);
+});
+
+//Request searched username from data and unban
+app.post('/getUserUnban', async (req, res) => {
+
+    const getUser = await fetch(`http://localhost:4000/getPlayerName?id=${req.body.id}`, {
+        method: 'GET'
+    });
+
+    const body = {
+        id: req.body.id
+    }
+
+    const unbanReq = await fetch (`http://localhost:4000/unbanPlayer?id=${req.body.id}`, {
+        method: `POST`,
+        body: JSON.stringify(body),
+        headers: {'Content-Type': 'application/json'} 
+    });
+
+    const userResult = await getUser.json();
+    const unbanResult = await unbanReq.json();
+
+    const respone = [userResult, unbanResult]
+
+    res.json(respone);
+});
+
 app.post('/createsubject', async (req, res) => {
     console.log("used /createsubject");
 
@@ -436,10 +490,27 @@ app.post('/createsubject', async (req, res) => {
         body: JSON.stringify(body),
         headers: {'Content-Type': 'application/json'}
     });
-
+  
     const result = await saveData.json();
 
     res.status(200).json({"message": "OK", "subjectId": result.subjectId});
+});
+
+//Send request to data to get searched lobby name
+app.post(`/getLobbyName`, async (req, res) => {
+
+    const body = {
+        id: req.body.id
+    }
+
+    const getLobby = await fetch (`http://localhost:4000/lobbySearch?id=${req.body.id}`, {
+        method: `POST`,
+        body: JSON.stringify(body),
+        headers: {"Content-Type": "application/json"}
+    });
+
+    const lobbyResult = await getLobby.json();
+    res.json(lobbyResult)
 });
 
 app.post('/createquestion', async (req, res) => {
@@ -456,7 +527,7 @@ app.post('/createquestion', async (req, res) => {
     const result = await saveData.json();
 
     res.status(200).json({"message": "OK", "questionId": result.questionId});
-});
+  });
 
 app.post('/createanswer', async (req, res) => {
     console.log("used /createanswer");
@@ -472,6 +543,24 @@ app.post('/createanswer', async (req, res) => {
     const result = await saveData.json();
 
     res.status(200).json({"message": "OK", "answerId": result.answerId});
+}); 
+
+//Send request to data server to delete certain lobby
+app.post(`/deleteLobby`, async (req, res) => {
+    const body = {
+        id: req.body.id
+    }
+
+    console.log(req.body.id)
+
+    const getDelete = await fetch(`http://localhost:4000/deleteLobby`, {
+        method: `POST`,
+        body: JSON.stringify(body),
+        headers: {'Content-Type': 'application/json'}
+    });
+
+    const deleteResult = await getDelete.json();
+    res.json(deleteResult)
 });
 
 app.post('/lobbydata', async (req, res) => {
