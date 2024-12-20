@@ -9,6 +9,15 @@ header {
     grid-template-rows: 100% !important;
 }
 
+#header-nav{
+    height: 5vh !important;
+}
+
+.nav-button {
+    height: 100% !important;
+    z-index: 1;
+}
+
 #game-creation {
     width: 100%;
     height: 100%;
