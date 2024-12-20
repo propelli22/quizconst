@@ -27,7 +27,7 @@
                 <div id="game-settings-modal" class="modal">
                     <div class="modal-content" id="game-settings-modal-content">
                         <span class="close" id="close-game-settings-modal">&times;</span>
-                        <h2><%= game_info %></h2>
+                        <h2><%= game_settings %></h2>
                         <div class="relative inline-block" style="width: 100%;">
                             <input type="text" id="game-name-input" placeholder="<%= give_game_name %>" value="<%= game_name %>">
                             <div id="char-count-name" class="absolute">80</div>
@@ -45,11 +45,26 @@
                             <span id="image-name"></span>
                         </div>
                         <img class="uploaded-image" id="uploaded-image"/>
-                        <button id="save-game-settings"><%= save_game_info %></button>
+                        <button id="save-game-settings"><%= save_game_settings %></button>
                         <div id="image-modal" class="modal" style="display: none;">
                             <span class="close" id="close-image-modal">&times;</span>
                             <img class="image-modal-content" id="fullscreen-image">
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div id="game-info-container">
+                <button id="game-info-button">i</button>
+                <div id="game-info-modal" class="modal">
+                    <div class="modal-content" id="game-info-modal-content">
+                        <span class="close" id="close-game-info-modal">&times;</span>
+                        <h2><%= game_info %></h2><br>
+                        <p><%= game_info_rename %></p><br>
+                        <p><%= game_info_add_question %></p><br>
+                        <p><%= game_info_add_image %></p><br>
+                        <p><%= game_info_question_settings %></p><br>
+                        <p><%= game_info_game_settings %></p><br>
+                        <p><%= game_info_done %></p>
                     </div>
                 </div>
             </div>
@@ -82,4 +97,5 @@
 <script type="module" src="script/game-creating/game-settings.js"></script>
 <script src="script/game-creating/question-settings-sliders.js"></script>
 <script src="script/game-creating/modal-resizer.js"></script>
+<script src="script/game-creating/game-info-modal.js"></script>
 <%- include('partials/footer') %>

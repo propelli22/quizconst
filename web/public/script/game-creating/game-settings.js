@@ -62,7 +62,7 @@ function saveGameSettings() {
 	if (gameNameInput.value.length !== 0) {
 		// If the game name is not empty
 		localStorage.setItem("gameName", gameNameInput.value) // Save the game name to local storage
-		document.getElementById("game-name").textContent = gameNameInput.value // Update the game name in the game info directly
+		document.getElementById("game-name").textContent = gameNameInput.value // Update the game name in the game settigns directly
 	}
 
 	if (gameDescriptionInput.value.length !== 0) {
