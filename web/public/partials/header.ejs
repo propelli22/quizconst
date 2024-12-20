@@ -16,7 +16,7 @@
                 <option value="en" <%= language === 'en' ? 'selected' : '' %>>EN</option>
             </select>
         </form>
-        <h1 id="main-title">Quizconst</h1>
+        <h1 id="main-title" onclick="window.location.href = window.location.origin">Quizconst</h1>
         <button id="nav-dropdown" class="button" onclick="toggleMenu()">▼</button>
         <nav id="header-nav">
             <% if (sessionId) { %>
@@ -31,3 +31,4 @@
             <p id="remaining-time"><%= loading %></p>
         </div>
     </header>
+<script src="script/back-to-main-page.js"></script>
