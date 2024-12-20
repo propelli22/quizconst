@@ -39,7 +39,7 @@ const port = "3000";
 const host = "0.0.0.0"; // run on device local ip
 
 app.get('/lobby', async (req, res) => {
-    console.log("loaded Lobby")
+    console.log("loaded /lobby")
 
     const language = req.query.language;
     const sessionId = req.headers.cookie || null;
@@ -67,8 +67,6 @@ app.get('/lobby', async (req, res) => {
         console.log(err);
     }
 
-    console.log(lobbyData);
-
     if(language === 'fi') {
         res.render('aula', {
             ...fi_lobby,
@@ -92,7 +90,7 @@ app.get('/lobby', async (req, res) => {
 
 
 app.get('/', async (req, res) => {
-    console.log("loaded Frontpage");
+    console.log("loaded / (frontpage)");
 
     const language = req.query.language;
     const sessionId = req.headers.cookie || null;
@@ -134,7 +132,7 @@ app.get('/', async (req, res) => {
 });
 
 app.get("/create", (req, res) => {
-	console.log("loaded Create a game")
+	console.log("loaded /create")
 	const language = req.query.language
 	const sessionId = req.session.sessionId || null
 
@@ -159,7 +157,7 @@ app.get("/create", (req, res) => {
 app.get('/game', async (req, res) => {
     // kalle does this. - Kalle
     // shit desicion - Kalle
-    console.log("loaded Game");
+    console.log("loaded /game");
     const lobby = req.query.lobby;
     const language = req.query.language;
     const sessionId = req.headers.cookie || null;
@@ -183,7 +181,7 @@ app.get('/game', async (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-    console.log("used Register");
+    console.log("used /register");
 
     const username = req.body.username;
     const email = req.body.email;
@@ -251,8 +249,6 @@ app.post('/joinplayer', async (req, res) => {
 
     const joinData = await responeJoin.json();
 
-    console.log(joinData);
-
     res.cookie('lobby', req.body.lobbyId);
     res.cookie('playerId', joinData);
 
@@ -260,7 +256,7 @@ app.post('/joinplayer', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    console.log("used Login");
+    console.log("used /login");
 
     const {input_name, input_log} = req.body;
  
@@ -277,12 +273,12 @@ app.post('/login', async (req, res) => {
 
     const checkResult = await checkLogin.json();
 
-    if (checkResult === true) {
+    if (checkResult.passwordResult === true) {
         const loggedUser = `${input_name}`
         req.session.userId = input_name;
         req.session.sessionId = loggedUser;
 
-        res.cookie('sessionId', loggedUser, {
+        res.cookie('sessionId', checkResult.userId, {
             httpOnly: true,
             secure: false,
             maxAge: 24 * 60 * 60 * 1000
@@ -313,7 +309,7 @@ app.post('/createlobby', async (req, res) => {
 
     const result = await createLobbyResponse.json();
 
-    res.status(200).json(result);
+    res.status(200).json(result)
 });
 
 app.post('/gamedata', async (req, res) => {
@@ -488,7 +484,6 @@ app.post('/createsubject', async (req, res) => {
     console.log("used /createsubject");
 
     const body = req.body;
-    console.log(body);
 
     const saveData = await fetch('http://localhost:4000/createsubject', {
         method: 'POST',
@@ -522,7 +517,6 @@ app.post('/createquestion', async (req, res) => {
     console.log("used /createquestion");
 
     const body = req.body
-    console.log(body);
 
     const saveData = await fetch('http://localhost:4000/createquestion', {
         method: 'POST',
@@ -539,7 +533,6 @@ app.post('/createanswer', async (req, res) => {
     console.log("used /createanswer");
 
     const body = req.body
-    console.log(body);
 
     const saveData = await fetch('http://localhost:4000/createanswer', {
         method: 'POST',
@@ -568,6 +561,34 @@ app.post(`/deleteLobby`, async (req, res) => {
 
     const deleteResult = await getDelete.json();
     res.json(deleteResult)
+});
+
+app.post('/lobbydata', async (req, res) => {
+    console.log("used /lobbydata");
+
+    const lobbyDataUrl = `http://localhost:4000/lobbydata?id=${req.body.lobbyId}`
+    let lobbyData;
+
+    const settings = {
+        method: 'GET'
+    }
+
+    try {
+        const xmlSite = await fetch(lobbyDataUrl, settings);
+        const xml = await xmlSite.text();
+
+        const isValid = XMLValidator.validate(xml);
+        if(isValid) {
+            const parser = new XMLParser();
+            lobbyData = parser.parse(xml).lobbydata;
+        } else {
+            lobbyData = 'An error occurred while fetching lobbydata :('
+        }
+    } catch (err) {
+        console.log(err);
+    }
+
+    res.status(200).json({"message": "ksi - thick of it"})
 });
 
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}...`));

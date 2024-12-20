@@ -21,7 +21,7 @@ export function generateFileName(file) {
         }
         return result;
     }
-    
+
     try {
       fs.renameSync(fullPath, path.join(folderPath, newFileName));
     } catch (error) {
