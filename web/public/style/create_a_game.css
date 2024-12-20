@@ -9,7 +9,7 @@ header {
     grid-template-rows: 100% !important;
 }
 
-#header-nav{
+#header-nav {
     height: 5vh !important;
 }
 
@@ -23,24 +23,23 @@ header {
     height: 100%;
 }
 
+#game-settings-container {
+    top: 205px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#game-info-container {
+    top: 50px;
+    display: flex;
+    justify-content: flex-end;
+}
+
 #question-container {
     position: relative;
     top: 55px;
     z-index: 1;
     width: 10%;
-}
-
-#game-settings-container {
-    position: absolute;
-    top: 205px;
-    right: 0px;
-    z-index: 1;
-    width: 10%;
-}
-
-#game-settings-button {
-    position: absolute;
-    right: 0;
 }
 
 #selected-question-name {
@@ -102,19 +101,7 @@ header {
     cursor: pointer;
 }
 
-.modal {
-    display: none; 
-    position: fixed; 
-    z-index: 2;
-    left: 0;
-    top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: hidden;
-    background-color: rgba(21, 21, 21, 0.9);
-}
-
-.flexing-modal {
+.modal, .flexing-modal {
     display: none; 
     position: fixed; 
     z-index: 2;

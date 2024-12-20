@@ -53,6 +53,10 @@ input[type="number"], select {
     border: #164F46 2px solid;
 }
 
+#main-title {
+    cursor: pointer;
+}
+
 .nav-button {
     height: 50%;    
 }
