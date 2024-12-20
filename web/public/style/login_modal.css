@@ -1,10 +1,11 @@
 /* Sign up/ Log in modal */
 
+
 #log-modal-content {
     background-color: #fefefe;
     margin: auto; /* Center the modal */
     padding: 20px;
-    border: 1px solid #888;
+    border: 4px solid #164F4D;
     width: 25%;
     max-height: calc(110vh - 210px); /* Prevent overflow */
     overflow-y: auto;
@@ -22,7 +23,7 @@
     background-color: white;
     max-width: 21vh;
     margin-bottom: 7px;
-    border: solid black;
+    border: solid 2px black;
 }
 
 #log-in-content {
@@ -43,7 +44,7 @@
     background-color: white;
     max-width: 21vh;
     margin-bottom: 7px;
-    border: solid black;
+    border: solid 2px black;
     
 }
 
@@ -52,6 +53,7 @@
     margin-left: 10%;
     margin-right: 10%;
 }
+
 .close{
     float: right;
     font-size: 3rem;
@@ -69,7 +71,8 @@
     height: 3vh;
     margin-top: 10px;
     align-self: flex-start;
-    background-color: white;
+    background-color: #d1e7e3 !important;
+    padding: 7px 0 15px 0;
 }
 
 /* Responsive design adjustments */

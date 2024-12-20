@@ -46,7 +46,7 @@ main {
 nav {
     display: flex;
     grid-row: 2;
-    grid-column: 1 / span 6;
+    grid-column: 6 / span 2;
 }
 
 input[type="number"], select {
@@ -66,9 +66,12 @@ input[type="number"], select {
     font-weight: 800;
     background-color: #d1e7e3;
     color: #164F46;
-    width: 50%;
     border: 2px #164F46 solid;
     box-shadow: 1px 1px 2px #113D3B;
+}
+
+.button {
+    width: 50%;
 }
 
 .textInput {
@@ -270,4 +273,20 @@ input[type="number"], select {
 #question-count {
     display: none;
     text-align: center;
+}
+
+@media screen and (max-width: 1024px) {
+    .loggedout {
+        width: 100%;
+    }
+    
+    .loggedin {
+        width: 100%;
+    }
+
+    nav {
+        display: block;
+        grid-column: 6 / span 2;
+        padding: 10px;
+    }
 }

@@ -15,6 +15,19 @@
     margin-bottom: auto;
 }
 
+#join-button, #create-button {
+    padding: 3.5px 0 3.5px 0;
+    margin-top: 4px;
+}
+
+#lobby-code {
+    background-color: white;
+    padding: 5px;
+    margin-top: 4px;
+    max-width: 130px;
+    text-align: center;
+}
+
 #create-game-container {
     grid-column-start: 1;
     text-align: center;
@@ -43,3 +56,4 @@ body {
 	100% {
 		background-position: 0% 50%;
 	}
+}
