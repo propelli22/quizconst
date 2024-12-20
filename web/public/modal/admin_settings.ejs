@@ -7,16 +7,16 @@
         <h2><%=adminSetting %></h2>
         <h3><%=playerSearch %></h3>
         <input min="4" type="number" required id="playerSearch" name="playerSearch" placeholder="<%=playerSearch %>"/> 
-        <button id="banButton" type="button"><%=Banbutton%></button> 
+        <button id="banButton" class="button" type="button"><%=Banbutton%></button> 
         <p class="errorMessage" id="error1" style="display: none; color: red;"><%=errorMessageUnban%></p>
-        <button id="unbanButton" type="button"><%=Unbanbutton%></button> 
+        <button id="unbanButton" class="button" type="button"><%=Unbanbutton%></button> 
         <p class="errorMessage" id="error2" style="display: none; color: red;"><%=errorMessageBan%></p>
 
         <!--This is only front change it when doing back end so it takes the lobby name via SQL and searches them from SQL-->
         <h3><%=manageLobbys%></h3>
             <div style="position: relative;">
                 <input type="number" id="lobbySearch" name="lobbySearch" placeholder="<%=lobbySearch%>">
-                <p class="errorMessage" id="error3" style="display: none; color: red;"><%=errorMessageLobby%></p>
+                <p class="errorMessage" id="error3" class="button" style="display: none; color: red;"><%=errorMessageLobby%></p>
             
                 <div id="lobbyResults" class="lobby-results"></div>
             </div>

@@ -1,5 +1,5 @@
 #adminModal {
-    background-color: #fefefe;
+    background-color: #d1e7e3;
     margin: auto; /* Center the modal horizontally */
     padding: 20px;
     border: 1px solid #888;
@@ -12,8 +12,7 @@
     right: 0;
     overflow: auto;
     display: none; /* Hide the modal by default */
-    background-color: rgb(212, 212, 212);
-    border: solid 0.4rem black;
+    border: solid 0.25rem black;
 }
 
 
@@ -32,7 +31,7 @@
 #playerSearch, #lobbySearch, #banButton, #unbanButton {
     margin-top: 0.5rem;
     background-color: white;
-    border: 0.2rem solid black;
+    border: 0.15rem solid black;
     width: 16vw;
     height: 6vh;
     text-align: center;
@@ -40,7 +39,7 @@
 }
 
 #unbanButton{
-    background-color: rgb(95, 255, 95);
+    background-color: rgb(135, 248, 135);
     margin-bottom: 0.3rem;
     cursor: pointer;
     color: white;
@@ -68,20 +67,24 @@
     width: 16vw;
 }
 
-#lobbyName {
+#lobbyName {    
     margin: 0;
     font-size: 1rem;
 }
 
 #deleteLobbyButton {
     padding: 0.5rem 1rem;
-    background-color: red;
+    background-color: rgb(255, 95, 95);
     color: white;
-    border: solid 0.2rem black;
+    border: solid 0.15rem black;
     cursor: pointer;
     font-size: 1rem;
+    font-family: "laca-variable", sans-serif;
 }
 
+.close {
+    padding-left: 5px;
+}
 
 /* Media query for screens between 1370px and 765px */
 @media (max-width: 1370px) and (min-width: 765px) {
