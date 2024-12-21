@@ -131,7 +131,7 @@ function createQuestionElements(questionIndex) {
 				)}</p>
             </div>
         </div>
-        <button id="settings-button">${question_settings}</button>
+        <button class="button" id="settings-button">${question_settings}</button>
         <div id="settings-modal" class="modal">
             <div class="modal-content">
                 <span id="close-settings-modal" class="close">&times;</span>
@@ -158,12 +158,12 @@ function createQuestionElements(questionIndex) {
                         <input type="range" id="question${questionIndex}-answer-points-slider" min="100" max="5000" value="1000" step="100" oninput="answerPointsInputChanger(this.value, ${questionIndex})" />
                     </div>
                     <div class="setting-item">
-                        <button id="save-settings">${save_settings}</button>
+                        <button class="button" id="save-settings">${save_settings}</button>
                     </div>
                 </div>
             </div>
         </div>
-        <button id="save-game-button">${save_game}</button>
+        <button class="button" id="save-game-button">${save_game}</button>
     `
 
 	// Attach listeners to the new question elements
