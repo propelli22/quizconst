@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="style/content/low_taper_fade.jpg" type="image/jpg">
     <title><%= page %> - Quizconst</title>
     <link rel="stylesheet" href="style/reset.css">
     <link rel="stylesheet" href="style/main.css">
@@ -10,23 +11,24 @@
 <body>
     <header>
         <form method="get" id="language-form">
-            <select name="language" id="language-selection" onchange="this.form.submit()">
+            <select name="language" id="language-selection" class="button" onchange="this.form.submit()">
                 <option value="fi" <%= language === 'fi' ? 'selected' : '' %>>FI</option>
                 <option value="en" <%= language === 'en' ? 'selected' : '' %>>EN</option>
             </select>
         </form>
-        <h1 id="main-title">Quizconst</h1>
+        <h1 id="main-title" onclick="window.location.href = window.location.origin">Quizconst</h1>
         <button id="nav-dropdown" class="button" onclick="toggleMenu()">▼</button>
         <nav id="header-nav">
             <% if (sessionId) { %>
-                <button id="account" class="nav-button"><%= user %></button>
-                <button id="create-subject" class="nav-button" onclick="window.open(`/create?language=${document.getElementById('language-selection').value}`, '_self')"><%= create_subject %></button>
-                <button id="find-subject" class="nav-button"><%= find_subject %></button>
+                <button id="account" class="nav-button loggedin"><%= user %></button>
+                <button id="create-subject" class="nav-button loggedin" onclick="window.open(`/create?language=${document.getElementById('language-selection').value}`, '_self')"><%= create_subject %></button>
+                <button id="find-subject" class="nav-button loggedin"><%= find_subject %></button>
             <% } else { %>
-                <button id="log-in" class="nav-button"><%= login %></button>
+                <button id="log-in" class="nav-button loggedout"><%= login %></button>
             <% } %>
         </nav>
         <div id="question-time">
             <p id="remaining-time"><%= loading %></p>
         </div>
     </header>
+<script src="script/back-to-main-page.js"></script>

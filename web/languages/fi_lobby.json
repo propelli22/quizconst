@@ -1,5 +1,5 @@
 {   
-    "page": "Etusivu",
+    "page": "Aula",
     "title": "Aula",
     "language": "fi",
     "join_game": "Liity",
@@ -25,6 +25,7 @@
     "sign_button": "Rekisteröidy",
     "loading": "Ladataan...",
     "questions": "Kysymyksiä:",
+    "user": "Käyttäjä",
     "made_by": "Projektin tekijät:",
     "developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
     "info": "2024, v1"

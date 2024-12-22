@@ -196,3 +196,30 @@ body {
 		background-position: 0% 50%;
 	}
 }
+
+#low-taper-fade-container, #cheats-container {
+    position: absolute;
+    z-index: 2;
+}
+
+#low-taper-fade {
+    height: 100vh;
+}
+
+@keyframes zoom-in-zoom-out {
+    0% {
+        display: block;
+        scale: 0%;
+        rotate: 0deg;
+    }
+
+    50% {
+        scale: 100%;
+        rotate: 360deg;
+    }
+
+    100% {
+        scale: 0%;
+        display: none;
+    }
+}
