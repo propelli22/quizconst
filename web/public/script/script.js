@@ -115,29 +115,44 @@ function countDown() {
 }
 
 // create a new lobby, return lobby id
-function newLobby() {
-  const lobbyName = document.getElementById("lobbyName").innerHTML;
-  //const maxPlayers = document.getElementById("count").innerHTML;
+async function newLobby() {
+  const lobbyName = document.getElementById("lobbyName").value;
+  const playerName = document.getElementById("playerName").value;
   const maxPlayers = document.getElementById("count").innerHTML;
   const subjectId = "3";
   const date = new Date();
   let gameDate = date.toISOString();
   const selectedLanguage = document.getElementById("language-selection").value;
 
-  fetch(`${currentAddress}/createlobby`, {
+  let createResponse;
+
+  await fetch(`${currentAddress}/createlobby`, {
     method: "POST",
     body: JSON.stringify({
       name: lobbyName,
       playercount: maxPlayers,
       subject: subjectId,
-      game_date: gameDate
+      game_date: gameDate,
+      playerName: playerName
     }),
     headers: {
       "Content-type": "application/json"
     }
   })
-    .then((response) => response.json())
-    .then((json) => window.location.href = `${currentAddress}/lobby?lobby=${json.lobbyId}&language=${selectedLanguage}`, "_self");
+  .then(Response => Response.json())
+  .then(data => createResponse = data);
+
+  await fetch(`${currentAddress}/joinplayer`, {
+    method: "POST",
+    body: JSON.stringify({
+      lobbyId: createResponse.lobbyId,
+      name: playerName,
+      isHost: true
+    }),
+    headers: {"Content-Type": "application/json"}
+  })
+  .then((response) => response.json())
+  .then((data) => window.location.href = `${currentAddress}/lobby?lobby=${createResponse.lobbyId}&language=${selectedLanguage}`, "_self")
 }
 
 // fetch all lobby data of selected id, throw user into lobby, if user has no account, username = player/pelaaja {i}
