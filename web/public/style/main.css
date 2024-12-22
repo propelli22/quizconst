@@ -1,10 +1,5 @@
 @import url("https://use.typekit.net/kuq8csk.css");
 
-.modal, #admin-modal {
-    z-index: 500 !important;
-    position: absolute;
-}
-
 body {
     font-family: "laca-variable", sans-serif;
     margin: 0;
