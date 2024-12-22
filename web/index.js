@@ -133,8 +133,8 @@ app.get('/', async (req, res) => {
 
 app.get("/create", (req, res) => {
 	console.log("loaded /create")
-	const language = req.query.language
-	const sessionId = req.session.sessionId || null
+	const language = req.query.language;
+	const sessionId = req.session.sessionId || null;
 
 	if (language == "fi") {
 		res.render("create_a_game", {
@@ -152,6 +152,21 @@ app.get("/create", (req, res) => {
 			sessionId: sessionId,
 		})
 	}
+})
+
+app.post('/setCookie', (req, res) => {
+    console.log("used /setCookie");
+
+    const cookie = req.body.setCookie;
+
+    if (cookie == "firstCreateLoad") {
+        res.cookie('loadedCreate', true, {
+            httpOnly: true,
+            secure: false
+        });
+    } else {
+        res.status(400).json({"message": "An error occured, please try again. (invalid cookie request)"})
+    }
 })
 
 app.get('/game', async (req, res) => {
