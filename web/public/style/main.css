@@ -19,6 +19,8 @@ h1 {
     text-align: center;
 }
 
+
+
 header {
     height: 25vh;
     display: grid;
@@ -114,23 +116,26 @@ input[type="number"], select {
     text-align: right;
 }
 
-/* New styles for the players grid */
-.players-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-gap: 10px;
+.players-flex {
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    width: 60%;
+    margin-left: 120px; /* Add left margin */
+    margin-right: 120px; /* Add right margin */
 }
 
 .player-box {
     border: 1px solid #ccc;
     padding: 18px;
-    border-radius: 5px;     
+    border-radius: 5px;
     background-color: #f9f9f9;
     width: 145px;
     text-align: center;
     margin: 5px;
+    flex: 1 0 18%; /* Ensure 5 players per row */
+    max-width: 150px; /* Ensure max width */
 }
 
 @media (max-width: 1200px) {
@@ -164,30 +169,10 @@ input[type="number"], select {
     }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 425px) {
     .players-grid {
-        grid-template-columns: 1fr 1fr; /* 2 columns on very small screens */
-        justify-content: center; /* Center the grid on very small screens */
-    }
-
-    .player-box {
-        width: 130px; /* Adjust width for very small screens */
-        padding: 10px; /* Adjust padding for very small screens */
-        margin: 5px; /* Add margin to separate the boxes */
-    }
-
-    .players-grid .player-box:nth-child(odd) {
-        grid-column: 1; /* First column */
-    }
-
-    .players-grid .player-box:nth-child(even) {
-        grid-column: 2; /* Second column */
-    }
-}
-
-@media (max-width: 375px) {
-    .players-grid {
-        grid-template-columns: repeat(5, 1fr); /* 5 columns on very small screens */
+        display: flex; /* Use flexbox on very small screens */
+        flex-wrap: wrap;
         justify-content: center; /* Center the grid on very small screens */
     }
 
@@ -195,10 +180,7 @@ input[type="number"], select {
         width: 70px; /* Adjust width for very small screens */
         padding: 10px; /* Adjust padding for very small screens */
         margin: 5px; /* Add margin to separate the boxes */
-    }
-
-    .players-grid .player-box:nth-child(n+6) {
-        grid-column: span 5; /* Span 5 columns for the second row */
+        flex: 1 0 45%; /* Flexbox properties to handle wrapping */
     }
 
     #admin-settings-button {
@@ -209,6 +191,66 @@ input[type="number"], select {
         transform: translateX(-50%);
     }
 }
+
+
+@media (max-width: 375px) {
+    .players-grid {
+        display: flex; /* Use flexbox on very small screens */
+        flex-wrap: wrap;
+        justify-content: center; /* Center the grid on very small screens */
+        overflow: auto;
+    }
+
+    .player-box {
+        width: 70px; /* Adjust width for very small screens */
+        padding: 10px; /* Adjust padding for very small screens */
+        margin: 5px; /* Add margin to separate the boxes */
+        flex: 1 0 45%; /* Flexbox properties to handle wrapping */
+    }
+
+    #admin-settings-button {
+        position: relative;
+        margin-top: 20px;
+        width: 90%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    main {
+        padding-bottom: 60px; /* Add extra space at the bottom for the admin settings button */
+    }
+}
+
+
+@media (max-width: 320px) {
+    .players-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on very small screens */
+        justify-content: center; /* Center the grid on very small screens */
+    }
+
+    .player-box {
+        width: 130px; /* Adjust width for very small screens */
+        padding: 10px; /* Adjust padding for very small screens */
+        margin: 5px; /* Add margin to separate the boxes */
+    }
+
+    .players-grid .player-box:nth-child(n+6) {
+        grid-column: span 2; /* Span 2 columns for the second row */
+    }
+
+    #admin-settings-button {
+        position: relative;
+        margin-top: 20px;
+        width: 90%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    main {
+        padding-bottom: 60px; /* Add extra space at the bottom for the admin settings button */
+    }
+}
+
 
 #credits {
     display: none;
