@@ -68,6 +68,7 @@ input[type="number"], select {
     color: #164F46;
     border: 2px #164F46 solid;
     box-shadow: 1px 1px 2px #113D3B;
+    border-radius: 2px;
     cursor: pointer;
 }
 
@@ -100,7 +101,7 @@ input[type="number"], select {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    box-shadow: 1px 1px #113D3B;
+    box-shadow: 1px 1px 2px #113D3B;
 }
 
 #main-title {
