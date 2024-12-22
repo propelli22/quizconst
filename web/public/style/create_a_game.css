@@ -9,9 +9,34 @@ header {
     grid-template-rows: 100% !important;
 }
 
+#open-question-modal, #game-settings-button, #game-info-button {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#game-settings-button, #game-info-button {
+    width: 5%;
+}
+
+#game-info-button {
+    margin-bottom: 10px;
+}
+
 #game-creation {
     width: 100%;
-    height: 100%;
+}
+
+#game-settings-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#game-info-container {
+    display: flex;
+    justify-content: flex-end;
 }
 
 #question-container {
@@ -21,24 +46,11 @@ header {
     width: 10%;
 }
 
-#game-settings-container {
-    position: absolute;
-    top: 205px;
-    right: 0px;
-    z-index: 1;
-    width: 10%;
-}
-
-#game-settings-button {
-    position: absolute;
-    right: 0;
-}
-
 #selected-question-name {
     text-align: center;
     margin: 0;
-    white-space: normal; /* Allow text to wrap */
-    word-wrap: break-word; /* Break words if necessary */
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 .question-title {
@@ -58,6 +70,11 @@ header {
 .custom-file-upload {
     margin-left: 38%;
     margin-right: 38%;
+}
+
+#custom-file-upload {
+    margin-left: 35% !important;
+    margin-right: 35% !important;
 }
 
 .image-name-container {
@@ -93,19 +110,7 @@ header {
     cursor: pointer;
 }
 
-.modal {
-    display: none; 
-    position: fixed; 
-    z-index: 2;
-    left: 0;
-    top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: hidden;
-    background-color: rgba(21, 21, 21, 0.9);
-}
-
-.flexing-modal {
+.modal, .flexing-modal {
     display: none; 
     position: fixed; 
     z-index: 2;
@@ -120,7 +125,7 @@ header {
 .image-modal-content {
     width: 100%;
     background-color: #fefefe;
-	z-index: 2;
+    z-index: 2;
 }
 
 .modal-content {
@@ -131,7 +136,7 @@ header {
     border: 1px solid #888;
     width: 80%;
     background-color: #fefefe;
-	z-index: 2;
+    z-index: 2;
 }
 
 .flexing-modal-content {
@@ -142,7 +147,7 @@ header {
     border: 1px solid #888;
     width: 80%;
     background-color: #fefefe;
-	z-index: 2;
+    z-index: 2;
 }
 
 .close {
@@ -174,7 +179,7 @@ header {
     width: 100%;
     height: 100%;
     object-fit: contain;
-	z-index: 2;
+    z-index: 2;
 }
 
 .question-item {
@@ -183,34 +188,32 @@ header {
     border: 1px solid #ccc;
     cursor: pointer;
     text-align: center;
-    white-space: normal; /* Allow text to wrap */
-    word-wrap: break-word; /* Break words if necessary */
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 .edit-question-input {
-    border: 1px solid #ccc; /* Set a default border */
-    box-sizing: border-box; /* Ensure padding and border are included in the width and height */
-    width: 100%; /* Ensure the input takes the full width */
-    height: 100%; /* Ensure the input takes the full height */
-    margin: 0; /* Reset margin */
-    padding: 10px; /* Adjust padding as needed */
-    font-size: 1em; /* Adjust font size as needed */
-    font-weight: normal; /* Adjust font weight as needed */
-    background-color: white; /* Set background color */
-    color: black; /* Set text color */
-    display: block; /* Ensure the input is displayed as a block element */
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 10px;
+    font-size: 1em;
+    font-weight: normal;
+    background-color: white;
+    color: black;
+    display: block;
 }
 
 .game-name {
-    margin: 0;
+    margin-top: 40px;
 }
 
 .title {
-    margin-top: 20px;
     text-align: center;
-    margin-bottom: 20px; /* Adjust as needed */
-    white-space: normal; /* Allow text to wrap */
-    word-wrap: break-word; /* Break words if necessary */
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 #question-answers {
@@ -258,18 +261,18 @@ header {
     text-align: center;
     padding: 15px 0px 15px 0px;
     border: black 3px solid;
-    white-space: normal; /* Allow text to wrap */
-    word-wrap: break-word; /* Break words if necessary */
-    overflow-wrap: break-word; /* Ensure long words break */
-    overflow: hidden; /* Hide overflow */
-    width: 100%; /* Ensure the container takes full width */
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    overflow: hidden;
+    width: 100%;
 }
 
 .answer {
-    white-space: normal; /* Allow text to wrap */
-    word-wrap: break-word; /* Break words if necessary */
-    overflow-wrap: break-word; /* Ensure long words break */
-    margin: 0; /* Ensure no margin on the paragraph */
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    margin: 0;
 }
 
 .edit-input {
@@ -279,7 +282,7 @@ header {
 .edit-answer-input {
     border: 1px solid #ccc;
     box-sizing: border-box;
-    width: calc(100% - 40px); /* Adjust width to leave space for the counter */
+    width: calc(100% - 40px);
     height: 100%;
     margin: 0;
     padding: 10px;
@@ -297,14 +300,7 @@ header {
     transform: translateY(-50%);
     font-size: 0.8em;
     color: #555;
-    padding: 5px 10px; /* Add padding for better appearance */
-}
-
-#open-question-modal, #add-question, #settings-button {
-    background-color: #aaa;
-    padding: 0px 5px 0px 5px;
-    border: black 2px solid;
-	z-index: 2;
+    padding: 5px 10px;
 }
 
 .wrong {
@@ -315,26 +311,38 @@ header {
     background-color: #00ff00;
 }
 
-/* New styles for the image modal */
 #image-modal-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-	z-index: 2;
+    z-index: 2;
+}
+
+#image-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.9);
 }
 
 #fullscreen-image {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 20px;
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
-/* Styles for the game name modal */
 #game-settings-modal-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-	z-index: 2;
+    z-index: 2;
 }
 
 #game-name-input,
@@ -349,8 +357,8 @@ header {
 }
 
 #game-description-input {
-    height: 100px; /* Make the description input field larger */
-    resize: none; /* Prevent resizing */
+    height: 100px;
+    resize: none;
 }
 
 .relative {
@@ -387,19 +395,13 @@ header {
 #save-game-settings {
     margin-top: 20px;
     padding: 10px 20px;
-    color: white;
-    background-color: gray;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
-/* Styles for the settings modal */
 #settings-modal .modal-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-	z-index: 2;
+    z-index: 2;
 }
 
 .setting-item {
@@ -425,11 +427,10 @@ header {
 }
 
 #game-description-input-settings {
-    height: 100px; /* Make the description input field larger */
-    resize: none; /* Prevent resizing */
+    height: 100px;
+    resize: none;
 }
 
-/* Centering styles for the image upload container */
 .image-upload-container {
     display: flex;
     flex-direction: column;
@@ -441,27 +442,39 @@ header {
 .delete-button {
     cursor: pointer;
     margin-left: 10px;
-    float: right; /* Float the button to the right */
+    float: right;
 }
 
 #question-list {
-    max-height: calc(100vh - 200px); /* Adjust this value as needed to fit your design */
-    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
 }
 
 #save-game-button {
     float: right;
-    padding: 0 20px; /* Adjust padding to fit the text inside */
+    padding: 0 20px;
     min-height: 20px;
     right: auto;
+    width: 30%;
 }
 
 .question-not-selected {
-    display: none; /* Initially hidden */
+    display: none;
     text-align: center;
     font-size: 2em;
     color: #555;
     margin-top: 20%;
+}
+
+@media (max-width: 1024px) {
+    #header-nav {
+         height: 5vh !important;
+    }
+
+    .nav-button {
+        height: 100% !important;
+        z-index: 1;
+    }
 }
 
 @media (min-width: 1024px) {
@@ -470,14 +483,17 @@ header {
         margin: 0;
         width: 100%;
     }
+
     #open-question-modal {
         display: none;
     }
+
     #game-creation {
         display: flex;
         width: 100%;
         height: 100%;
     }
+
     .flexing-modal {
         display: block;
         position: relative; 
@@ -487,12 +503,14 @@ header {
         overflow: hidden;
         background-color: transparent;
     }
+
     .question-container {
         overflow: auto;
         min-width: 19%;
         max-width: 60%;
         top: 0 !important;
     }
+
     .flexing-modal-content {
         position: absolute;
         top: 0;
@@ -505,36 +523,45 @@ header {
         z-index: 1;
         box-sizing: border-box;
     }
+
     .resizer {
         width: 5px;
         background: #000;
         cursor: ew-resize;
         z-index: 1;
     }
+
     .resizable-right {
         flex-grow: 1;
         overflow: hidden;
         width: 60%;
+        height: 120%;
     }
+
     .game-name {
         text-align: center;
         margin: 0 auto;
         padding: 20px;
     }
+
     .question-container, .ressizable-right {
-        flex-grow: 1; /* Allow each child to grow equally */
+        flex-grow: 1;
     }
+
     #close-question-modal {
         display: none;
     }
+    
     #question-modal {
         display: block;
     }
+
     #save-game-button {
-        display: block !important; /* Ensure the button is visible */
+        display: block !important;
     }
+    
     #question-list {
-        max-height: calc(100vh - 425px); /* Adjust this value as needed to fit your design */
-        overflow-y: auto; /* Enable vertical scrolling */
+        max-height: calc(100vh - 425px);
+        overflow-y: auto;
     }
 }
