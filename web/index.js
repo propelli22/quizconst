@@ -253,7 +253,8 @@ app.post('/joinplayer', async (req, res) => {
     const body = {
         lobby: req.body.lobbyId,
         name: req.body.name,
-        accountId: req.body.accountId
+        accountId: req.body.accountId,
+        host: req.body.isHost
     }
 
     const responeJoin = await fetch('http://localhost:4000/joingame', {

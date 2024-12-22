@@ -193,10 +193,7 @@ app.post("/createlobby", (req, res) => {
   const connection = mysql.createConnection(dbconfig);
   connection.connect();
 
-  connection.query(
-    sql,
-    [subject, name, max_players, game_date],
-    (err, rows) => {
+  connection.query(sql, [subject, name, max_players, game_date], (err, rows) => {
       if (err) {
         throw err;
       }
@@ -566,18 +563,30 @@ app.post('/joingame', (req, res) => {
     const lobbyId = req.body.lobby;
     const name = req.body.name;
     const account = req.body.accountId;
+    const isHost = req.body.host;
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
-    const sql = 'INSERT INTO player (lobby_id, banned, name, account) VALUES (?,0,?,?)';   
+    const sql1 = 'INSERT INTO player (lobby_id, banned, name, account) VALUES (?,0,?,?)';   
+    const sql2 = 'INSERT INTO player (lobby_id, banned, name, account, host) VALUES (?,0,?,?,1)'
 
-    connection.query(sql, [lobbyId, name, account], (err, rows) => {
-      if (err) {
-        throw err;
-      }
+    if (isHost) {
+      connection.query(sql2, [lobbyId, name, account], (err, rows) => {
+        if (err) {
+          throw err
+        }
 
-      res.status(200).json(rows.insertId)
-    });
+        res.status(200).json(rows.insertId)
+      });
+    } else {
+      connection.query(sql1, [lobbyId, name, account], (err, rows) => {
+        if (err) {
+          throw err;
+        }
+  
+        res.status(200).json(rows.insertId)
+      });
+    }
 
     connection.end();
 });
