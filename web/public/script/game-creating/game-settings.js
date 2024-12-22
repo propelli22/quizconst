@@ -114,10 +114,14 @@ gameImageInput.addEventListener("change", handleImageUpload)
 
 gameImageNameContainer.addEventListener("click", () => {
 	imageModal.style.display = "block"
+	imagePreview.style.width = "100%"
+	imagePreview.style.height = "100%"
 })
 
 closeImageModal.addEventListener("click", () => {
 	imageModal.style.display = "none"
+	imagePreview.style.width = ""
+	imagePreview.style.height = ""
 })
 
 closeGameImageNameContainer.addEventListener("click", (event) => {

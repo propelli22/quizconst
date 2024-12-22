@@ -7,7 +7,9 @@
     </div>
     <div class="game-creation" id="game-creation">
         <div id="question-container" class="question-container">
-            <button id="open-question-modal">></button>
+            <button class="button" id="open-question-modal">
+                <img src="style/svgs/right-arrow-svgrepo-com.svg" alt="Info" width="24" height="24">
+            </button>
             <div id="question-modal" class="flexing-modal">
                 <div class="flexing-modal-content" id="question-modal-content">
                     <span class="close" id="close-question-modal">&times;</span>
@@ -15,15 +17,34 @@
                     <div id="question-list">
                         <div class="question-item" id="question1"><%= question %> 1</div>
                     </div>
-                    <button id="add-question"><%= add_question %></button>
+                    <button class="button" id="add-question"><%= add_question %></button>
                 </div>
             </div>
         </div>
         <div class="resizer"></div>
         <div class="resizable-right" id="main-container">
             <p id="question-not-selected" class="question-not-selected"><%= question_not_selected %></p>
+            <div id="game-info-container">
+                <button class="button" id="game-info-button">
+                    <img src="style/svgs/info-button-svgrepo-com.svg" alt="Info" width="24" height="24">
+                </button>
+                <div id="game-info-modal" class="modal">
+                    <div class="modal-content" id="game-info-modal-content">
+                        <span class="close" id="close-game-info-modal">&times;</span>
+                        <h2><%= editor_guide %></h2><br>
+                        <p><%= editor_guide_rename %></p><br>
+                        <p><%= editor_guide_add_question %></p><br>
+                        <p><%= editor_guide_add_image %></p><br>
+                        <p><%= editor_guide_question_settings %></p><br>
+                        <p><%= editor_guide_game_settings %></p><br>
+                        <p><%= editor_guide_done %></p>
+                    </div>
+                </div>
+            </div>
             <div id="game-settings-container">
-                <button id="game-settings-button"><</button>
+                <button class="button" id="game-settings-button">
+                    <img src="style/svgs/settings-gear-svgrepo-com.svg" alt="Info" width="24" height="24">
+                </button>
                 <div id="game-settings-modal" class="modal">
                     <div class="modal-content" id="game-settings-modal-content">
                         <span class="close" id="close-game-settings-modal">&times;</span>
@@ -45,26 +66,11 @@
                             <span id="image-name"></span>
                         </div>
                         <img class="uploaded-image" id="uploaded-image"/>
-                        <button id="save-game-settings"><%= save_game_settings %></button>
+                        <button class="button" id="save-game-settings"><%= save_game_settings %></button>
                         <div id="image-modal" class="modal" style="display: none;">
                             <span class="close" id="close-image-modal">&times;</span>
                             <img class="image-modal-content" id="fullscreen-image">
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div id="game-info-container">
-                <button id="game-info-button">i</button>
-                <div id="game-info-modal" class="modal">
-                    <div class="modal-content" id="game-info-modal-content">
-                        <span class="close" id="close-game-info-modal">&times;</span>
-                        <h2><%= game_info %></h2><br>
-                        <p><%= game_info_rename %></p><br>
-                        <p><%= game_info_add_question %></p><br>
-                        <p><%= game_info_add_image %></p><br>
-                        <p><%= game_info_question_settings %></p><br>
-                        <p><%= game_info_game_settings %></p><br>
-                        <p><%= game_info_done %></p>
                     </div>
                 </div>
             </div>
