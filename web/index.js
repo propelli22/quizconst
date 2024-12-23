@@ -44,6 +44,13 @@ app.get('/lobby', async (req, res) => {
     const language = req.query.language;
     const sessionId = req.headers.cookie || null;
     const lobbyId = req.query.lobby;
+    const admin = await getCookie('admin') || null;
+
+    async function getCookie(name) {
+        const value = `; ${req.headers.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
 
     const lobbyDataUrl = `http://localhost:4000/lobbydata?id=${lobbyId}`
     let lobbyData;
@@ -71,19 +78,22 @@ app.get('/lobby', async (req, res) => {
         res.render('aula', {
             ...fi_lobby,
             sessionId: sessionId,
-            lobbyData: lobbyData
+            lobbyData: lobbyData,
+            admin: admin
         });
     } else if(language === "en") {
         res.render('aula', {
             ...en_lobby,
             sessionId: sessionId,
-            lobbyData: lobbyData
+            lobbyData: lobbyData,
+            admin: admin
         });
     } else {
         res.render('aula', {
             ...en_lobby,
             sessionId: sessionId,
-            lobbyData: lobbyData
+            lobbyData: lobbyData,
+            admin: admin
         });
     }
 });
@@ -94,6 +104,13 @@ app.get('/', async (req, res) => {
 
     const language = req.query.language;
     const sessionId = req.headers.cookie || null;
+    const admin = await getCookie('admin') || null;
+
+    async function getCookie(name) {
+        const value = `; ${req.headers.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
 
     let subjectsURL = 'http://localhost:4000/getsubjects'
     const settings = {
@@ -114,42 +131,56 @@ app.get('/', async (req, res) => {
         res.render('home', {
             ...fi_home,
             subjects: subjectsURL,
-            sessionId: sessionId
+            sessionId: sessionId,
+            admin: admin
         });
     } else if (language == 'en') {
         res.render('home', {
             ...en_home,
             subjects: subjectsURL,
-            sessionId: sessionId
+            sessionId: sessionId,
+            admin: admin
         });
     } else { // by default render the finnish verison
         res.render('home', {
             ...fi_home,
             subjects: subjectsURL,
-            sessionId: sessionId
+            sessionId: sessionId,
+            admin: admin
         });
     }
 });
 
-app.get("/create", (req, res) => {
+app.get("/create", async (req, res) => {
 	console.log("loaded /create")
+
 	const language = req.query.language;
 	const sessionId = req.session.sessionId || null;
+    const admin = await getCookie('admin') || null;
+
+    async function getCookie(name) {
+        const value = `; ${req.headers.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
 
 	if (language == "fi") {
 		res.render("create_a_game", {
 			...fi_create,
 			sessionId: sessionId,
+            admin: admin
 		})
 	} else if (language == "en") {
 		res.render("create_a_game", {
 			...en_create,
 			sessionId: sessionId,
+            admin: admin
 		})
 	} else {
 		res.render("create_a_game", {
 			...fi_create,
 			sessionId: sessionId,
+            admin: admin
 		})
 	}
 })
@@ -176,21 +207,31 @@ app.get('/game', async (req, res) => {
     const lobby = req.query.lobby;
     const language = req.query.language;
     const sessionId = req.headers.cookie || null;
+    const admin = await getCookie('admin') || null;
+
+    async function getCookie(name) {
+        const value = `; ${req.headers.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
 
     if (language == 'fi') {
         res.render('game', {
             ...fi_game,
-            sessionId: sessionId    
+            sessionId: sessionId,
+            admin: admin
         });
     } else if (language == 'en') {
         res.render('game', {
             ...en_game,
-            sessionId: sessionId
+            sessionId: sessionId,
+            admin: admin
         });
     } else { // by default, render the finnish version
         res.render('game', {
             ...fi_game,
-            sessionId: sessionId
+            sessionId: sessionId,
+            admin: admin
         });
     }
 });
@@ -289,6 +330,8 @@ app.post('/login', async (req, res) => {
 
     const checkResult = await checkLogin.json();
 
+    console.log(checkResult)
+
     if (checkResult.passwordResult === true) {
         const loggedUser = `${input_name}`
         req.session.userId = input_name;
@@ -299,6 +342,14 @@ app.post('/login', async (req, res) => {
             secure: false,
             maxAge: 24 * 60 * 60 * 1000
         });
+
+        if(checkResult.isAdmin) {
+            res.cookie('admin', checkResult.isAdmin, {
+                httpOnly: true,
+                secure: false,
+                maxAge: 24 * 60 * 60 * 1000
+            });
+        }
 
         const lastPage = req.query.redirect || '/';
         res.status(200).redirect(lastPage);

@@ -1,6 +1,10 @@
     <footer>
         <div id="footer-left">
-            <button id="admin-settings-button" class="button"><%= admin_settings %></button>
+            <% if (admin) { %>
+                <button id="admin-settings-button" class="button"><%= admin_settings %></button>
+            <% } else { %>
+                <!-- nothing to see here :), yet! (and there wont be anything here most likely!) -->
+            <% } %>
         </div>
         <div id="credits">
             <p id="made_by"><%= made_by %></p>
