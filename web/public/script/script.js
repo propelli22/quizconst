@@ -37,6 +37,10 @@ var userModal = document.getElementById("user-modal");
 var userButton = document.getElementById("account");
 var userSpan = document.getElementsByClassName("close")[3];
 
+var joinLobbyModal = document.getElementById("join-lobby-modal");
+var joinLobbyButton = document.getElementById("join-button");
+var joinLobbySpan = document.getElementsByClassName("close")[2];
+
 const cLobbySubjectButton = document.getElementById("c-lobby-select-subject");
  
 if (subjectButton) {
@@ -89,6 +93,14 @@ lobbyButton.onclick = function() {
 
 lobbySpan.onclick = function() {
   lobbyModal.style.display = "none";
+}
+
+joinLobbyButton.onclick = function() {
+  joinLobbyModal.style.display = "block";
+}
+
+joinLobbySpan.onclick = function() {
+  joinLobbyModal.style.display = "none";
 }
 
 let count = 16;
@@ -166,17 +178,15 @@ async function newLobby() {
   .then((data) => window.location.href = `${currentAddress}/lobby?lobby=${createResponse.lobbyId}&language=${selectedLanguage}`, "_self")
 }
 
+function setDisplayId() {
+  document.getElementById("lobby-code-p").innerHTML = document.getElementById("lobby-code").value
+}
+
 // fetch all lobby data of selected id, throw user into lobby, if user has no account, username = player/pelaaja {i}
 async function joinLobby() {
   const lobbyId = document.getElementById("lobby-code").value;
-  const playerName = "Oodi"
-
-  let dataResult;
-  let joinResult;
-
-  const dataBody = {
-    lobbyId: lobbyId
-  }
+  const playerName = document.getElementById("joinPlayerName").value;
+  const selectedLanguage = document.getElementById("language-selection").value;
 
   const joinBody = {
     lobbyId: lobbyId,
@@ -188,17 +198,8 @@ async function joinLobby() {
     body: JSON.stringify(joinBody),
     headers: {"Content-Type": "application/json"}
   })
-  .then(Respone => Respone.json())
-  .then(data => joinResult = data);
-
-
-  await fetch(`${currentAddress}/lobbydata`, {
-    method: "POST",
-    body: JSON.stringify(dataBody),
-    headers: {"Content-Type": "application/json"}
-  })
-  .then(Response => Response.json())
-  .then(data => dataResult = data);
+  .then((response) => response.json())
+  .then((data) => window.location.href = `${currentAddress}/lobby?lobby=${lobbyId}&language=${selectedLanguage}`, "_self");
 }
 
 //Log in module do not change! (i changed it :) - Kalle)
