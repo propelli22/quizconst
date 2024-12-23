@@ -3,6 +3,8 @@ var logModal = document.getElementById("log-modal");
 
 const currentAddress = window.location.origin;
 
+let selectedSubject;
+
 function toggleMenu() {
     const buttons = document.querySelectorAll('.nav-button');
 
@@ -114,12 +116,21 @@ function countDown() {
   document.getElementById("count").innerHTML = count;
 }
 
+function selectSubject(id, name, desc, author, img) {
+  selectedSubject = id;
+
+  document.getElementById("find-subject-modal").style.display = "none";
+
+  const subjectDiv = document.getElementById("selected-subject")
+  // TODO: update selected-subject to have the selected subject box, see find subject modal
+}
+
 // create a new lobby, return lobby id
 async function newLobby() {
   const lobbyName = document.getElementById("lobbyName").value;
   const playerName = document.getElementById("playerName").value;
   const maxPlayers = document.getElementById("count").innerHTML;
-  const subjectId = "3";
+  const subjectId = selectedSubject;
   const date = new Date();
   let gameDate = date.toISOString();
   const selectedLanguage = document.getElementById("language-selection").value;
