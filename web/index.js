@@ -155,7 +155,7 @@ app.get("/create", async (req, res) => {
 	console.log("loaded /create")
 
 	const language = req.query.language;
-	const sessionId = req.session.sessionId || null;
+	const sessionId = req.headers.cookie || null;
     const admin = await getCookie('admin') || null;
 
     async function getCookie(name) {
