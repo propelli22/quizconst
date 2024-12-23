@@ -329,3 +329,21 @@ input[type="number"], select {
         padding: 10px;
     }
 }
+
+body {
+    background: linear-gradient(45deg, #a6d0c9, #4e958a);
+    background-size: 300% 200%;
+    animation: gradient 10s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
