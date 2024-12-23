@@ -14,7 +14,9 @@ h1 {
     text-align: center;
 }
 
-
+#leave-button {
+    display: none;
+}
 
 header {
     height: 25vh;
