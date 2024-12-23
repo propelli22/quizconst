@@ -4,6 +4,8 @@
     "loading": "Ladataan...",
     "questions": "Kysymyksiä:",
     "join_game": "Liity",
+    "joinLobby": "Liity peliin",
+    "lobbyCode": "Aulan ID:",
     "input_code": "Syötä koodi...",
     "create_lobby": "Luo aula",
     "lobby_name": "Aulan nimi:",
@@ -60,5 +62,6 @@
     "deleteLobby": "Poista aula",
     "lobbyName": "Aulan nimi",
     "errorMessageLobby": "Aulaa ei löytynyt",
-    "typeHere": "Kirjoita tähän"
+    "typeHere": "Kirjoita tähän",
+    "usernameInput": "Kirjoita nimesi:"
 }

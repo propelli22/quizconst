@@ -3,6 +3,8 @@ var logModal = document.getElementById("log-modal");
 
 const currentAddress = window.location.origin;
 
+let selectedSubject;
+
 function toggleMenu() {
     const buttons = document.querySelectorAll('.nav-button');
 
@@ -34,6 +36,10 @@ var lobbySpan = document.getElementsByClassName("close")[1];
 var userModal = document.getElementById("user-modal");
 var userButton = document.getElementById("account");
 var userSpan = document.getElementsByClassName("close")[3];
+
+var joinLobbyModal = document.getElementById("join-lobby-modal");
+var joinLobbyButton = document.getElementById("join-button");
+var joinLobbySpan = document.getElementsByClassName("close")[2];
 
 const cLobbySubjectButton = document.getElementById("c-lobby-select-subject");
  
@@ -89,6 +95,14 @@ lobbySpan.onclick = function() {
   lobbyModal.style.display = "none";
 }
 
+joinLobbyButton.onclick = function() {
+  joinLobbyModal.style.display = "block";
+}
+
+joinLobbySpan.onclick = function() {
+  joinLobbyModal.style.display = "none";
+}
+
 let count = 16;
 let maxLimit = 100;
 
@@ -114,43 +128,65 @@ function countDown() {
   document.getElementById("count").innerHTML = count;
 }
 
+function selectSubject(id, name, desc, author, img) {
+  selectedSubject = id;
+
+  document.getElementById("find-subject-modal").style.display = "none";
+
+  const subjectDiv = document.getElementById("selected-subject")
+  // TODO: update selected-subject to have the selected subject box, see find subject modal
+}
+
 // create a new lobby, return lobby id
-function newLobby() {
-  const lobbyName = document.getElementById("lobbyName").innerHTML;
-  //const maxPlayers = document.getElementById("count").innerHTML;
+async function newLobby() {
+  const lobbyName = document.getElementById("lobbyName").value;
+  const playerName = document.getElementById("playerName").value;
   const maxPlayers = document.getElementById("count").innerHTML;
-  const subjectId = "3";
+  const subjectId = selectedSubject;
   const date = new Date();
   let gameDate = date.toISOString();
   const selectedLanguage = document.getElementById("language-selection").value;
 
-  fetch(`${currentAddress}/createlobby`, {
+  let createResponse;
+
+  await fetch(`${currentAddress}/createlobby`, {
     method: "POST",
     body: JSON.stringify({
       name: lobbyName,
       playercount: maxPlayers,
       subject: subjectId,
-      game_date: gameDate
+      game_date: gameDate,
+      playerName: playerName
     }),
     headers: {
       "Content-type": "application/json"
     }
   })
-    .then((response) => response.json())
-    .then((json) => window.location.href = `${currentAddress}/lobby?lobby=${json.lobbyId}&language=${selectedLanguage}`, "_self");
+  .then(Response => Response.json())
+  .then(data => createResponse = data);
+
+  await fetch(`${currentAddress}/joinplayer`, {
+    method: "POST",
+    body: JSON.stringify({
+      lobbyId: createResponse.lobbyId,
+      name: playerName,
+      isHost: true
+    }),
+    headers: {"Content-Type": "application/json"}
+  })
+  .then((response) => response.json())
+  .then((data) => window.location.href = `${currentAddress}/lobby?lobby=${createResponse.lobbyId}&language=${selectedLanguage}`, "_self")
+}
+
+function setDisplayId() {
+  document.getElementById("lobby-code-p").innerHTML = document.getElementById("lobby-code").value
 }
 
 // fetch all lobby data of selected id, throw user into lobby, if user has no account, username = player/pelaaja {i}
 async function joinLobby() {
   const lobbyId = document.getElementById("lobby-code").value;
-  const playerName = "Oodi"
-
-  let dataResult;
-  let joinResult;
-
-  const dataBody = {
-    lobbyId: lobbyId
-  }
+  const playerName = document.getElementById("joinPlayerName").value;
+  const selectedLanguage = document.getElementById("language-selection").value;
 
   const joinBody = {
     lobbyId: lobbyId,
@@ -162,17 +198,8 @@ async function joinLobby() {
     body: JSON.stringify(joinBody),
     headers: {"Content-Type": "application/json"}
   })
-  .then(Respone => Respone.json())
-  .then(data => joinResult = data);
-
-
-  await fetch(`${currentAddress}/lobbydata`, {
-    method: "POST",
-    body: JSON.stringify(dataBody),
-    headers: {"Content-Type": "application/json"}
-  })
-  .then(Response => Response.json())
-  .then(data => dataResult = data);
+  .then((response) => response.json())
+  .then((data) => window.location.href = `${currentAddress}/lobby?lobby=${lobbyId}&language=${selectedLanguage}`, "_self");
 }
 
 //Log in module do not change! (i changed it :) - Kalle)

@@ -1,10 +1,5 @@
 @import url("https://use.typekit.net/kuq8csk.css");
 
-.modal, #admin-modal {
-    z-index: 500 !important;
-    position: absolute;
-}
-
 body {
     font-family: "laca-variable", sans-serif;
     margin: 0;
@@ -19,7 +14,9 @@ h1 {
     text-align: center;
 }
 
-
+#leave-button {
+    display: none;
+}
 
 header {
     height: 25vh;
@@ -333,4 +330,22 @@ input[type="number"], select {
         grid-column: 6 / span 2;
         padding: 10px;
     }
+}
+
+body {
+    background: linear-gradient(45deg, #a6d0c9, #4e958a);
+    background-size: 300% 200%;
+    animation: gradient 10s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }

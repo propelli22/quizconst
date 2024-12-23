@@ -6,6 +6,8 @@
         <form method="post" action="localhost:4000/createlobby">
             <h3><%= lobby_name %></h3>
             <input type="text" name="lobbyname" id="lobbyName" placeholder="<%= typeHere %>" class="textInput">
+            <h3><%= usernameInput %></h3>
+            <input type="text" name="playername" id="playerName" placeholder="<%= typeHere %>" class="textInput">
             <h3><%= max_players %></h3>
             <div id="player-count-div">
                 <input type="button" id="count-up" class="button" value="+" onclick="countUp()">
