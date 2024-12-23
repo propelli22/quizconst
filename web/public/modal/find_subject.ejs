@@ -8,12 +8,12 @@
             <% for (let subject of subjects) { %>
                 <div class="subject-selection">
                     <div class="subject-data">
-                        <h2><%= subject.subject_title %></h2>
-                        <p><%= subject.subject_description %></p>
-                        <p><%= subject.username %></p>
-                        <button id="<%= subject.subject_id %>" class="select-button" onclick="alert(this.id)"><%= select %></button>
+                        <h2 id="subject-<%= subject.subject_id %>-title"><%= subject.subject_title %></h2>
+                        <p id="subject-<%= subject.subject_id %>-description"><%= subject.subject_description %></p>
+                        <p id="subject-<%= subject.subject_id %>-author"><%= subject.username %></p>
+                        <button id="subject-<%= subject.subject_id %>" class="select-button" onclick="selectSubject(this.id)"><%= select %></button>
                     </div>
-                    <img src="style/content/public_img/<%= subject.subject_image %>" alt="Image related to <%= subject.subject_title %>">
+                    <img src="style/content/public_img/<%= subject.subject_image %>" alt="Image related to <%= subject.subject_title %>" id="subject-<%= subject.subject_id %>-image">
                 </div>
             <% } %>
         </div>
