@@ -87,20 +87,24 @@ if (userButton) {
   }
 }
 
-lobbyButton.onclick = function() {
-  lobbyModal.style.display = "block";
+if(lobbyButton) {
+  lobbyButton.onclick = function() {
+    lobbyModal.style.display = "block";
+  }
+  
+  lobbySpan.onclick = function() {
+    lobbyModal.style.display = "none";
+  }
 }
 
-lobbySpan.onclick = function() {
-  lobbyModal.style.display = "none";
-}
-
-joinLobbyButton.onclick = function() {
-  joinLobbyModal.style.display = "block";
-}
-
-joinLobbySpan.onclick = function() {
-  joinLobbyModal.style.display = "none";
+if(joinLobbyButton) {
+  joinLobbyButton.onclick = function() {
+    joinLobbyModal.style.display = "block";
+  }
+  
+  joinLobbySpan.onclick = function() {
+    joinLobbyModal.style.display = "none";
+  }
 }
 
 let count = 16;
@@ -203,146 +207,148 @@ async function joinLobby() {
 }
 
 //Log in module do not change! (i changed it :) - Kalle)
-if(document.getElementById("log-in")) {
+if(window.location.pathname != '/game') {
   document.getElementById("log-in").addEventListener("click", () => {
     logModal.style.display = "block";
   });
-}
 
-document.getElementById("log-close-button").addEventListener("click", () => {
+  document.getElementById("log-close-button").addEventListener("click", () => {
     logModal.style.display = "none";
-});
+  });
+
+  //Sign up validation !!!
+  var emailPattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.[a-z]{2,}(?:\.[a-z]{2,})?$/i;
+  var passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+
+  document.getElementById("sign-up-button").addEventListener("click", () => {
+
+      let usernameSignup = document.getElementById("username").value;
+      let wrongNameError = document.getElementById("wrongName");
+      let emptyNameError = document.getElementById("emptyName");
+
+      let email = document.getElementById("email").value;
+      let wrongEmailError = document.getElementById("wrongEmail");
+      let emptyEmailError = document.getElementById("emptyEmail");
+
+      let passwordSignup = document.getElementById("password").value;
+      let wrongPasswordError = document.getElementById("wrongPasswordSignup");
+      let emptyPasswordError = document.getElementById("emptyPasswordSignup");
+
+      let isValid = true;
+
+      // Verification of the input fields (name, email, password)
+      if (usernameSignup == "") {
+          emptyNameError.style.display = "block";
+          emptyNameError.style.color = "red";
+          wrongNameError.style.display = "none";
+          isValid = false;
+      } else if (usernameSignup.length < 4 || usernameSignup.length > 14) {
+          wrongNameError.style.display = "block";
+          wrongNameError.style.color = "red";
+          emptyNameError.style.display = "none";
+          isValid = false;
+      } else {
+          wrongNameError.style.display = "none";
+          emptyNameError.style.display = "none";
+      }
+
+
+      if (email == "") {
+          emptyEmailError.style.display = "block";
+          wrongEmailError.style.display = "none";
+          emptyEmailError.style.color = "red";
+          isValid = false;
+      } else if (!emailPattern.test(email)) {
+          wrongEmailError.style.display = "block";
+          wrongEmailError.style.color = "red";
+          emptyEmailError.style.display = "none";
+          isValid = false;
+      } else {
+          wrongEmailError.style.display = "none";
+          emptyEmailError.style.display = "none";
+      }
+
+      if (passwordSignup == "") {
+          emptyPasswordError.style.display = "block";
+          wrongPasswordError.style.display = "none";
+          emptyPasswordError.style.color = "red";
+          isValid = false;
+      }
+      else if (!passwordPattern.test(passwordSignup)) {
+          wrongPasswordError.style.display = "block";
+          wrongPasswordError.style.color = "red";
+          emptyPasswordError.style.display = "none";
+          isValid = false;
+      } else {
+          wrongPasswordError.style.display = "none";
+          emptyEmailError.style.display = "none";
+      }
+
+      if (isValid) {
+          document.getElementById("sign-up-content").onsubmit = function() { return true; };
+      } else {
+          document.getElementById("sign-up-content").onsubmit = function() { return false; };
+      }
+  });
+
+  //Log in validation
+
+  // Get the values and IDs from the input fields
+  document.getElementById("log-in-button").addEventListener("click", () => {
+      const usernameLogIn = document.getElementById("login-username").value;
+      const wrongNameLogError = document.getElementById("wrongNameLogin");
+      const emptyNameLogError = document.getElementById("emptyNameLogin");
+
+      const passwordLogin = document.getElementById("login-password").value;
+      const emptyPasswordError = document.getElementById("emptyPasswordLogin");
+      const wrongPasswordError = document.getElementById("wrongPasswordLogin");
+
+      // Set the validation to true
+      var isValid2 = true;
+
+      //Verification of the input fields (name, password)
+
+      if (usernameLogIn == "") {
+          emptyNameLogError.style.display = "block";
+          emptyNameLogError.style.color = "red";
+          wrongNameLogError.style.display = "none";
+          isValid2 = false;
+      } else if (usernameLogIn.length < 4 || usernameLogIn.length > 14) { /*change when doing backend to match password in data*/
+          wrongNameLogError.style.display = "block";
+          wrongNameLogError.style.color = "red";
+          emptyNameLogError.style.display = "none";
+          isValid2 = false;
+      } else {
+          wrongNameLogError.style.display = "none";
+          emptyNameLogError.style.display = "none";
+      }
+
+
+      if (passwordLogin == "") {
+          emptyPasswordError.style.display = "block";
+          wrongPasswordError.style.display = "none";
+          emptyPasswordError.style.color = "red";
+          isValid2 = false;
+      } else if(!passwordPattern .test(passwordLogin)) {
+          wrongPasswordError.style.display = "block";
+          wrongPasswordError.style.color = "red";
+          emptyPasswordError.style.display = "none";
+          isValid2 = false;
+      } else {
+          wrongPasswordError.style.display = "none";
+          emptyPasswordError.style.display = "none";
+      }
+
+      // If the validation is true, the form will be submitted else it will not
+      if (isValid2) {
+          document.getElementById("log-in-content").onsubmit = function() { return true; };
+      } else {
+          document.getElementById("log-in-content").onsubmit = function() { return false; };
+      }
+  });
+}
       
-//Sign up validation !!!
-var emailPattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.[a-z]{2,}(?:\.[a-z]{2,})?$/i;
-var passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 
-document.getElementById("sign-up-button").addEventListener("click", () => {
-
-    let usernameSignup = document.getElementById("username").value;
-    let wrongNameError = document.getElementById("wrongName");
-    let emptyNameError = document.getElementById("emptyName");
-
-    let email = document.getElementById("email").value;
-    let wrongEmailError = document.getElementById("wrongEmail");
-    let emptyEmailError = document.getElementById("emptyEmail");
-
-    let passwordSignup = document.getElementById("password").value;
-    let wrongPasswordError = document.getElementById("wrongPasswordSignup");
-    let emptyPasswordError = document.getElementById("emptyPasswordSignup");
-
-    let isValid = true;
-
-    // Verification of the input fields (name, email, password)
-    if (usernameSignup == "") {
-        emptyNameError.style.display = "block";
-        emptyNameError.style.color = "red";
-        wrongNameError.style.display = "none";
-        isValid = false;
-    } else if (usernameSignup.length < 4 || usernameSignup.length > 14) {
-        wrongNameError.style.display = "block";
-        wrongNameError.style.color = "red";
-        emptyNameError.style.display = "none";
-        isValid = false;
-    } else {
-        wrongNameError.style.display = "none";
-        emptyNameError.style.display = "none";
-    }
-
-
-    if (email == "") {
-        emptyEmailError.style.display = "block";
-        wrongEmailError.style.display = "none";
-        emptyEmailError.style.color = "red";
-        isValid = false;
-    } else if (!emailPattern.test(email)) {
-        wrongEmailError.style.display = "block";
-        wrongEmailError.style.color = "red";
-        emptyEmailError.style.display = "none";
-        isValid = false;
-    } else {
-        wrongEmailError.style.display = "none";
-        emptyEmailError.style.display = "none";
-    }
-    
-    if (passwordSignup == "") {
-        emptyPasswordError.style.display = "block";
-        wrongPasswordError.style.display = "none";
-        emptyPasswordError.style.color = "red";
-        isValid = false;
-    }
-    else if (!passwordPattern.test(passwordSignup)) {
-        wrongPasswordError.style.display = "block";
-        wrongPasswordError.style.color = "red";
-        emptyPasswordError.style.display = "none";
-        isValid = false;
-    } else {
-        wrongPasswordError.style.display = "none";
-        emptyEmailError.style.display = "none";
-    }
-
-    if (isValid) {
-        document.getElementById("sign-up-content").onsubmit = function() { return true; };
-    } else {
-        document.getElementById("sign-up-content").onsubmit = function() { return false; };
-    }
-});
-
-//Log in validation
-
-// Get the values and IDs from the input fields
-document.getElementById("log-in-button").addEventListener("click", () => {
-    const usernameLogIn = document.getElementById("login-username").value;
-    const wrongNameLogError = document.getElementById("wrongNameLogin");
-    const emptyNameLogError = document.getElementById("emptyNameLogin");
-
-    const passwordLogin = document.getElementById("login-password").value;
-    const emptyPasswordError = document.getElementById("emptyPasswordLogin");
-    const wrongPasswordError = document.getElementById("wrongPasswordLogin");
-    
-    // Set the validation to true
-    var isValid2 = true;
-
-    //Verification of the input fields (name, password)
-
-    if (usernameLogIn == "") {
-        emptyNameLogError.style.display = "block";
-        emptyNameLogError.style.color = "red";
-        wrongNameLogError.style.display = "none";
-        isValid2 = false;
-    } else if (usernameLogIn.length < 4 || usernameLogIn.length > 14) { /*change when doing backend to match password in data*/
-        wrongNameLogError.style.display = "block";
-        wrongNameLogError.style.color = "red";
-        emptyNameLogError.style.display = "none";
-        isValid2 = false;
-    } else {
-        wrongNameLogError.style.display = "none";
-        emptyNameLogError.style.display = "none";
-    }
-
-
-    if (passwordLogin == "") {
-        emptyPasswordError.style.display = "block";
-        wrongPasswordError.style.display = "none";
-        emptyPasswordError.style.color = "red";
-        isValid2 = false;
-    } else if(!passwordPattern .test(passwordLogin)) {
-        wrongPasswordError.style.display = "block";
-        wrongPasswordError.style.color = "red";
-        emptyPasswordError.style.display = "none";
-        isValid2 = false;
-    } else {
-        wrongPasswordError.style.display = "none";
-        emptyPasswordError.style.display = "none";
-    }
-
-    // If the validation is true, the form will be submitted else it will not
-    if (isValid2) {
-        document.getElementById("log-in-content").onsubmit = function() { return true; };
-    } else {
-        document.getElementById("log-in-content").onsubmit = function() { return false; };
-    }
-});
 
 console.log("Quizconst");
 console.log("Project made by: Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra");
