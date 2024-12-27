@@ -42,7 +42,7 @@ app.get('/lobby', async (req, res) => {
     console.log("loaded /lobby")
 
     const language = req.query.language;
-    const sessionId = req.headers.cookie || null;
+    const sessionId = await getCookie('sessionId') || null;
     const lobbyId = req.query.lobby;
     const admin = await getCookie('admin') || null;
 
@@ -79,6 +79,7 @@ app.get('/lobby', async (req, res) => {
             ...fi_lobby,
             sessionId: sessionId,
             lobbyData: lobbyData,
+            lobbyId: lobbyId,
             admin: admin
         });
     } else if(language === "en") {
@@ -86,6 +87,7 @@ app.get('/lobby', async (req, res) => {
             ...en_lobby,
             sessionId: sessionId,
             lobbyData: lobbyData,
+            lobbyId: lobbyId,
             admin: admin
         });
     } else {
@@ -93,6 +95,7 @@ app.get('/lobby', async (req, res) => {
             ...en_lobby,
             sessionId: sessionId,
             lobbyData: lobbyData,
+            lobbyId: lobbyId,
             admin: admin
         });
     }
@@ -103,7 +106,7 @@ app.get('/', async (req, res) => {
     console.log("loaded / (frontpage)");
 
     const language = req.query.language;
-    const sessionId = req.headers.cookie || null;
+    const sessionId = await getCookie('sessionId') || null;
     const admin = await getCookie('admin') || null;
 
     async function getCookie(name) {
@@ -155,7 +158,7 @@ app.get("/create", async (req, res) => {
 	console.log("loaded /create")
 
 	const language = req.query.language;
-	const sessionId = req.headers.cookie || null;
+	const sessionId = await getCookie('sessionId') || null;
     const admin = await getCookie('admin') || null;
 
     async function getCookie(name) {
@@ -206,7 +209,7 @@ app.get('/game', async (req, res) => {
     console.log("loaded /game");
     const lobby = req.query.lobby;
     const language = req.query.language;
-    const sessionId = req.headers.cookie || null;
+    const sessionId = await getCookie('sessionId') || null;
     const admin = await getCookie('admin') || null;
 
     async function getCookie(name) {
