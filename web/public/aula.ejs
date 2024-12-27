@@ -12,6 +12,7 @@
         </div>
     <% } else { %>
         <h1><%= lobbyData.lobbydata[0].lobbyName %></h1>
+        <p><%= lobbyCode %>: <%= lobbyId %></p>
         <div class="players-grid" id="players-grid">
             <!--<div class="player-box host" id="host-player">
                 <p>Pelaaja 1 (Host)</p>
@@ -27,3 +28,4 @@
 <%- include('partials/footer') %>
 <script src="script/script.js"></script>
 <script src="script/aula.js"></script>
+<script src="script/loadPlayers.js"></script>

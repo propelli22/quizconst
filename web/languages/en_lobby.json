@@ -26,6 +26,7 @@
     "loading": "Loading...",
     "questions": "Questions: ",
     "user": "User",
+    "lobbyCode": "Lobby code",
     "made_by": "Built by:",
     "developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
     "info": "2024, v1"
