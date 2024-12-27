@@ -118,9 +118,9 @@ input[type="number"], select {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    width: 60%;
-    margin-left: 120px; /* Add left margin */
-    margin-right: 120px; /* Add right margin */
+    width: 60vw;
+    margin-left: 120px;
+    margin-right: 120px;
 }
 
 .player-box {
@@ -128,11 +128,10 @@ input[type="number"], select {
     padding: 18px;
     border-radius: 5px;
     background-color: #f9f9f9;
-    width: 145px;
     text-align: center;
     margin: 5px;
-    flex: 1 0 18%; /* Ensure 5 players per row */
-    max-width: 150px; /* Ensure max width */
+    flex: 1 0 18%;
+    height: 18%;
 }
 
 @media (max-width: 1200px) {
