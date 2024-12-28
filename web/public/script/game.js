@@ -276,6 +276,7 @@ async function runQuestion(questionData) {
 }
 
 // do not touch! easter egg :)
+console.clear();
 console.log("Wrong place fool, there are no answers to be given here :) or is there?");
 // TODO FOR KALLE: as an easter egg, add an command that can be ran in the console
 // the command should output answers to the questions, BUT, they are all wrong :)
