@@ -11,12 +11,13 @@
                 <h2><%= join_game %></h2>
                 <form method="get">
                     <input type="number" id="lobby-code" placeholder="<%= input_code %>">
-                    <input type="button" value="<%= join_game %>" class="button" id="join-button" onclick="joinLobby()">
+                    <input type="button" value="<%= join_game %>" class="button" id="join-button" onclick="setDisplayId()">
                 </form>
             </div>
         </div>
         <%- include('modal/find_subject') %>
         <%- include('modal/create_lobby') %>
+        <%- include('modal/join_lobby') %>
         <%- include('modal/login') %>
         <%- include('modal/user') %>
         <%- include('modal/admin_settings') %>

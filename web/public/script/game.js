@@ -34,7 +34,7 @@ async function getQuestionCount() {
     }
     
     // fetch all questions of a subject to figure out how many questions there are and what their id:s are
-    await fetch(`${currentAddress}/gamedata`, {
+    await fetch(`${currentAddressGame}/gamedata`, {
         method: 'POST',
         body: JSON.stringify(getQuestionsBody),
         headers: {'Content-Type': 'application/json'}
@@ -67,7 +67,7 @@ async function getQuestion(id) {
         questionId: id
     }
 
-    await fetch(`${currentAddress}/gamedata`, {
+    await fetch(`${currentAddressGame}/gamedata`, {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {'Content-Type': 'application/json'}
@@ -100,7 +100,7 @@ async function setPlayerReady(recivedPoints) {
         recivedPoints: recivedPoints
     }
 
-    await fetch(`${currentAddress}/gamedata`, {
+    await fetch(`${currentAddressGame}/gamedata`, {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {'Content-Type': 'application/json'}
@@ -144,7 +144,7 @@ async function fetchQuestionAnswers(questionData) {
         questionId: questionData.questionId
     }
 
-    await fetch(`${currentAddress}/gamedata`, {
+    await fetch(`${currentAddressGame}/gamedata`, {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {'Content-Type': 'application/json'}
@@ -220,7 +220,7 @@ async function runQuestion(questionData) {
         questionId: questionId
     }
     
-    await fetch(`${currentAddress}/gamedata`, {
+    await fetch(`${currentAddressGame}/gamedata`, {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {'Content-Type': 'application/json'}
@@ -276,6 +276,7 @@ async function runQuestion(questionData) {
 }
 
 // do not touch! easter egg :)
+console.clear();
 console.log("Wrong place fool, there are no answers to be given here :) or is there?");
 // TODO FOR KALLE: as an easter egg, add an command that can be ran in the console
 // the command should output answers to the questions, BUT, they are all wrong :)
@@ -334,7 +335,7 @@ async function showResults() {
         playerId: playerId
     }
     
-    await fetch(`${currentAddress}/gamedata`, {
+    await fetch(`${currentAddressGame}/gamedata`, {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {'Content-Type': 'application/json'}
@@ -389,7 +390,7 @@ async function showResults() {
 }
 
 function leaveLobby() {
-    window.open(`${currentAddress}`)
+    window.open(`${currentAddressGame}`)
 }
 
 function resultsButtonVisibility() {

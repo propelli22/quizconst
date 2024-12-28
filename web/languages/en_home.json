@@ -4,6 +4,8 @@
     "loading": "Loading...",
     "questions": "Questions:",
     "join_game": "Join",
+    "joinLobby": "Join Game",
+    "lobbyCode": "Lobby ID:",
     "input_code": "Insert code...",
     "create_lobby": "Create a lobby",
     "lobby_name": "Lobby name:",
@@ -60,5 +62,6 @@
     "deleteLobby": "Delete lobby",
     "lobbyName": "Lobby name",
     "errorMessageLobby": "Lobby was not found",
-    "typeHere": "Type here"
+    "typeHere": "Type here",
+    "usernameInput": "Insert an username:"
 }

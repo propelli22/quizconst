@@ -1,10 +1,5 @@
 @import url("https://use.typekit.net/kuq8csk.css");
 
-.modal, #admin-modal {
-    z-index: 500 !important;
-    position: absolute;
-}
-
 body {
     font-family: "laca-variable", sans-serif;
     margin: 0;
@@ -19,7 +14,9 @@ h1 {
     text-align: center;
 }
 
-
+#leave-button {
+    display: none;
+}
 
 header {
     height: 25vh;
@@ -121,9 +118,9 @@ input[type="number"], select {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    width: 60%;
-    margin-left: 120px; /* Add left margin */
-    margin-right: 120px; /* Add right margin */
+    width: 60vw;
+    margin-left: 120px;
+    margin-right: 120px;
 }
 
 .player-box {
@@ -131,11 +128,10 @@ input[type="number"], select {
     padding: 18px;
     border-radius: 5px;
     background-color: #f9f9f9;
-    width: 145px;
     text-align: center;
     margin: 5px;
-    flex: 1 0 18%; /* Ensure 5 players per row */
-    max-width: 150px; /* Ensure max width */
+    flex: 1 0 18%;
+    height: 18%;
 }
 
 @media (max-width: 1200px) {
@@ -333,4 +329,22 @@ input[type="number"], select {
         grid-column: 6 / span 2;
         padding: 10px;
     }
+}
+
+body {
+    background: linear-gradient(45deg, #a6d0c9, #4e958a);
+    background-size: 300% 200%;
+    animation: gradient 10s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }

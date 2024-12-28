@@ -6,6 +6,7 @@
 	"create_subject": "Luo aihe",
 	"find_subject": "Etsi aihe",
 	"login": "Kirjaudu sisään",
+	"user": "Käyttäjä",
 	"editor_guide": "Editorin opas",
 	"editor_guide_rename": "Nimeä mikä tahansa objekti uudelleen pitämällä sitä painettuna, lukuun ottamatta pelin nimeä ja kuvausta.",
 	"editor_guide_add_question": "Lisää kysymyksiä napsauttamalla 'Lisää kysymys' -painiketta.",

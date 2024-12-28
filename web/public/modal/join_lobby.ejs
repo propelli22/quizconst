@@ -1,0 +1,14 @@
+<link rel="stylesheet" href="style/join_lobby.css">
+<div id="join-lobby-modal" class="modal">
+    <div id="join-lobby-content">
+        <span class="close">&times;</span>
+        <h2><%= joinLobby %></h2>
+        <form>
+            <h3><%= lobbyCode %></h3>
+            <p id="lobby-code-p"></p>
+            <h3><%= usernameInput %></h3>
+            <input type="text" name="playername" id="joinPlayerName" placeholder="<%= typeHere %>" class="textInput">
+            <input type="button" value="<%= join_game %>" class="button" onclick="joinLobby()">
+        </form>
+    </div>
+</div>
