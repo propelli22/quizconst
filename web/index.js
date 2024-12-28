@@ -312,6 +312,10 @@ app.post('/joinplayer', async (req, res) => {
     res.cookie('lobby', req.body.lobbyId);
     res.cookie('playerId', joinData);
 
+    if(req.body.isHost){
+        res.cookie('host', true);
+    }
+
     res.status(200).json({"message": "Ok"})
 });
 

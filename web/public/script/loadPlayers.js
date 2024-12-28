@@ -16,7 +16,6 @@ async function loadPlayers() {
     .then(Response => Response.json())
     .then(data => lobbyData = data);
 
-    console.log(lobbyData);
     const playerDiv = document.getElementById("players-flex");
 
     playerDiv.innerHTML = '';
