@@ -658,7 +658,7 @@ app.post('/lobbydata', async (req, res) => {
         console.log(err);
     }
 
-    res.status(200).json({"message": "ksi - thick of it"})
+    res.status(200).json(lobbyData)
 });
 
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}...`));
