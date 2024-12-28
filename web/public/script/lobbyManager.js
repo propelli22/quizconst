@@ -5,7 +5,7 @@ const currentAddressLobby = window.location.origin;
 const lobbyId = urlParams.get('lobby');
 const delay = 500;
 
-async function loadPlayers() {
+async function lobbyManager() {
     let lobbyData;
 
     await fetch(`${currentAddressLobby}/lobbydata`, {
@@ -36,4 +36,4 @@ async function loadPlayers() {
     }
 }
 
-setInterval(loadPlayers, delay); 
+setInterval(lobbyManager, delay); 
