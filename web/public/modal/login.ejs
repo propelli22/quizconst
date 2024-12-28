@@ -14,7 +14,7 @@
                 <!--Sign up modal-->
                 <form id="sign-up-content" onsubmit="return false;" method="post" action="/register">
                     <h2><%= sign_title %></h2>
-                    <p><%= sign_name %></p> <input type="text" class="sign_text" name="username" id="username" min="4" max="14"> <p style="display: none;" id="wrongName"><%=wrongNameSignup%></p> <p style="display: none;" id="emptyName"><%=emptyNameSignup%></p>
+                    <p><%= sign_name %></p> <input type="text" class="sign_text" name="username" id="username" min="4" max="14" autocomplete="off"> <p style="display: none;" id="wrongName"><%=wrongNameSignup%></p> <p style="display: none;" id="emptyName"><%=emptyNameSignup%></p>
                     <p><%= sign_email %></p> <input type="text" class="sign_text" name="email" id="email"> <p style="display: none;" id="wrongEmail"><%=wrongEmailSignup%></p> <p style="display: none;" id="emptyEmail"><%=emptyEmailSignup%></p>
                     <p><%= sign_password %></p> <input type="password" class="sign_text" name="password" id="password"> <p style="display: none;" id="wrongPasswordSignup"><%=wrongPasswordSignup%></p> <p style="display: none;" id="emptyPasswordSignup"><%=emptyPasswordSignup%></p>
                     <input type="submit" class="button" id="sign-up-button" value="<%= sign_button %>" >
