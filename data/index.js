@@ -192,7 +192,7 @@ app.post("/createlobby", (req, res) => {
   const subject = req.body.subject;
   const game_date = req.body.game_date;
 
-  let sql = `INSERT INTO lobby (subject_id, lobby_name, max_players, game_date) VALUES (?,?,?,?)`;
+  let sql = `INSERT INTO lobby (subject_id, lobby_name, max_players, game_date, status) VALUES (?,?,?,?, 'lobby')`;
 
   // remove comment tags if issues with inserting empty names
   //if (!name) {
