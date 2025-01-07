@@ -663,5 +663,46 @@ app.post('/createanswer', (req, res) => {
   connection.end();
 });
 
+// todo: update to be '/setstatus' and allow changing the lobby status to the needed status code
+app.post('/lobbyready', (req, res) => {
+  console.log("used /lobbyready");
+
+  const lobbyId = req.body.lobbyId;
+
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+  const sql = `UPDATE lobby SET status ='moveToGame' WHERE lobby_id = ?`;
+
+  console.log(lobbyId)
+
+  connection.query(sql, [lobbyId], (err, rows) => {
+    if(err) {
+      throw err;
+    }
+
+    res.status(200).json({"message": "LOBBY READY"});
+  });
+
+  connection.end();
+});
+
+app.post('/lobbystatus', (req, res) => {
+  console.log('used /lobbystatus');
+
+  const lobbyId = req.body.lobbyId;
+
+  const connetion = mysql.createConnection(dbconfig);
+  connetion.connect();
+  const sql = 'SELECT status FROM lobby WHERE lobby_id = ?';
+
+  connetion.query(sql, [lobbyId], (err, rows) => {
+    if (err) {
+      throw err
+    }
+
+    res.status(200).json(rows)
+  })
+});
+
 // run the server
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));
