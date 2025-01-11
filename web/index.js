@@ -38,6 +38,10 @@ app.use(
 const port = "3000";
 const host = "0.0.0.0"; // run on device local ip
 
+app.use((req, res) => {
+    res.status(404).send("Sivua ei löytynyt.")
+});
+
 app.get('/lobby', async (req, res) => {
     console.log("loaded /lobby")
 
