@@ -38,10 +38,6 @@ app.use(
 const port = "3000";
 const host = "0.0.0.0"; // run on device local ip
 
-app.use((req, res) => {
-    res.status(404).send("Sivua ei löytynyt.")
-});
-
 app.get('/lobby', async (req, res) => {
     console.log("loaded /lobby")
 
@@ -405,6 +401,7 @@ app.post('/gamedata', async (req, res) => {
     const question = req.body.questionId;
     const lobby = req.body.lobbyId;
     const points = req.body.recivedPoints;
+    const status = req.body.setStatus;
 
     // try to optimize this later !!!
     if (runAction == "allquestions") {
@@ -533,6 +530,16 @@ app.post('/gamedata', async (req, res) => {
         const result = await getSubject.json();
 
         res.status(200).json(result);
+    } else if (runAction == "setStatus") {
+        const setStatus = await fetch('http://localhost:4000/setLobbyStatus', {
+            method: 'POST',
+            body: JSON.stringify({lobbystatus: status, lobbyid: lobby}),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const result = await setStatus.json();
+
+        res.status(200).json({'message': 'OK'});
     } else {
         res.status(400).json({"message": "Failed to get action, please check input."});
     }
@@ -699,6 +706,11 @@ app.post('/lobbydata', async (req, res) => {
     }
 
     res.status(200).json(lobbyData)
+});
+
+// KEEP THIS REQUEST AS THE LAST REQUEST !!!
+app.use((req, res) => {
+    res.status(404).send("Sivua ei löytynyt.")
 });
 
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}...`));

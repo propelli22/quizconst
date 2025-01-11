@@ -9,7 +9,7 @@ const lobbyId = getCookie("lobby");
 const playerId = getCookie("playerId");
 const isHost = getCookie("host") || false;
 const subjectId = getSubject();
-let questionId = getFirstQuestion(subjectId);
+//let questionId = getFirstQuestion(subjectId);
 let lastQuestion = false;
 
 const questionCountTag = document.getElementById("question-count");
@@ -459,6 +459,33 @@ function resultsButtonVisibility() {
     }
 }
 
+// Lobby status is used for synchronising all the players devices
+// Players devices will be constantly retrieving the lobby status and use that
+// to figure out what question to load or wheter to show the results etc.
+async function setLobbyStatus(status) {
+    const body = {
+        setStatus: status,
+        action: "setStatus",
+        lobbyId: await getCookie("lobby")
+    }
+
+    let response;
+
+    await fetch(`${currentAddressGame}/gamedata`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {'Content-Type': 'application/json'}
+    })
+    .then(Response => Response.json())
+    .then(data => response = data);
+
+    console.log(response);
+}
+
+async function getLobbyStatus() {
+    
+}
+
 // TODO:
 // - intergrate status codes to sync all players
 // - remove placeholders
@@ -476,6 +503,11 @@ async function gameController() {
 
         if (i + 1 == questionCount) {
             lastQuestion = true;
+        }
+
+        if(isHost) {
+            await setLobbyStatus(`q_${questions[i]}`)
+            console.log(`q_${questions[i]}`)
         }
 
         await questionPreview(recivedQuestionData);
