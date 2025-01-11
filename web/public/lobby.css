@@ -1,0 +1,7 @@
+#start-game-button {
+    display: block !important;
+}
+
+#lobby-control-buttons {
+    grid-column: 2;
+}

@@ -37,9 +37,13 @@ async function lobbyManager() {
 
     const playerDiv = document.getElementById("players-flex");
 
-    playerDiv.innerHTML = '';
+    console.log(playerDiv.children.length)
+    console.log(lobbyData.lobbydata.length)
 
-    if(lobbyData.lobbydata.length != playerDiv.children.length) {
+    if(lobbyData.lobbydata.length != playerDiv.children.length && lobbyData.lobbydata.length != undefined) {
+        console.log("moi")
+        playerDiv.innerHTML = '';
+
         for(let i = 0; i < lobbyData.lobbydata.length; i++) {
             const player = lobbyData.lobbydata[i];
             const playerBox = document.createElement('div');

@@ -18,6 +18,10 @@ h1 {
     display: none;
 }
 
+#start-game-button {
+    display: none;
+}
+
 header {
     height: 25vh;
     display: grid;

@@ -1,11 +1,10 @@
 <%- include('partials/header') %>
+<link rel="stylesheet" href="lobby.css">
 <main>
     <% if (!lobbyData.lobbydata.length) { %>
         <h1><%= lobbyData.lobbydata.lobbyName %></h1>
-        <div class="players-grid" id="players-flex">
-            <!--<div class="player-box host" id="host-player">
-                <p>Pelaaja 1 (Host)</p>
-            </div>-->
+        <p><%= lobbyCode %>: <%= lobbyId %></p>
+        <div class="players-flex" id="players-flex">
             <div class="player-box" id="player-<%= lobbyData.lobbydata.player %>">
                 <p><%= lobbyData.lobbydata.name %></p>
             </div>
