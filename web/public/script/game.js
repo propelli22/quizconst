@@ -1,16 +1,16 @@
-const lobbyId = 2;  // placeholder for now, until the lobby sends cookies.
-const subjectId = 2; // placeholder for now, until the lobby sends cookies.
-let questionId = 1; // placeholder for now, retrive all question ID:s of a subject on game start as an list.
-const playerId = 3; // placeholder for now, until the lobby sends cookies.
-const isHost = true; // placeholder for now, until the lobby sends cookies.
-let lastQuestion = false;
-
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 
 const currentAddressGame = window.location.origin;  
 const currentLanguage = urlParams.get('language');
 let currentQuestion = 0;
+
+const lobbyId = getCookie("lobby");
+const playerId = getCookie("playerId");
+const isHost = getCookie("host") || false;
+const subjectId = getSubject();
+let questionId = getFirstQuestion(subjectId);
+let lastQuestion = false;
 
 const questionCountTag = document.getElementById("question-count");
 
@@ -26,11 +26,67 @@ let questionCount = 1;
 const questionCountText = questionCountTag.innerHTML;
 let questionIDlist = [];
 
+// not using the "getCookie.js" module due to weird issues with html script linking, try to fix later, same in lobbymanager
+async function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+}
+
+async function getSubject() {
+    let response;
+    const body = {
+        action: "getsubject",
+        lobbyId: await getCookie("lobby")
+    }
+
+    await fetch(`${currentAddressGame}/gamedata`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {'Content-Type': 'application/json'}
+    })
+    .then(Response => Response.json())
+    .then(data => response = data);
+
+    return response[0].subject_id;
+}
+
+async function getFirstQuestion() {
+    let dataResponse;
+    const getQuestionsBody = {
+        action: "allquestions",
+        subjectId: await getSubject()
+    }
+
+    console.log(getQuestionsBody)
+    
+    // fetch all questions of a subject to figure out how many questions there are and what their id:s are
+    await fetch(`${currentAddressGame}/gamedata`, {
+        method: 'POST',
+        body: JSON.stringify(getQuestionsBody),
+        headers: {'Content-Type': 'application/json'}
+    })
+    .then(Response => Response.json())
+    .then(data => dataResponse);
+
+    return dataResponse[0].question_id;
+}
+
 async function getQuestionCount() {
     let dataResponse;
     const getQuestionsBody = {
         action: "allquestions",
-        subjectId: subjectId
+        subjectId: await getSubject()
     }
     
     // fetch all questions of a subject to figure out how many questions there are and what their id:s are
@@ -95,10 +151,12 @@ async function setPlayerReady(recivedPoints) {
     let dataResponse;
     const body = {
         action: "questionready",
-        playerId: playerId,
-        lobbyId: lobbyId,
+        playerId: await getCookie("playerId"),
+        lobbyId: await getCookie("lobby"),
         recivedPoints: recivedPoints
     }
+
+    console.log(body)
 
     await fetch(`${currentAddressGame}/gamedata`, {
         method: 'POST',
@@ -278,8 +336,6 @@ async function runQuestion(questionData) {
 // do not touch! easter egg :)
 console.clear();
 console.log("Wrong place fool, there are no answers to be given here :) or is there?");
-// TODO FOR KALLE: as an easter egg, add an command that can be ran in the console
-// the command should output answers to the questions, BUT, they are all wrong :)
 
 // EASTER EGG FUNCTIONS, in the game
 Object.defineProperty(window, 'giveMaxPoints', { // rick rolls you :D
@@ -331,8 +387,8 @@ async function showResults() {
     let dataResponse;
     const body = {
         action: "results",
-        lobbyId: lobbyId,
-        playerId: playerId
+        lobbyId: await getCookie("lobby"),
+        playerId: await getCookie("playerId")
     }
     
     await fetch(`${currentAddressGame}/gamedata`, {
@@ -390,7 +446,7 @@ async function showResults() {
 }
 
 function leaveLobby() {
-    window.open(`${currentAddressGame}`)
+    location.replace(`${currentAddressGame}`)
 }
 
 function resultsButtonVisibility() {
@@ -403,13 +459,15 @@ function resultsButtonVisibility() {
     }
 }
 
-// TODO torstaille ja loppu viikolle myöskin, viikonlopulle menee :) t perjantai kalle
-// - testaus yhdellä ja useammalla laitteella, mutta koska aula ei ole viellä valmis, ei voi testata vielä, eli siis odoteteaan aulaa :(
+// TODO:
+// - intergrate status codes to sync all players
+// - remove placeholders
+// - test weird scenarios, (etc. player does not answer, player leaves mid game)
 
 // gameController is used to call all the functions in order using async.
 async function gameController() {
     // initalaize game, done separately from question cycle to avoid unnecesary looping of things that need to be called only once.
-    const questions = await getQuestionCount();
+    const questions = await getQuestionCount(subjectId);
     countQuestions();
 
     // question cycle
