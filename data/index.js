@@ -701,7 +701,29 @@ app.post('/lobbystatus', (req, res) => {
     }
 
     res.status(200).json(rows)
-  })
+  });
+
+  connetion.end();
+});
+
+app.post('/getlobbysubject', (req, res) => {
+  console.log('used /getlobbysubject');
+
+  const lobbyId = req.body.lobbyId;
+
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+  const sql = 'SELECT subject_id FROM lobby WHERE lobby_id = ?'
+
+  connection.query(sql, [lobbyId], (err, rows) => {
+    if (err) {
+      throw err
+    }
+
+    res.status(200).json(rows);
+  });
+
+  connection.end();
 });
 
 // run the server

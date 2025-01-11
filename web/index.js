@@ -314,6 +314,8 @@ app.post('/joinplayer', async (req, res) => {
 
     if(req.body.isHost){
         res.cookie('host', true);
+    } else {
+        res.cookie('host', false);
     }
 
     res.status(200).json({"message": "Ok"})
@@ -515,6 +517,16 @@ app.post('/gamedata', async (req, res) => {
         });
 
         const result = await getStatus.json();
+
+        res.status(200).json(result);
+    } else if (runAction == "getsubject") {
+        const getSubject = await fetch('http://localhost:4000/getlobbysubject', {
+            method: 'POST',
+            body: JSON.stringify({lobbyId: lobby}),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const result = await getSubject.json();
 
         res.status(200).json(result);
     } else {
