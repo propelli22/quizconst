@@ -540,6 +540,18 @@ app.post('/gamedata', async (req, res) => {
         const result = await setStatus.json();
 
         res.status(200).json({'message': 'OK'});
+    } else if (runAction == "getStatus") {
+        const getStatus = await fetch('http://localhost:4000/getLobbyStatus', {
+            method: 'POST',
+            body: JSON.stringify({lobbyid: lobby}),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const result = await getStatus.json()
+
+        res.status(200).json(result);
+
+        console.log(result);
     } else {
         res.status(400).json({"message": "Failed to get action, please check input."});
     }

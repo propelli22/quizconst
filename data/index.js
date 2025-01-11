@@ -747,5 +747,27 @@ app.post('/setLobbyStatus', (req, res) => {
   connection.end();
 });
 
+app.post('/getLobbyStatus', (req, res) => {
+  console.log("used /getLobbyStatus");
+
+  const lobbyId = req.body.lobbyid;
+
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+  const sql = 'SELECT status FROM lobby WHERE lobby_id = ?';
+
+  connection.query(sql, [lobbyId], (err, rows) => {
+    if(err) {
+      throw err;
+    }
+
+    res.status(200).json(rows);
+
+    console.log(rows);
+  });
+
+  connection.end();
+})
+
 // run the server
 app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));

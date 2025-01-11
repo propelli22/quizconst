@@ -373,6 +373,11 @@ Object.defineProperty(window, 'getCorrectAnswer', {
 });
 
 async function showResults() {
+    if(isHost) {
+        await setLobbyStatus(`results`)
+        console.log(`results`)
+    }
+
     questionContainer.style.display = "none";
     mainGameContainer.style.display = "none";
     loadingContainer.style.display = "none";
@@ -483,7 +488,20 @@ async function setLobbyStatus(status) {
 }
 
 async function getLobbyStatus() {
-    
+    const lobby = await getCookie("lobby");
+    let response;
+
+    await fetch(`${currentAddressGame}/gamedata`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({lobbyId: lobby, action: "getStatus"})
+    })
+    .then(Response => Response.json())
+    .then(data => response = data);
+
+    console.log(response[0].status);
+
+    return response[0].status;
 }
 
 // TODO:
@@ -496,23 +514,34 @@ async function gameController() {
     // initalaize game, done separately from question cycle to avoid unnecesary looping of things that need to be called only once.
     const questions = await getQuestionCount(subjectId);
     countQuestions();
-
+    
     // question cycle
     for(let i = 0; i < questionCount; i++) {
         const recivedQuestionData = await getQuestion(questions[i]);
-
+    
         if (i + 1 == questionCount) {
             lastQuestion = true;
         }
-
+    
         if(isHost) {
             await setLobbyStatus(`q_${questions[i]}`)
             console.log(`q_${questions[i]}`)
         }
-
-        await questionPreview(recivedQuestionData);
-        await runQuestion(recivedQuestionData);
-        await showResults();
+    
+        let lobbyStatus;
+        do {
+            lobbyStatus = await getLobbyStatus();
+            if (lobbyStatus === `q_${questions[i]}`) {
+                await questionPreview(recivedQuestionData);
+                await runQuestion(recivedQuestionData);
+            } else if (lobbyStatus === 'results') {
+                await showResults();
+            } else {
+                console.log(`Unknown lobby status: ${lobbyStatus}`);
+            }
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        } while (lobbyStatus !== `q_${questions[i]}` && lobbyStatus !== 'results');
     }
 }
 
