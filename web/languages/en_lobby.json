@@ -2,6 +2,7 @@
     "title": "Lobby",
     "page": "Lobby",
     "language": "en",
+    "logout": "Log out",
     "join_game": "Join",
     "create_lobby": "Create a lobby",
     "lobby_name": "Lobby name:",

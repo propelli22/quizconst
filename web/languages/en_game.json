@@ -1,6 +1,7 @@
 {
     "page": "Game",
     "language": "en",
+    "logout": "Log out",
     "find_subject": "Search subject",
     "create_subject": "Create subject",
     "login": "Log in",

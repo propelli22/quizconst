@@ -1,6 +1,7 @@
 {
 	"page": "Create a game",
 	"language": "en",
+	"logout": "Log out",
 	"loading": "Loading...",
 	"questions": "Questions:",
 	"create_subject": "Create subject",

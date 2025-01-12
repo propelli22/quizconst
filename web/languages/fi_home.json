@@ -2,6 +2,7 @@
     "page": "Etusivu",
     "language": "fi",
     "loading": "Ladataan...",
+    "logout": "Kirjaudu ulos",
     "questions": "Kysymyksiä:",
     "join_game": "Liity",
     "joinLobby": "Liity peliin",

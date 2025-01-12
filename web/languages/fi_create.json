@@ -2,6 +2,7 @@
 	"page": "Luo aihe",
 	"language": "fi",
 	"loading": "Ladataan...",
+	"logout": "Kirjaudu ulos",
 	"questions": "Kysymyksiä:",
 	"create_subject": "Luo aihe",
 	"find_subject": "Etsi aihe",

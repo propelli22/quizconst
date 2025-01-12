@@ -1,6 +1,7 @@
 {
     "page": "Homepage",
     "language": "en",
+    "logout": "Log out",
     "loading": "Loading...",
     "questions": "Questions:",
     "join_game": "Join",

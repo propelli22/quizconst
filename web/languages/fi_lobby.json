@@ -3,6 +3,7 @@
     "title": "Aula",
     "language": "fi",
     "join_game": "Liity",
+    "logout": "Kirjaudu ulos",
     "create_lobby": "Luo aula",
     "lobby_name": "Aulan nimi:",
     "max_players": "Pelaaja rajoitus:",
