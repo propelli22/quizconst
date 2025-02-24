@@ -40,7 +40,45 @@ Backend toteutettin Node.js express palvelimena, Node.js valittiin ryhmän kokem
 
 ## Testaus
 
-Testaus/tuomio -päivä, 13.1.2025. WEB23A kaverit kutsuttu testaamaan / rikkomaan projektimme täysin.
+Projektia voi testata osoitteessa https://quizconst.propellidev.com/
+
+## Asennus / käyttö
+
+Projektin asennus ohjeet:
+
+Lataa .zip pakettina ja pura se haluamaasi kansioon.
+
+1. Asenna tietokanta
+- Lataa `quizconst_db_final_1.sql`
+- Käynnistä MySQL palvelimesi
+- Luo tietokanta nimellä 'quizconst'
+- Tuo tietokantaan `quizconst_db_final_1.sql`
+- Muokkaa data kansion `dbconfig.json` tiedostoon tietokannan osoite, käyttäjä ja salasana.
+- HUOM! Tietokannassa ei ole valmiiksi dataa, joudut siis luomaan itse omat datasi. (Tietokanta pohjaan lisätään esimerkki dataa myöhemmin - Kalle).
+
+2. Asenna palvelimien osat ja käynnistä palvelimet
+- Avaa terminaali ja suorita komento `cd web`
+- Suorita komento `npm install`
+- Siirry takaisin kansiorakenteessa komennolla `cd ..`
+- Siirry data palvelimen kansioon komennolla `cd data`
+- Suorita komento `npm install`
+- Suorita komento `npm start`
+- Siirry takaisin kansiorakenteessa komennolla `cd ..`
+- Siirry web palvelimen kansioon komennolla `cd web`
+- Suorita komento `npm start`
+- Molemmat web ja data palvelin ovat nyt päällä ja niihin pääsee localhostilla, web palvelin pyörii osoitteessa 3000, data palvelin pyörii osoitteessa 4000.
+
+HUOM!! Ohjeet ei ole tarkistettu - Kalle
+
+## Tiedossa olevat ongelmat
+
+Quizconstin tiedossa olevat ongelmat:
+- Lista ei päivitetty - Kalle
+
+## Tulevat muutokset
+
+Quizconstiin suunnitteilla olevia muutoksia:
+- Pelin luonti sivu uusitaan, sivusto tulee käyttämään inspiraationa taitaja 2025 semi-finaalin admin paneelia.
 
 ## Kiitokset!
 
@@ -56,7 +94,8 @@ Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra
 
 Projekti toteutettu osana Business College Helsingin ohjelmistokehittäjänä toimiminen -kurssia, 2024-2025
 
-  
+
+## ENGLISH VERSION MISSING INFORMATION THAT IS ON THE FINNISH VERSION!
 # Quizconst 🇬🇧
 
 Quizconst is a multiplayer trivia game where you can compete against your friend in different subjects, and figure out whos the smartest in the group.
