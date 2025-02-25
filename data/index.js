@@ -7,6 +7,7 @@ const http = require('http');
 const socketIO = require('socket.io');
 
 const app = express();
+app.use(express.json());
 const server = http.createServer(app);
 const io = socketIO();
 const port = 4000;
