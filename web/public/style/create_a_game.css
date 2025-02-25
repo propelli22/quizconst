@@ -146,7 +146,6 @@ header {
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
-    background-color: #fefefe;
     z-index: 2;
 }
 
@@ -185,11 +184,12 @@ header {
 .question-item {
     margin: 10px 0;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 2px solid #164F46;
     cursor: pointer;
     text-align: center;
     white-space: normal;
     word-wrap: break-word;
+    background-color: #d1e7e3;
 }
 
 .edit-question-input {
@@ -519,7 +519,6 @@ header {
         border: none;
         width: 100%;
         height: 100%;
-        background-color: #fefefe;
         z-index: 1;
         box-sizing: border-box;
     }
