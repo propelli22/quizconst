@@ -3,19 +3,20 @@ const { XMLBuilder } = require("fast-xml-parser");
 const mysql = require("mysql");
 const dbconfig = require("./dbconfig.json");
 const bcrypt = require("bcrypt");
+const http = require('http');
+const socketIO = require('socket.io');
 
 const app = express();
-app.use(express.json());
+const server = http.createServer(app);
+const io = socketIO();
+const port = 4000;
 
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*"); // TODO: change to current device ip
-    res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-    next();
-})
-
-const port = "4000";
-const host = "localhost"; // runs on localhost to avoid external users access to database
+// TODO: (data server 24.2.2025)
+// - Update stupid solutions (stupid for loop get requests on lobby and game) to websockets, to avoid unnesecary requests
+// - Add input validation
+// - Add error handling
+// - Add security measures (somesort of password/key that needs to be in the request to access the server, this can/will be done with vercel as well)
+// - Testing
 
 // Obvious: checks password, return is it is correct or not, does not tell if the user is also correct etc.
 app.post('/checklogin', (req, res) => {
@@ -34,28 +35,34 @@ app.post('/checklogin', (req, res) => {
     }
 
     let result = JSON.parse(JSON.stringify(rows));
-    
-    let isAdmin;
 
-    if(rows[0].admin == 1) {
-      isAdmin = true;
-    } else {
-      isAdmin = false;
-    }
+    console.log(rows[0])
 
-    // can only send back true or false
-    bcrypt.compare(
-      password,
-      result[0].password,
-      function (err, passwordResult) {
-        const body = {
-          passwordResult: passwordResult,
-          userId: rows[0].user_id,
-          isAdmin: isAdmin
-        }
-        res.send(body);
+    if(rows[0] != undefined) {
+      let isAdmin;
+
+      if(rows[0].admin == 1) {
+        isAdmin = true;
+      } else {
+        isAdmin = false;
       }
-    );
+
+      // can only send back true or false
+      bcrypt.compare(
+        password,
+        result[0].password,
+        function (err, passwordResult) {
+          const body = {
+            passwordResult: passwordResult,
+            userId: rows[0].user_id,
+            isAdmin: isAdmin
+          }
+          res.send(body);
+        }
+      );
+    } else {
+      res.json({"message": "Hmm... miten näin pääsi käymään? (could not find user in database, please check input)"})
+    }
   });
 
   connection.end();
@@ -767,7 +774,113 @@ app.post('/getLobbyStatus', (req, res) => {
   });
 
   connection.end();
-})
+});
+
+io.on('connection', (socket) => {
+
+  socket.on('playerAnswer', () => {
+
+  });
+
+  socket.on('gameContinue', () => {
+
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Disconnected player from websocket');
+  });
+});
+
+io.on('newPlayer', (playerData) => {
+  console.log(`New player connected to the server via an websocket.`);
+
+  const sql = 'SELECT * FROM lobby JOIN player ON lobby.lobby_id = player.lobby_id WHERE lobby.lobby_id = ?';
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+
+  connection.query(sql, [playerData.lobbyId], (err, rows) => {
+    if (err) {
+      throw err
+    }
+
+    callback(rows)
+  });
+
+  connection.end();
+
+  io.emit(playerData);
+});
+
+io.on('gameStart', (lobbyData) => {
+  console.log(`Game starting. Lobby: ${lobbyData.lobbyId}`);
+
+  const sql = 'UPDATE lobby SET status ="moveToGame" WHERE lobby_id = ?';
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+
+  connection.query(sql, [lobbyData.lobbyId], (err, rows) => {
+    if (err) {
+      throw err
+    }
+
+    io.emit({"message": "Game starting!"});
+  });
+
+  connection.end();
+});
+
+io.on('questionData', (questionId) => {
+  const sql = 'SELECT * FROM question WHERE question_id = ?';
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+
+  connection.query(sql, [questionId], (err, rows) => {
+    if (err) {
+      throw err
+    }
+
+    callback(rows);
+  });
+
+  connection.end();
+});
+
+io.on('playerAnswer', (playerResultData) => {
+  console.log(`Player ${playerResultData.playerId} answered.`)
+  const sql = 'UPDATE player SET ready=1 SET point = points + ? WHERE player_id = ?';
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+
+  connection.query(sql, [playerResultData.points, playerResultData.playerId], (err, rows) => {
+    if (err) {
+      throw err
+    }
+
+    callback({"message": "Results recived"});
+  });
+
+  connection.end();
+});
+
+io.on('gameContinue', (lobbyData) => {
+  console.log(`Continuing game... Lobby: ${lobbyData.lobbyId}`);
+
+  const sql = 'UPDATE lobby SET continue_game = 1 WHERE lobby_id = ?';
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+
+  connection.query(sql, [lobbyData.lobbyId], (err, rows) => {
+    if (err) {
+      throw err
+    }
+
+    io.emit({"message": "Game continuing..."});
+  });
+
+  connection.end();
+});
 
 // run the server
-app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));
+server.listen(port, () => {
+  console.log(`Server running on port ${port}`)
+});
