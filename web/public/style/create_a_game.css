@@ -470,6 +470,9 @@ header {
     #header-nav {
          height: 5vh !important;
     }
+    .resizable-right {
+        width: 100% !important;
+    }
 
     .nav-button {
         height: 100% !important;
