@@ -3,13 +3,20 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const { XMLParser, XMLBuilder, XMLValidator } = require("fast-xml-parser");
-const { get } = require('http');
-const { getEventListeners } = require('events');
+const http = require('http');
+const socketIO = require('socket.io');
 
+// TODO: (web server 24.2.2025)
+// - Update stupid solutions (stupid for loop get requests on lobby and game) to websockets, to avoid unnesecary requests
+// - Add input validation
+// - Add error handling
+// - Update to use http server
+// - Testing
 
 const app = express();
-app.use(express.urlencoded({extended: 'false'}))
-app.use(express.json())
+const server = http.createServer(app);
+const io = socketIO();
+const port = 3000;
 
 // import languages from json
 const fi_home = require('./languages/fi_home.json')
@@ -34,9 +41,6 @@ app.use(
         cookie: { secure: false, httpOnly: true }
     })
 );
-
-const port = "3000";
-const host = "0.0.0.0"; // run on device local ip
 
 app.get('/lobby', async (req, res) => {
     console.log("loaded /lobby")
@@ -720,9 +724,20 @@ app.post('/lobbydata', async (req, res) => {
     res.status(200).json(lobbyData)
 });
 
+app.post('/logout', (req, res) => {
+    console.log("used /logout");
+
+    res.clearCookie("admin");
+    res.clearCookie("playerId");
+    res.clearCookie("sessionId");
+    res.status(200).json({"message": "cookies cleared"})
+});
+
 // KEEP THIS REQUEST AS THE LAST REQUEST !!!
 app.use((req, res) => {
     res.status(404).send("Sivua ei löytynyt.")
 });
 
-app.listen(port, host, () => console.log(`Listening on ${host}:${port}...`));
+server.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
