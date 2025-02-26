@@ -804,12 +804,10 @@ io.on('newPlayer', (playerData) => {
       throw err
     }
 
-    callback(rows)
+    callback(rows);
   });
 
   connection.end();
-
-  io.emit(playerData);
 });
 
 io.on('gameStart', (lobbyData) => {
