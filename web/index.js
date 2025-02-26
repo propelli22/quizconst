@@ -5,6 +5,7 @@ const session = require('express-session');
 const { XMLParser, XMLBuilder, XMLValidator } = require("fast-xml-parser");
 const http = require('http');
 const socketIO = require('socket.io');
+const axios = require('axios');
 
 // TODO: (web server 24.2.2025)
 // - Update stupid solutions (stupid for loop get requests on lobby and game) to websockets, to avoid unnesecary requests
@@ -17,6 +18,8 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO();
 const port = 3000;
+
+const domain = 'http://localhost:4000/'
 
 // import languages from json
 const fi_home = require('./languages/fi_home.json')
@@ -56,33 +59,20 @@ app.get('/lobby', async (req, res) => {
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
-    const lobbyDataUrl = `http://localhost:4000/lobbydata?id=${lobbyId}`
-    let lobbyData;
+    const lobbyPlayersData = axios.get(`${domain}/lobbydata?id=${lobbyId}`);
+    const playerData = {lobbyId: lobbyId, name: req.body.name, account: req.body.accountId, isHost: req.body.host};
 
-    const settings = {
-        method: 'GET'
-    }
+    io.serverSideEmit('newPlayer', playerData);
 
-    try {
-        const xmlSite = await fetch(lobbyDataUrl, settings);
-        const xml = await xmlSite.text();
-
-        const isValid = XMLValidator.validate(xml);
-        if(isValid) {
-            const parser = new XMLParser();
-            lobbyData = parser.parse(xml).lobbydata;
-        } else {
-            lobbyData = 'An error occurred while fetching lobbydata :('
-        }
-    } catch (err) {
-        console.log(err);
-    }
-
+    io.on('playerJoin', (socket) => {
+        socket.emit(lobbyPlayersData);
+        io.emit(playerData);
+    });
+    
     if(language === 'fi') {
         res.render('aula', {
             ...fi_lobby,
             sessionId: sessionId,
-            lobbyData: lobbyData,
             lobbyId: lobbyId,
             admin: admin
         });
@@ -90,7 +80,6 @@ app.get('/lobby', async (req, res) => {
         res.render('aula', {
             ...en_lobby,
             sessionId: sessionId,
-            lobbyData: lobbyData,
             lobbyId: lobbyId,
             admin: admin
         });
@@ -98,7 +87,6 @@ app.get('/lobby', async (req, res) => {
         res.render('aula', {
             ...en_lobby,
             sessionId: sessionId,
-            lobbyData: lobbyData,
             lobbyId: lobbyId,
             admin: admin
         });
