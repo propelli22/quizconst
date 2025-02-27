@@ -117,6 +117,11 @@ input[type="number"], select {
     text-align: right;
 }
 
+#no-subject-selected-error {
+    display: none;
+    color: red;
+}
+
 .players-flex {
     display: flex;
     flex-wrap: wrap;
