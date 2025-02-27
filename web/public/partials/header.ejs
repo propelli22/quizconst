@@ -10,7 +10,7 @@
 <body>
     <header>
         <form method="get" id="language-form">
-            <select name="language" id="language-selection" class="button" onchange="this.form.submit()">
+            <select name="language" id="language-selection" class="button" onchange="selectLanguage()">
                 <option value="fi" <%= language === 'fi' ? 'selected' : '' %>>FI</option>
                 <option value="en" <%= language === 'en' ? 'selected' : '' %>>EN</option>
             </select>

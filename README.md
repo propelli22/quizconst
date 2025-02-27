@@ -38,7 +38,7 @@ Sivuston frontend päätettiin toteuttaa käyttäen EJS -muotoa kieli tuen ja uu
 
 Backend toteutettin Node.js express palvelimena, Node.js valittiin ryhmän kokemuksen takia, ryhmässä ei projektin aloituksessa oikein osattu muita backend kieliä joten Node.js oli helppo valinta. Samasta syystä valittiin myös MySQL tietokannan puolelle.
 
-## Testaus
+## Kokeile quizconstia!
 
 Projektia voi testata osoitteessa https://quizconst.propellidev.com/
 
