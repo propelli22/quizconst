@@ -1,3 +1,7 @@
+//import { blockedName } from './userContentFilter.js';
+// ugh, this file isn't made to be an module, so it is a complete mess of code
+// pls fix - kalle
+
 // Part of log in modal!
 var logModal = document.getElementById("log-modal");
 
@@ -26,7 +30,6 @@ addEventListener("DOMContentLoaded", (event) => {
 })
 
 var subjectModal = document.getElementById("find-subject-modal");
-var subjectButton = document.getElementById("find-subject");
 var subjectSpan = document.getElementsByClassName("close")[0];
 
 var lobbyModal = document.getElementById("create-lobby-modal");
@@ -43,11 +46,7 @@ var joinLobbySpan = document.getElementsByClassName("close")[2];
 
 const cLobbySubjectButton = document.getElementById("c-lobby-select-subject");
  
-if (subjectButton) {
-  subjectButton.onclick = function() {
-    subjectModal.style.display = "block";
-  }
-  
+if (cLobbySubjectButton) {
   cLobbySubjectButton.onclick = function() {
     subjectModal.style.display = "block";
   }
@@ -139,81 +138,6 @@ function selectSubject(id, name, desc, author, img) {
 
   const subjectDiv = document.getElementById("selected-subject")
   // TODO: update selected-subject to have the selected subject box, see find subject modal
-}
-
-// create a new lobby, return lobby id
-async function newLobby() {
-  const lobbyName = document.getElementById("lobbyName").value;
-  const playerName = document.getElementById("playerName").value;
-  const maxPlayers = document.getElementById("count").innerHTML;
-  const subjectId = selectedSubject;
-  const date = new Date();
-  let gameDate = date.toISOString();
-  const selectedLanguage = document.getElementById("language-selection").value;
-
-  // improvent idea: add an blocked names list
-  if(playerName === "") {
-    playerName = "Player"
-  }
-
-  let createResponse;
-
-  await fetch(`${currentAddressMain}/createlobby`, {
-    method: "POST",
-    body: JSON.stringify({
-      name: lobbyName,
-      playercount: maxPlayers,
-      subject: subjectId,
-      game_date: gameDate,
-      playerName: playerName
-    }),
-    headers: {
-      "Content-type": "application/json"
-    }
-  })
-  .then(Response => Response.json())
-  .then(data => createResponse = data);
-
-  await fetch(`${currentAddressMain}/joinplayer`, {
-    method: "POST",
-    body: JSON.stringify({
-      lobbyId: createResponse.lobbyId,
-      name: playerName,
-      isHost: true
-    }),
-    headers: {"Content-Type": "application/json"}
-  })
-  .then((response) => response.json())
-  .then((data) => window.location.href = `${currentAddressMain}/lobby?lobby=${createResponse.lobbyId}&language=${selectedLanguage}`, "_self")
-}
-
-function setDisplayId() {
-  document.getElementById("lobby-code-p").innerHTML = document.getElementById("lobby-code").value
-}
-
-// fetch all lobby data of selected id, throw user into lobby, if user has no account, username = player/pelaaja {i}
-async function joinLobby() {
-  const lobbyId = document.getElementById("lobby-code").value;
-  const playerName = document.getElementById("joinPlayerName").value;
-  const selectedLanguage = document.getElementById("language-selection").value;
-
-  // improvent idea: add an blocked names list
-  if(playerName === "") {
-    playerName = "Player"
-  }
-
-  const joinBody = {
-    lobbyId: lobbyId,
-    name: playerName
-  }
-
-  await fetch(`${currentAddressMain}/joinplayer`, {
-    method: 'POST',
-    body: JSON.stringify(joinBody),
-    headers: {"Content-Type": "application/json"}
-  })
-  .then((response) => response.json())
-  .then((data) => window.location.href = `${currentAddressMain}/lobby?lobby=${lobbyId}&language=${selectedLanguage}`, "_self");
 }
 
 //Log in module do not change! (i changed it :) - Kalle)
@@ -357,8 +281,25 @@ if(window.location.pathname != '/game') {
       }
   });
 }
-      
 
+async function logout() {
+  let response;
+
+  await fetch(`${currentAddressMain}/logout`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'}
+  })
+  .then(Response => Response.json())
+  .then(data => response = data)
+
+  location.replace(`${currentAddressMain}`)
+}
+      
+function selectLanguage() {
+  const urlParams = new URLSearchParams(window.location.search);
+  urlParams.set('language', document.getElementById('language-selection').value);
+  window.location.search = urlParams.toString();
+}
 
 console.log("Quizconst");
 console.log("Project made by: Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra");

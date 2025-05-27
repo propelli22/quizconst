@@ -1,15 +1,20 @@
+const socket = io();
+
 const urlParams = new URLSearchParams(window.location.search);
 const currentAddressLobby = window.location.origin; 
 
 const lobbyId = urlParams.get('lobby');
+const language = urlParams.get('language');
 const delay = 500;
 
+let players = [];
+
 // not using the "getCookie.js" module due to weird issues with html script linking, try to fix later
-function getCookie(cname) {
+async function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
+    for(let i = 0; i < ca.length; i++) {
       let c = ca[i];
       while (c.charAt(0) == ' ') {
         c = c.substring(1);
@@ -21,87 +26,107 @@ function getCookie(cname) {
     return "";
 }
 
-// TODO IN THE LOBBYMANAGER:
-// - Get the players id, lobby id, is host, etc. from the cookies and constantly compare them, if they dont match kick the player out.
-
-async function lobbyManager() {
-    let lobbyData;
-
-    await fetch(`${currentAddressLobby}/lobbydata`, {
-        method: 'POST',
-        body: JSON.stringify({'lobbyId': lobbyId}),
-        headers: {'Content-Type': 'application/json'}
-    })
-    .then(Response => Response.json())
-    .then(data => lobbyData = data);
-
-    const playerDiv = document.getElementById("players-flex");
-
-    console.log(playerDiv.children.length)
-    console.log(lobbyData.lobbydata.length)
-
-    if(lobbyData.lobbydata.length != playerDiv.children.length && lobbyData.lobbydata.length != undefined) {
-        console.log("moi")
-        playerDiv.innerHTML = '';
-
-        for(let i = 0; i < lobbyData.lobbydata.length; i++) {
-            const player = lobbyData.lobbydata[i];
-            const playerBox = document.createElement('div');
-            playerBox.className = 'player-box';
-            playerBox.id = `player-${player.id}`;
-
-            const playerName = document.createElement('p');
-            playerName.textContent = player.name;
-
-            playerBox.appendChild(playerName);
-            playerDiv.appendChild(playerBox);
-        }
-    }
-
-    let statusData;
-    const statusBody = {
-        action: "getStatus",
+async function startGame() {
+    const gameStartData = {
+        playerId: await getCookie("playerId"),
+        isHost: await getCookie("host"),
         lobbyId: lobbyId
     }
 
-    await fetch(`${currentAddressLobby}/gamedata`, {
-        method: 'POST',
-        body: JSON.stringify(statusBody),
-        headers: {'Content-Type': 'application/json'}
-    })
-    .then(Response => Response.json())
-    .then(data => statusData = data);
-
-    if(statusData[0].status == "moveToGame") {
-        moveToGame();
-    }
+    socket.emit('startGame', gameStartData);
 }
 
-async function startGame() {
-    // only the host can run this, it will set the lobby as ready for the game
-    const isHost = true;
+socket.on('connect', () => {
+    console.log('Connected to server!');
+});
 
-    if (isHost) {
-        console.log("toimin")
-        const lobbyReadyBody = {
-            action: 'lobbyReady',
-            lobbyId: lobbyId
+document.addEventListener('DOMContentLoaded', async () => {
+    const localPlayerData = {
+        lobbyId: lobbyId,
+        playerId: await getCookie("playerId"),
+        isHost: await getCookie("isHost")
+    }
+
+    socket.emit('playerJoin', localPlayerData);
+
+    if (await getCookie("host") == "true") {
+        console.log("You are the host of this lobby!");
+
+        const startButton = document.getElementById("start-game-button");
+
+        startButton.style.display = "block";
+    } else {
+        console.log("You are not the host of this lobby");
+
+        const startButton = document.getElementById("start-game-button");
+
+        startButton.style.display = "none";
+    }
+});
+
+// TODO IN THE LOBBYMANAGER:
+// - Get the players id, lobby id, is host, etc. from the cookies and constantly compare them, if they dont match kick the player out.
+
+socket.on('lobbyPlayers', (lobbyPlayerData) => {
+    console.log(lobbyPlayerData.playerdata);
+
+    lobbyPlayerData.playerdata.forEach(player => {
+        if (players.some(id => id == player.player)) {
+            return
+        } else {
+            const div = document.createElement('div');
+            const p = document.createElement('p');
+
+            div.setAttribute('class', 'player-box');
+            
+            if (player.isHost) {
+                div.setAttribute('class', 'host');
+                div.setAttribute('id', 'host-player');
+            }
+
+            p.textContent = `${player.name}`;
+
+            div.appendChild(p);
+
+            div.setAttribute('id', 'foreach')
+
+            document.getElementById('players-flex').appendChild(div);
+
+            players.push(player.player);
         }
+    });
+});
 
-        let response;
-
-        await fetch(`${currentAddressLobby}/gamedata`, {
-            method: 'POST',
-            body: JSON.stringify(lobbyReadyBody),
-            headers: {'Content-Type': 'application/json'}
-        })
-        .then(Response => Response.json())
-        .then(data => response = data);
+socket.on('newPlayer', async (playerData) => {
+    if (players.some(id => id == playerData.playerId)) {
+        return
+    } else {
+        if (playerData.playerId == await getCookie("playerId")) {
+            return
+        } else {
+            const div = document.createElement('div');
+            const p = document.createElement('p');
+    
+            console.log(playerData);
+    
+            div.setAttribute('class', 'player-box');
+    
+            if (playerData.isHost) {
+                div.setAttribute('class', 'host');
+                div.setAttribute('id', 'host-player');
+            }
+    
+            p.textContent = `${playerData.playerName}`;
+    
+            div.appendChild(p);
+    
+            document.getElementById('players-flex').appendChild(div);
+        }
     }
-}
+});
 
-function moveToGame() {
-    location.replace(`${currentAddressLobby}/game`);
-}
+socket.on('gameStarting', async (gameData) => {
+    console.log(`Game Starting! Please wait for the page to relocate to the game...`);
 
-setInterval(lobbyManager, delay);
+    window.location.replace(`${currentAddressLobby}/game?lobby=${gameData.lobbyId}&subject=${gameData.subjectId}&language=${language}`);
+});

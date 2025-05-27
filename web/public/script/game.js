@@ -373,11 +373,6 @@ Object.defineProperty(window, 'getCorrectAnswer', {
 });
 
 async function showResults() {
-    if(isHost) {
-        await setLobbyStatus(`results`)
-        console.log(`results`)
-    }
-
     questionContainer.style.display = "none";
     mainGameContainer.style.display = "none";
     loadingContainer.style.display = "none";
@@ -437,17 +432,12 @@ async function showResults() {
         }
     }
 
-    return new Promise((resolve) => {
-        document.getElementById("continue-button").addEventListener("click", function () {
-            document.getElementById("continue-button").style.display = "none";
-            resolve(true);
-        });
-
-        document.getElementById("leave-button").addEventListener("click", function () {
-            document.getElementById("leave-button").style.display = "none";
-            resolve(true);
-        });
-    })
+    document.getElementById("continue-button").addEventListener("click", function () {
+        document.getElementById("continue-button").style.display = "none";
+    });
+    document.getElementById("leave-button").addEventListener("click", function () {
+        document.getElementById("leave-button").style.display = "none";
+    });
 }
 
 function leaveLobby() {
@@ -511,38 +501,51 @@ async function getLobbyStatus() {
 
 // gameController is used to call all the functions in order using async.
 async function gameController() {
-    // initalaize game, done separately from question cycle to avoid unnecesary looping of things that need to be called only once.
+    // Initialize game, done separately from question cycle to avoid unnecessary looping of things that need to be called only once.
     const questions = await getQuestionCount(subjectId);
     countQuestions();
-    
-    // question cycle
-    for(let i = 0; i < questionCount; i++) {
-        const recivedQuestionData = await getQuestion(questions[i]);
-    
-        if (i + 1 == questionCount) {
-            lastQuestion = true;
-        }
-    
-        if(isHost) {
-            await setLobbyStatus(`q_${questions[i]}`)
-            console.log(`q_${questions[i]}`)
-        }
-    
-        let lobbyStatus;
-        do {
-            lobbyStatus = await getLobbyStatus();
-            if (lobbyStatus === `q_${questions[i]}`) {
-                await questionPreview(recivedQuestionData);
-                await runQuestion(recivedQuestionData);
-            } else if (lobbyStatus === 'results') {
-                await showResults();
-            } else {
-                console.log(`Unknown lobby status: ${lobbyStatus}`);
+
+    let currentQuestionIndex = 0;
+
+    while (currentQuestionIndex < questionCount) {
+        const lobbyStatus = await getLobbyStatus();
+        console.log(`Current lobby status: ${lobbyStatus}`);
+
+        if (lobbyStatus.startsWith('q_')) {
+            const questionId = lobbyStatus.split('_')[1];
+            const recivedQuestionData = await getQuestion(questionId);
+
+            await questionPreview(recivedQuestionData);
+            await runQuestion(recivedQuestionData);
+
+            if (await getCookie("host") || false) {
+                await setLobbyStatus('results');
+                console.log('results');
             }
-            
-            await new Promise(resolve => setTimeout(resolve, 1000));
-        } while (lobbyStatus !== `q_${questions[i]}` && lobbyStatus !== 'results');
+        } else if (lobbyStatus == 'results') {
+            await showResults();
+
+            console.log("mitää")
+            document.getElementById('continue-button').addEventListener('click', async () => {
+                await setLobbyStatus(`q_${questions[currentQuestionIndex]}`);
+                console.log(`q_${questions[currentQuestionIndex + 1]}`);
+            });
+
+            do {
+                await new Promise(resolve => setTimeout(resolve, 300));
+            } while ((await getLobbyStatus()) == 'results');
+
+            currentQuestionIndex++;
+        } else if (lobbyStatus === "moveToGame" && isHost) {
+            await setLobbyStatus(`q_${questions[0]}`);
+            console.log(`q_${questions[0]}`);
+        } else {
+            console.log(`Unknown lobby status: ${lobbyStatus}`);
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 300));
     }
 }
 
+// Call the gameController function to start the game
 gameController();

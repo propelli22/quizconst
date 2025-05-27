@@ -20,7 +20,9 @@
                 <input type="button" class="button" id="c-lobby-select-subject" onclick="alert('Toimii!')" value="<%= select_subject %>">
                 <p id="no-subject-selected-error">EJS PLACEHOLDER: Ei aihetta valittuna!</p>
             </div>
-            <input type="button" value="<%= create %>" class="button" onclick="newLobby()">
+            <input type="button" value="<%= create %>" class="button" onclick="createLobby()">
         </form>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+<script src="../script/createLobby.js"></script>

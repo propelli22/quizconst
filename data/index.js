@@ -5,8 +5,14 @@ const dbconfig = require("./dbconfig.json");
 const bcrypt = require("bcrypt");
 const http = require('http');
 const socketIO = require('socket.io');
+const cors = require("cors");
 
 const app = express();
+app.use(cors({
+  origin: "http://localhost:3000",
+  methods: ["GET", "POST"],
+  credentials: true
+}));
 app.use(express.json());
 const server = http.createServer(app);
 const io = socketIO();
@@ -103,7 +109,7 @@ app.get('/lobbydata', (req, res) => {
     }
 
     const builder = new XMLBuilder({
-      arrayNodeName: "lobbydata",
+      arrayNodeName: "playerdata",
     });
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -775,6 +781,38 @@ app.post('/getLobbyStatus', (req, res) => {
   });
 
   connection.end();
+});
+
+app.post('/startGame', (req, res) => {
+  console.log("used /startGame - POST");
+
+  const lobbyId = req.body.lobbyId;
+
+  const sql = 'UPDATE lobby SET status ="inGame" WHERE lobby_id = ?';
+  const sql2 = 'SELECT lobby_id, subject_id FROM lobby WHERE lobby_id = ?';
+  const connetion = mysql.createConnection(dbconfig);
+  connetion.connect();
+
+  connetion.query(sql, [lobbyId], (err, rows) => {
+    if (err) {
+      res.status(404).json({"message": "An internal server error occurred, please try again later."})
+      throw err
+    }
+  });
+
+  connetion.query(sql2, [lobbyId], (err, rows) => {
+    if (err) {
+      res.status(404).json({"message": "An internal server error occurred, please try again later."});
+      throw err
+    }
+
+    res.status(200).json({
+      "lobbyId": rows[0].lobby_id,
+      "subjectId": rows[0].subject_id,
+    });
+  })
+
+  connetion.end();
 });
 
 io.on('connection', (socket) => {

@@ -1,30 +1,22 @@
 <%- include('partials/header') %>
 <link rel="stylesheet" href="lobby.css">
 <main>
-    <% if (!lobbyData.lobbydata.length) { %>
-        <h1><%= lobbyData.lobbydata.lobbyName %></h1>
-        <p><%= lobbyCode %>: <%= lobbyId %></p>
-        <div class="players-flex" id="players-flex">
-            <div class="player-box" id="player-<%= lobbyData.lobbydata.player %>">
-                <p><%= lobbyData.lobbydata.name %></p>
-            </div>
-        </div>
-    <% } else { %>
-        <h1><%= lobbyData.lobbydata[0].lobbyName %></h1>
-        <p><%= lobbyCode %>: <%= lobbyId %></p>
-        <div class="players-flex" id="players-flex">
-            <!--<div class="player-box host" id="host-player">
-                <p>Pelaaja 1 (Host)</p>
-            </div>-->
-            <% for(let player of lobbyData.lobbydata) { %>
-                <div class="player-box" id="player-<%= player.player %>">
-                    <p><%= player.name %></p>
+    <!--
+    <div class="player-box" id="player-< player.player %>">
+                    <p>< player.name %></p>
                 </div>
-            <% } %>
-        </div>
-    <% } %>
+    -->
+    <h1><%= loading %></h1>
+    <p><%= lobbyCode %>: <%= loading %></p>
+    <div id="player-loader" style="display: none;">
+            
+    </div>
+    <div class="players-flex" id="players-flex">
+
+    </div>
     <!-- include the login modal, needs json modifications, the whole language system needs to be more organized -->
 </main>
 <%- include('partials/footer') %>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="script/lobbyManager.js"></script>
