@@ -3,13 +3,26 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const { XMLParser, XMLBuilder, XMLValidator } = require("fast-xml-parser");
-const { get } = require('http');
-const { getEventListeners } = require('events');
+const http = require('http');
+const { Server } = require('socket.io');
+const axios = require('axios');
 
+// TODO: (web server 24.2.2025)
+// - Update stupid solutions (stupid for loop get requests on lobby and game) to websockets, to avoid unnesecary requests
+// - Add input validation
+// - Add error handling
+// - Update to use http server
+// - Testing
 
 const app = express();
-app.use(express.urlencoded({extended: 'false'}))
-app.use(express.json())
+const server = http.createServer(app);
+const io = new Server(server, {});
+const port = 3000;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+const dataServerDomain = 'http://localhost:4000'
 
 // import languages from json
 const fi_home = require('./languages/fi_home.json')
@@ -35,55 +48,40 @@ app.use(
     })
 );
 
-const port = "3000";
-const host = "0.0.0.0"; // run on device local ip
-
 app.get('/lobby', async (req, res) => {
     console.log("loaded /lobby")
 
     const language = req.query.language;
-    const sessionId = req.headers.cookie || null;
+    const sessionId = await getCookie('sessionId') || null;
     const lobbyId = req.query.lobby;
+    const admin = await getCookie('admin') || null;
 
-    const lobbyDataUrl = `http://localhost:4000/lobbydata?id=${lobbyId}`
-    let lobbyData;
-
-    const settings = {
-        method: 'GET'
-    }
-
-    try {
-        const xmlSite = await fetch(lobbyDataUrl, settings);
-        const xml = await xmlSite.text();
-
-        const isValid = XMLValidator.validate(xml);
-        if(isValid) {
-            const parser = new XMLParser();
-            lobbyData = parser.parse(xml).lobbydata;
-        } else {
-            lobbyData = 'An error occurred while fetching lobbydata :('
-        }
-    } catch (err) {
-        console.log(err);
+    async function getCookie(name) {
+        const value = `; ${req.headers.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
     if(language === 'fi') {
         res.render('aula', {
             ...fi_lobby,
             sessionId: sessionId,
-            lobbyData: lobbyData
+            lobbyId: lobbyId,
+            admin: admin
         });
     } else if(language === "en") {
         res.render('aula', {
             ...en_lobby,
             sessionId: sessionId,
-            lobbyData: lobbyData
+            lobbyId: lobbyId,
+            admin: admin
         });
     } else {
         res.render('aula', {
             ...en_lobby,
             sessionId: sessionId,
-            lobbyData: lobbyData
+            lobbyId: lobbyId,
+            admin: admin
         });
     }
 });
@@ -93,7 +91,14 @@ app.get('/', async (req, res) => {
     console.log("loaded / (frontpage)");
 
     const language = req.query.language;
-    const sessionId = req.headers.cookie || null;
+    const sessionId = await getCookie('sessionId') || null;
+    const admin = await getCookie('admin') || null;
+
+    async function getCookie(name) {
+        const value = `; ${req.headers.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
 
     let subjectsURL = 'http://localhost:4000/getsubjects'
     const settings = {
@@ -114,42 +119,56 @@ app.get('/', async (req, res) => {
         res.render('home', {
             ...fi_home,
             subjects: subjectsURL,
-            sessionId: sessionId
+            sessionId: sessionId,
+            admin: admin
         });
     } else if (language == 'en') {
         res.render('home', {
             ...en_home,
             subjects: subjectsURL,
-            sessionId: sessionId
+            sessionId: sessionId,
+            admin: admin
         });
     } else { // by default render the finnish verison
         res.render('home', {
             ...fi_home,
             subjects: subjectsURL,
-            sessionId: sessionId
+            sessionId: sessionId,
+            admin: admin
         });
     }
 });
 
-app.get("/create", (req, res) => {
+app.get("/create", async (req, res) => {
 	console.log("loaded /create")
+
 	const language = req.query.language;
-	const sessionId = req.session.sessionId || null;
+	const sessionId = await getCookie('sessionId') || null;
+    const admin = await getCookie('admin') || null;
+
+    async function getCookie(name) {
+        const value = `; ${req.headers.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
 
 	if (language == "fi") {
 		res.render("create_a_game", {
 			...fi_create,
 			sessionId: sessionId,
+            admin: admin
 		})
 	} else if (language == "en") {
 		res.render("create_a_game", {
 			...en_create,
 			sessionId: sessionId,
+            admin: admin
 		})
 	} else {
 		res.render("create_a_game", {
 			...fi_create,
 			sessionId: sessionId,
+            admin: admin
 		})
 	}
 })
@@ -172,25 +191,38 @@ app.post('/setCookie', (req, res) => {
 app.get('/game', async (req, res) => {
     // kalle does this. - Kalle
     // shit desicion - Kalle
-    console.log("loaded /game");
+    console.log("loaded /game - GET");
+
     const lobby = req.query.lobby;
     const language = req.query.language;
-    const sessionId = req.headers.cookie || null;
+    const subjectId = req.query.subject;
+
+    const sessionId = await getCookie('sessionId') || null;
+    const admin = await getCookie('admin') || null;
+
+    async function getCookie(name) {
+        const value = `; ${req.headers.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
 
     if (language == 'fi') {
         res.render('game', {
             ...fi_game,
-            sessionId: sessionId    
+            sessionId: sessionId,
+            admin: admin
         });
     } else if (language == 'en') {
         res.render('game', {
             ...en_game,
-            sessionId: sessionId
+            sessionId: sessionId,
+            admin: admin
         });
     } else { // by default, render the finnish version
         res.render('game', {
             ...fi_game,
-            sessionId: sessionId
+            sessionId: sessionId,
+            admin: admin
         });
     }
 });
@@ -253,7 +285,8 @@ app.post('/joinplayer', async (req, res) => {
     const body = {
         lobby: req.body.lobbyId,
         name: req.body.name,
-        accountId: req.body.accountId
+        accountId: req.body.accountId || null,
+        host: req.body.isHost
     }
 
     const responeJoin = await fetch('http://localhost:4000/joingame', {
@@ -266,6 +299,12 @@ app.post('/joinplayer', async (req, res) => {
 
     res.cookie('lobby', req.body.lobbyId);
     res.cookie('playerId', joinData);
+
+    if(req.body.isHost){
+        res.cookie('host', true);
+    } else {
+        res.cookie('host', false);
+    }
 
     res.status(200).json({"message": "Ok"})
 });
@@ -288,6 +327,8 @@ app.post('/login', async (req, res) => {
 
     const checkResult = await checkLogin.json();
 
+    console.log(checkResult)
+
     if (checkResult.passwordResult === true) {
         const loggedUser = `${input_name}`
         req.session.userId = input_name;
@@ -298,6 +339,14 @@ app.post('/login', async (req, res) => {
             secure: false,
             maxAge: 24 * 60 * 60 * 1000
         });
+
+        if(checkResult.isAdmin) {
+            res.cookie('admin', checkResult.isAdmin, {
+                httpOnly: true,
+                secure: false,
+                maxAge: 24 * 60 * 60 * 1000
+            });
+        }
 
         const lastPage = req.query.redirect || '/';
         res.status(200).redirect(lastPage);
@@ -340,6 +389,7 @@ app.post('/gamedata', async (req, res) => {
     const question = req.body.questionId;
     const lobby = req.body.lobbyId;
     const points = req.body.recivedPoints;
+    const status = req.body.setStatus;
 
     // try to optimize this later !!!
     if (runAction == "allquestions") {
@@ -438,6 +488,58 @@ app.post('/gamedata', async (req, res) => {
         const result = await getTime.json();
 
         res.json(result);
+    } else if (runAction == "lobbyReady") {
+        const setStatus = await fetch(`http://localhost:4000/lobbyready`, {
+            method: 'POST',
+            body: JSON.stringify({lobbyId: lobby}),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const result = await setStatus.json();
+
+        res.status(200).json(result);
+    } else if (runAction == "getStatus") {
+        const getStatus = await fetch(`http://localhost:4000/lobbystatus`, {
+            method: 'POST',
+            body: JSON.stringify({lobbyId: lobby}),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const result = await getStatus.json();
+
+        res.status(200).json(result);
+    } else if (runAction == "getsubject") {
+        const getSubject = await fetch('http://localhost:4000/getlobbysubject', {
+            method: 'POST',
+            body: JSON.stringify({lobbyId: lobby}),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const result = await getSubject.json();
+
+        res.status(200).json(result);
+    } else if (runAction == "setStatus") {
+        const setStatus = await fetch('http://localhost:4000/setLobbyStatus', {
+            method: 'POST',
+            body: JSON.stringify({lobbystatus: status, lobbyid: lobby}),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const result = await setStatus.json();
+
+        res.status(200).json({'message': 'OK'});
+    } else if (runAction == "getStatus") {
+        const getStatus = await fetch('http://localhost:4000/getLobbyStatus', {
+            method: 'POST',
+            body: JSON.stringify({lobbyid: lobby}),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        const result = await getStatus.json()
+
+        res.status(200).json(result);
+
+        console.log(result);
     } else {
         res.status(400).json({"message": "Failed to get action, please check input."});
     }
@@ -603,7 +705,162 @@ app.post('/lobbydata', async (req, res) => {
         console.log(err);
     }
 
-    res.status(200).json({"message": "ksi - thick of it"})
+    res.status(200).json(lobbyData)
 });
 
-app.listen(port, host, () => console.log(`Listening on ${host}:${port}...`));
+app.post('/logout', (req, res) => {
+    console.log("used /logout");
+
+    res.clearCookie("admin");
+    res.clearCookie("playerId");
+    res.clearCookie("sessionId");
+    res.status(200).json({"message": "cookies cleared"})
+});
+
+const lobbies = {}; // stores all the existing lobbies in the server.
+
+io.on('connection', (socket) => {
+    console.log('Player connected to server.');
+    
+    socket.on('playerJoin', (playerData) => {
+        console.log(`Player ${playerData.playerId} joined lobby ${playerData.lobbyId}`);
+
+        axios.get(`${dataServerDomain}/lobbydata?id=${playerData.lobbyId}`)
+            .then((response) => {
+                const isValid = XMLValidator.validate(response.data);
+
+                if(isValid) {
+                    const parser = new XMLParser();
+                    let lobbyPlayersData = parser.parse(response.data).lobbydata;
+                    socket.emit('lobbyPlayers', lobbyPlayersData);
+                } else {
+                    console.error("An error occurred while parsing XML data from /lobbydata !");
+                    const errorMessage = {
+                        message_en: "An unexpected error occurred while fetching other players, please try again later...",
+                        message_fi: "Tapahtui virhe. Palvelin ei pystynyt hakemaan muita pelaajia, yritä uudelleen myöhemmin!"
+                    }
+                    socket.emit('error', errorMessage)
+                }
+
+                axios.get(`${dataServerDomain}/getPlayerName?id=${playerData.playerId}`)
+                .then((response) => {
+                    playerData.playerName = response.data[0].name;
+                    console.log(playerData);
+                    io.emit('newPlayer', playerData);
+                })
+            })
+            .catch((error) => {
+                console.error('Error fetching lobbydata:', error);
+            });
+    });
+
+    socket.on('startGame', (gameStartData) => {
+        console.log(`Starting game, lobby: ${gameStartData.lobbyId}`);
+
+        axios.post(`${dataServerDomain}/startGame`, {
+            lobbyId: gameStartData.lobbyId,
+        })
+        .then((response) => {
+            const gameData = {
+                lobbyId: response.data.lobbyId,
+                subjectId: response.data.subjectId,
+            }
+
+            io.emit('gameStarting', gameData);
+        })
+    });
+
+    socket.on('playerReady', (playerData) => {
+        console.log(`Player ${playerData.playerId} ready!`);
+
+        if (!lobbies[playerData.lobbyId]) {
+            lobbies[playerData.lobbyId] = {
+                players: {},
+                questions: [],
+                currentQuestion: 0,
+                playerAnswers: 0,
+            };
+        }
+
+        lobbies[playerData.lobbyId].players[playerData.playerId] = { answered: false };
+
+        const allReady = Object.values(lobbies[playerData.lobbyId].players).every(player => player.answered == false);
+
+        if (allReady) {
+            console.log(`Lobby ${playerData.lobbyId} is ready!`);
+
+            axios.post(`${dataServerDomain}/getquestions`, { 
+                subjectId: playerData.subjectId 
+            })
+            .then((response => {
+                lobbies[playerData.lobbyId].questions = response.data;
+                emitNextQuestion(playerData.lobbyId);
+            }))
+            .catch((error) => {
+                console.error(`Error occurred while fetching questions!\n\n Error:\n${error}\n\nLobby: ${playerData.lobbyId}\n\nSubject: ${playerData.subjectId}`);
+            });
+        }
+    });
+
+    socket.on('questionAnswer', (answerData) => {
+        console.log(`Player ${answerData.playerId} has answered!`);
+
+        // TÄHÄN PISTEIDEN LÄHETYS DATAAN!!!
+
+        if (lobbies[answerData.lobbyId] && lobbies[answerData.lobbyId].players[answerData.playerId]) {
+            lobbies[answerData.lobbyId].players[answerData.playerId].answered = true;
+            lobbies[answerData.lobbyId].playerAnswers++;
+        }
+
+        const allAnswered = lobbies[answerData.lobbyId].playerAnswers === Object.keys(lobbies[answerData.lobbyId].players).length;
+
+        if (allAnswered) {
+            console.log(`All players in lobby ${answerData.lobbyId} have answered.`);
+
+            axios.post(`${dataServerDomain}/results`, {
+                lobbyId: answerData.lobbyId,
+            })
+            .then((response) => {
+                io.to(answerData.lobbyId).emit('scores', response.data);
+            })
+            .catch((error) => {
+                console.error(`An error occurred while fetching scores!\n\nError:\n${error}\n\nLobby: ${answerData.lobbyId}`);
+            });
+        }
+    });
+
+    socket.on('continueGame', (lobbyData) => {
+        if (lobbies[lobbyData.lobbyId]) {
+            Object.values(lobbies[lobbyData.lobbyId].players).forEach(player => player.answered = false);
+            lobbies[lobbyData.lobbyId].playerAnswers = 0;
+
+            emitNextQuestion(lobbyId);
+        }
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Player disconnected from server.');
+    })
+
+    function emitNextQuestion(lobbyId) {
+        const lobby = lobbies[lobbyId];
+        
+        if (lobby.currentQuestion < lobby.questions.length) {
+            const question = lobby.questions[lobby.currentQuestion];
+            io.to(lobbyId).emit('gameQuestion', question);
+            lobby.currentQuestion++;
+        } else {
+            console.log(`Game in lobby ${lobbyId} has ended!`);
+            io.to(lobbyId).emit('gameEnd', { message: 'The game has ended!'});
+        }
+    }
+});
+
+// KEEP THIS REQUEST AS THE LAST REQUEST !!!
+app.use((req, res) => {
+    res.status(404).redirect('/');
+});
+
+server.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});

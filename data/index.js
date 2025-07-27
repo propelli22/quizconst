@@ -3,19 +3,27 @@ const { XMLBuilder } = require("fast-xml-parser");
 const mysql = require("mysql");
 const dbconfig = require("./dbconfig.json");
 const bcrypt = require("bcrypt");
+const http = require('http');
+const socketIO = require('socket.io');
+const cors = require("cors");
 
 const app = express();
+app.use(cors({
+  origin: "http://localhost:3000",
+  methods: ["GET", "POST"],
+  credentials: true
+}));
 app.use(express.json());
+const server = http.createServer(app);
+const io = socketIO();
+const port = 4000;
 
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*"); // TODO: change to current device ip
-    res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-    next();
-})
-
-const port = "4000";
-const host = "localhost"; // runs on localhost to avoid external users access to database
+// TODO: (data server 24.2.2025)
+// - Update stupid solutions (stupid for loop get requests on lobby and game) to websockets, to avoid unnesecary requests
+// - Add input validation
+// - Add error handling
+// - Add security measures (somesort of password/key that needs to be in the request to access the server, this can/will be done with vercel as well)
+// - Testing
 
 // Obvious: checks password, return is it is correct or not, does not tell if the user is also correct etc.
 app.post('/checklogin', (req, res) => {
@@ -23,7 +31,7 @@ app.post('/checklogin', (req, res) => {
 
   const { user, password } = req.body;
 
-  const sql = `SELECT password, user_id FROM user WHERE username = ?`;
+  const sql = `SELECT password, user_id, admin FROM user WHERE username = ?`;
 
   const connection = mysql.createConnection(dbconfig);
 
@@ -35,18 +43,33 @@ app.post('/checklogin', (req, res) => {
 
     let result = JSON.parse(JSON.stringify(rows));
 
-    // can only send back true or false
-    bcrypt.compare(
-      password,
-      result[0].password,
-      function (err, passwordResult) {
-        const body = {
-          passwordResult: passwordResult,
-          userId: rows[0].user_id
-        }
-        res.send(body);
+    console.log(rows[0])
+
+    if(rows[0] != undefined) {
+      let isAdmin;
+
+      if(rows[0].admin == 1) {
+        isAdmin = true;
+      } else {
+        isAdmin = false;
       }
-    );
+
+      // can only send back true or false
+      bcrypt.compare(
+        password,
+        result[0].password,
+        function (err, passwordResult) {
+          const body = {
+            passwordResult: passwordResult,
+            userId: rows[0].user_id,
+            isAdmin: isAdmin
+          }
+          res.send(body);
+        }
+      );
+    } else {
+      res.json({"message": "Hmm... miten näin pääsi käymään? (could not find user in database, please check input)"})
+    }
   });
 
   connection.end();
@@ -86,7 +109,7 @@ app.get('/lobbydata', (req, res) => {
     }
 
     const builder = new XMLBuilder({
-      arrayNodeName: "lobbydata",
+      arrayNodeName: "playerdata",
     });
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -183,7 +206,7 @@ app.post("/createlobby", (req, res) => {
   const subject = req.body.subject;
   const game_date = req.body.game_date;
 
-  let sql = `INSERT INTO lobby (subject_id, lobby_name, max_players, game_date) VALUES (?,?,?,?)`;
+  let sql = `INSERT INTO lobby (subject_id, lobby_name, max_players, game_date, status) VALUES (?,?,?,?, 'lobby')`;
 
   // remove comment tags if issues with inserting empty names
   //if (!name) {
@@ -193,10 +216,7 @@ app.post("/createlobby", (req, res) => {
   const connection = mysql.createConnection(dbconfig);
   connection.connect();
 
-  connection.query(
-    sql,
-    [subject, name, max_players, game_date],
-    (err, rows) => {
+  connection.query(sql, [subject, name, max_players, game_date], (err, rows) => {
       if (err) {
         throw err;
       }
@@ -566,18 +586,30 @@ app.post('/joingame', (req, res) => {
     const lobbyId = req.body.lobby;
     const name = req.body.name;
     const account = req.body.accountId;
+    const isHost = req.body.host;
 
     const connection = mysql.createConnection(dbconfig);
     connection.connect();
-    const sql = 'INSERT INTO player (lobby_id, banned, name, account) VALUES (?,0,?,?)';   
+    const sql1 = 'INSERT INTO player (lobby_id, banned, name, account) VALUES (?,0,?,?)';   
+    const sql2 = 'INSERT INTO player (lobby_id, banned, name, account, host) VALUES (?,0,?,?,1)'
 
-    connection.query(sql, [lobbyId, name, account], (err, rows) => {
-      if (err) {
-        throw err;
-      }
+    if (isHost) {
+      connection.query(sql2, [lobbyId, name, account], (err, rows) => {
+        if (err) {
+          throw err
+        }
 
-      res.status(200).json(rows.insertId)
-    });
+        res.status(200).json(rows.insertId)
+      });
+    } else {
+      connection.query(sql1, [lobbyId, name, account], (err, rows) => {
+        if (err) {
+          throw err;
+        }
+  
+        res.status(200).json(rows.insertId)
+      });
+    }
 
     connection.end();
 });
@@ -645,5 +677,247 @@ app.post('/createanswer', (req, res) => {
   connection.end();
 });
 
+// todo: update to be '/setstatus' and allow changing the lobby status to the needed status code
+app.post('/lobbyready', (req, res) => {
+  console.log("used /lobbyready");
+
+  const lobbyId = req.body.lobbyId;
+
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+  const sql = `UPDATE lobby SET status ='moveToGame' WHERE lobby_id = ?`;
+
+  console.log(lobbyId)
+
+  connection.query(sql, [lobbyId], (err, rows) => {
+    if(err) {
+      throw err;
+    }
+
+    res.status(200).json({"message": "LOBBY READY"});
+  });
+
+  connection.end();
+});
+
+app.post('/lobbystatus', (req, res) => {
+  console.log('used /lobbystatus');
+
+  const lobbyId = req.body.lobbyId;
+
+  const connetion = mysql.createConnection(dbconfig);
+  connetion.connect();
+  const sql = 'SELECT status FROM lobby WHERE lobby_id = ?';
+
+  connetion.query(sql, [lobbyId], (err, rows) => {
+    if (err) {
+      throw err
+    }
+
+    res.status(200).json(rows)
+  });
+
+  connetion.end();
+});
+
+app.post('/getlobbysubject', (req, res) => {
+  console.log('used /getlobbysubject');
+
+  const lobbyId = req.body.lobbyId;
+
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+  const sql = 'SELECT subject_id FROM lobby WHERE lobby_id = ?'
+
+  connection.query(sql, [lobbyId], (err, rows) => {
+    if (err) {
+      throw err
+    }
+
+    res.status(200).json(rows);
+  });
+
+  connection.end();
+});
+
+app.post('/setLobbyStatus', (req, res) => {
+  console.log("used /setLobbyStatus");
+
+  const status = req.body.lobbystatus;
+  const lobby = req.body.lobbyid;
+
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+  const sql = 'UPDATE lobby SET status = ? WHERE lobby_id = ?'
+
+  connection.query(sql, [status, lobby], (err, rows) => {
+    if (err) {
+      throw err
+    }
+
+    res.status(200).json({'message': 'OK'});
+  });
+
+  connection.end();
+});
+
+app.post('/getLobbyStatus', (req, res) => {
+  console.log("used /getLobbyStatus");
+
+  const lobbyId = req.body.lobbyid;
+
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+  const sql = 'SELECT status FROM lobby WHERE lobby_id = ?';
+
+  connection.query(sql, [lobbyId], (err, rows) => {
+    if(err) {
+      throw err;
+    }
+
+    res.status(200).json(rows);
+
+    console.log(rows);
+  });
+
+  connection.end();
+});
+
+app.post('/startGame', (req, res) => {
+  console.log("used /startGame - POST");
+
+  const lobbyId = req.body.lobbyId;
+
+  const sql = 'UPDATE lobby SET status ="inGame" WHERE lobby_id = ?';
+  const sql2 = 'SELECT lobby_id, subject_id FROM lobby WHERE lobby_id = ?';
+  const connetion = mysql.createConnection(dbconfig);
+  connetion.connect();
+
+  connetion.query(sql, [lobbyId], (err, rows) => {
+    if (err) {
+      res.status(404).json({"message": "An internal server error occurred, please try again later."})
+      throw err
+    }
+  });
+
+  connetion.query(sql2, [lobbyId], (err, rows) => {
+    if (err) {
+      res.status(404).json({"message": "An internal server error occurred, please try again later."});
+      throw err
+    }
+
+    res.status(200).json({
+      "lobbyId": rows[0].lobby_id,
+      "subjectId": rows[0].subject_id,
+    });
+  })
+
+  connetion.end();
+});
+
+io.on('connection', (socket) => {
+
+  socket.on('playerAnswer', () => {
+
+  });
+
+  socket.on('gameContinue', () => {
+
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Disconnected player from websocket');
+  });
+});
+
+io.on('newPlayer', (playerData) => {
+  console.log(`New player connected to the server via an websocket.`);
+
+  const sql = 'SELECT * FROM lobby JOIN player ON lobby.lobby_id = player.lobby_id WHERE lobby.lobby_id = ?';
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+
+  connection.query(sql, [playerData.lobbyId], (err, rows) => {
+    if (err) {
+      throw err
+    }
+
+    callback(rows);
+  });
+
+  connection.end();
+});
+
+io.on('gameStart', (lobbyData) => {
+  console.log(`Game starting. Lobby: ${lobbyData.lobbyId}`);
+
+  const sql = 'UPDATE lobby SET status ="moveToGame" WHERE lobby_id = ?';
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+
+  connection.query(sql, [lobbyData.lobbyId], (err, rows) => {
+    if (err) {
+      throw err
+    }
+
+    io.emit({"message": "Game starting!"});
+  });
+
+  connection.end();
+});
+
+io.on('questionData', (questionId) => {
+  const sql = 'SELECT * FROM question WHERE question_id = ?';
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+
+  connection.query(sql, [questionId], (err, rows) => {
+    if (err) {
+      throw err
+    }
+
+    callback(rows);
+  });
+
+  connection.end();
+});
+
+io.on('playerAnswer', (playerResultData) => {
+  console.log(`Player ${playerResultData.playerId} answered.`)
+  const sql = 'UPDATE player SET ready=1 SET point = points + ? WHERE player_id = ?';
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+
+  connection.query(sql, [playerResultData.points, playerResultData.playerId], (err, rows) => {
+    if (err) {
+      throw err
+    }
+
+    callback({"message": "Results recived"});
+  });
+
+  connection.end();
+});
+
+io.on('gameContinue', (lobbyData) => {
+  console.log(`Continuing game... Lobby: ${lobbyData.lobbyId}`);
+
+  const sql = 'UPDATE lobby SET continue_game = 1 WHERE lobby_id = ?';
+  const connection = mysql.createConnection(dbconfig);
+  connection.connect();
+
+  connection.query(sql, [lobbyData.lobbyId], (err, rows) => {
+    if (err) {
+      throw err
+    }
+
+    io.emit({"message": "Game continuing..."});
+  });
+
+  connection.end();
+});
+
 // run the server
-app.listen(port, host, () => console.log(`Listening on ${host}:${port}`));
+server.listen(port, () => {
+  console.log(`Server running on port ${port}`)
+});

@@ -2,6 +2,7 @@
     "title": "Lobby",
     "page": "Lobby",
     "language": "en",
+    "logout": "Log out",
     "join_game": "Join",
     "create_lobby": "Create a lobby",
     "lobby_name": "Lobby name:",
@@ -26,6 +27,7 @@
     "loading": "Loading...",
     "questions": "Questions: ",
     "user": "User",
+    "lobbyCode": "Lobby code",
     "made_by": "Built by:",
     "developers": "Boris Savushkin, Kalle Kahri, Mike Luong, Thomas Zeilstra",
     "info": "2024, v1"

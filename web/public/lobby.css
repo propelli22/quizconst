@@ -1,0 +1,7 @@
+#lobby-control-buttons {
+    grid-column: 2;
+}
+
+#header-nav, #nav-dropdown {
+    display: none;
+}

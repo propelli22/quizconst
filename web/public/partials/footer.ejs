@@ -1,6 +1,10 @@
     <footer>
         <div id="footer-left">
-            <button id="admin-settings-button" class="button"><%= admin_settings %></button>
+            <% if (admin) { %>
+                <button id="admin-settings-button" class="button"><%= admin_settings %></button>
+            <% } else { %>
+                <!-- nothing to see here :), yet! (and there wont be anything here most likely!) -->
+            <% } %>
         </div>
         <div id="credits">
             <p id="made_by"><%= made_by %></p>
@@ -14,11 +18,13 @@
             <button id="continue-button" class="button" style="display: none;"><!--EJS TAG PLACEHOLDER, CHANGE!!-->Jatka</button>
             <button id="leave-button" class="button" onclick="leaveLobby()"><!--EJS TAG PLACEHOLDER, CHANGE!!-->Lopeta</button>
         </div>
+        <div id="lobby-control-buttons">
+            <button id="start-game-button" class="button" onclick="startGame()"><!-- EJS TAG PLACEHOLDER, CHANGE!! -->Aloita</button>
+        </div>
         <div id="footer-right">
             <!-- nothing to see here :), yet! (and there wont be anything here most likely!) -->
         </div>
     </footer>
-    <script src="script/script.js"></script> <!-- DO NOT MOVE, breaks the site if moved!!! -->
-    <script src="script/admin.js"></script> <!-- DO NOT MOVE, breaks the site if moved!!! -->
+    <script src="script/script.js"></script> <!-- DO NOT MOVE, breaks the site if moved!!!, what a stupid mess of code - Kalle --> 
 </body>
 </html>

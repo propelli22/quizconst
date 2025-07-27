@@ -2,6 +2,7 @@
     "page": "Peli",
     "language": "fi",
     "find_subject": "Etsi aihe",
+    "logout": "Kirjaudu ulos",
     "create_subject": "Luo aihe",
     "login": "Kirjaudu sisään",
     "user": "Käyttäjä",

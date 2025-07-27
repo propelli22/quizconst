@@ -1,1 +1,0 @@
-// todo: write a script that retrives all the players in the lobby, adds the new ones to the page.

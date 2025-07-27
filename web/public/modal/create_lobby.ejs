@@ -6,6 +6,8 @@
         <form method="post" action="localhost:4000/createlobby">
             <h3><%= lobby_name %></h3>
             <input type="text" name="lobbyname" id="lobbyName" placeholder="<%= typeHere %>" class="textInput">
+            <h3><%= usernameInput %></h3>
+            <input type="text" name="playername" id="playerName" placeholder="<%= typeHere %>" class="textInput">
             <h3><%= max_players %></h3>
             <div id="player-count-div">
                 <input type="button" id="count-up" class="button" value="+" onclick="countUp()">
@@ -16,8 +18,11 @@
             <div id="selected-subject">
                 <p id="no-selection"><%= no_subject %></p>
                 <input type="button" class="button" id="c-lobby-select-subject" onclick="alert('Toimii!')" value="<%= select_subject %>">
+                <p id="no-subject-selected-error">EJS PLACEHOLDER: Ei aihetta valittuna!</p>
             </div>
-            <input type="button" value="<%= create %>" class="button" onclick="newLobby()">
+            <input type="button" value="<%= create %>" class="button" onclick="createLobby()">
         </form>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+<script src="../script/createLobby.js"></script>
